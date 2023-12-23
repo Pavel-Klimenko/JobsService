@@ -6,15 +6,15 @@
  * Time: 23:58
  */
 
-namespace App\Containers\Vacancies\Actions;
+namespace App\Domains\Vacancies\Actions;
 
-use App\Ship\Helpers\Helper;
-use App\Containers\Vacancies\Models\Vacancies;
+use App\Helper;
+use App\Domains\Vacancies\Models\Vacancies;
 
 class createVacancy
 {
     public function run($request) {
-        $arrVacancyFields = [
+/*        $arrVacancyFields = [
             'NAME' => $request->NAME,
             'ICON' => Auth::user()->ICON,
             'IMAGE' => Auth::user()->IMAGE,
@@ -27,6 +27,22 @@ class createVacancy
             'RESPONSIBILITY' => Helper::convertTextPointsToJson($request->RESPONSIBILITY),
             'QUALIFICATIONS' => Helper::convertTextPointsToJson($request->QUALIFICATIONS),
             'BENEFITS' => $request->BENEFITS
+        ];*/
+
+
+        $arrVacancyFields = [
+            'NAME' => 'Test',
+            //'ICON' => Auth::user()->ICON,
+            //'IMAGE' => Auth::user()->IMAGE,
+            'COUNTRY' => 'Test',
+            'CITY' => 'Test',
+            'CATEGORY_ID' => 1,
+            //'COMPANY_ID' => Auth::user()->id, TODO передать с другого сервиса
+            'SALARY_FROM' => 1000,
+            'DESCRIPTION' => 2000,
+            //'RESPONSIBILITY' => Helper::convertTextPointsToJson($request->RESPONSIBILITY),
+            //'QUALIFICATIONS' => Helper::convertTextPointsToJson($request->QUALIFICATIONS),
+            'BENEFITS' => 'Test'
         ];
 
         return Vacancies::create($arrVacancyFields);

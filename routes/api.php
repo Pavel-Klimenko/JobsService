@@ -18,6 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::post('/vacancies-list', [VacancyController::class, 'getVacancies']);
-Route::post('/vacancy', [VacancyController::class, 'getVacancy']);
+Route::group(['prefix' => 'vacancies'], function () {
+    Route::post('/list', [VacancyController::class, 'getVacancies']);
+    Route::post('/read', [VacancyController::class, 'getVacancy']);
+    Route::post('/create', [VacancyController::class, 'createVacancy']);
+    Route::post('/delete', [VacancyController::class, 'deleteVacancy']);
+    Route::post('/update', [VacancyController::class, 'updateVacancy']);
+});

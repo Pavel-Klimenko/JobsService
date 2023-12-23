@@ -6,16 +6,14 @@
  * Time: 23:58
  */
 
-namespace App\Containers\Vacancies\Actions;
+namespace App\Domains\Vacancies\Actions;
 
-use App\Containers\Vacancies\Models\Vacancies;
+use App\Domains\Vacancies\Models\Vacancies;
 
 
 class deleteVacancy
 {
-/*    public function run($request) {
-        $vacancy = Vacancies::find($request->VACANCY_ID);
-        $vacancy->delete();
-    }*/
-
+   public function run($vacancyId) {
+        return Vacancies::find($vacancyId)->delete();
+    }
 }

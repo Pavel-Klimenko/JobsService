@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+use App\Domains\Vacancies\Http\Controllers\VacancyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,3 +17,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('/vacancies-list', [VacancyController::class, 'getVacancies']);
+Route::post('/vacancy', [VacancyController::class, 'getVacancy']);

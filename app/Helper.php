@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 
 //TODO перенести общий функционал в Ships
+
 //use App\Models\Roles;
+
 use App\Constants;
 
 class Helper
@@ -23,12 +25,6 @@ class Helper
         var_dump($data);
         echo '</pre>';
     }
-
-/*    public static function getRoleIdByName($roleName)
-    {
-        $role = Roles::where('name', $roleName)->firstOrFail();
-        return $role->id;
-    }*/
 
     public static function getTableRow($modelObject, $column, $value)
     {

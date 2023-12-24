@@ -1,18 +1,18 @@
 <?php
-namespace App\Models;
+namespace App\Domains\Candidates\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 use App\Constants;
+use App\Helper;
 //use App\Ship\Helpers\Helper;
 //use App\Containers\Vacancies\Models\InterviewInvitations;
 
-class User
+class User extends Model
 {
-    use HasApiTokens, Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -56,6 +56,13 @@ class User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+/*    public function scopeCandidates($query)
+    {
+        $roleName = Constants::USER_ROLE_NAMES['candidate'];
+        $roleId = Helper::getRoleIdByName($roleName);
+        return $query->where('role_id', $roleId);
+    }*/
 
 
 /*    //only companies

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
+use App\Domains\Candidates\Http\Controllers\CandidateController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,3 +27,11 @@ Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/delete', [VacancyController::class, 'deleteVacancy']);
     Route::post('/update', [VacancyController::class, 'updateVacancy']);
 });
+
+Route::group(['prefix' => 'candidates'], function () {
+    Route::post('/list', [CandidateController::class, 'getCandidates']);
+    Route::post('/read', [CandidateController::class, 'getCandidate']);
+    Route::post('/create-interview-invitation',
+        [CandidateController::class, 'createInterviewInvitation']);
+});
+

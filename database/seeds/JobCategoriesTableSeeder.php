@@ -3,7 +3,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\JobCategories;
+use App\Domains\Candidates\Models\JobCategories;
 
 
 class JobCategoriesTableSeeder extends Seeder

@@ -3,10 +3,10 @@
 //namespace Database\Seeders;
 
 use App\Models\Reviews;
-use App\Models\User;
-use App\Models\Vacancies;
+use App\Domains\Candidates\Models\User;
+use App\Domains\Vacancies\Models\Vacancies;
 use Illuminate\Database\Seeder;
-use App\Models\JobCategories;
+use App\Domains\Candidates\Models\JobCategories;
 
 
 

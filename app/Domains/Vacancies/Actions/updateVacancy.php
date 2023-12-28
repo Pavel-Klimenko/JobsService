@@ -10,20 +10,26 @@ namespace App\Domains\Vacancies\Actions;
 
 use App\Helper;
 use App\Domains\Vacancies\Models\Vacancies;
+use Illuminate\Support\Facades\Log;
 
 class updateVacancy
 {
     public function run($request) {
-        $arParams = [];
-        foreach ($request->all() as $name => $value) {
-            if ($name == 'VACANCY_ID') continue;
-            $arParams[$name] = $value;
+        try {
+            $arParams = [];
+            $arRequest = $request->all();
+
+            foreach ($arRequest as $name => $value) {
+                if ($name == 'VACANCY_ID') continue;
+                $arParams[$name] = $value;
+            }
+            $result = Vacancies::where('ID', $request->VACANCY_ID)->limit(1)->update($arParams);
+            Log::info('updateVacancy()', ['request_data' => $arRequest, 'response_data' => $result]);
+            return $result;
+        } catch(\Exception $exception) {
+            Log::error('updateVacancy()', ['error_message' => $exception->getMessage()]);
+            return $exception->getMessage();
         }
-
-        return Vacancies::where('ID', $request->VACANCY_ID)->limit(1)->update($arParams);
-
-
-
 
         //$vacancy->NAME = 'PHP Developer';
 

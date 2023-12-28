@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use TCG\Voyager\Models\Role;
 use TCG\Voyager\Models\User;
-use App\Models\JobCategories;
+use App\Domains\Candidates\Models\JobCategories;
 use App\Constants;
 
 class UsersTableSeeder extends Seeder

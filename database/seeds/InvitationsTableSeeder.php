@@ -1,9 +1,9 @@
 <?php
 //namespace Database\Seeders;
 
-use App\Models\InterviewInvitations;
-use App\Models\User;
-use App\Models\Vacancies;
+use App\Domains\Candidates\Models\InterviewInvitations;
+use App\Domains\Candidates\Models\User;
+use App\Domains\Vacancies\Models\Vacancies;
 use App\Constants;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;

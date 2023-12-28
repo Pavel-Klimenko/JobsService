@@ -9,10 +9,19 @@
 namespace App\Domains\Candidates\Actions;
 
 use App\Domains\Candidates\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class getCandidate
 {
     public function run($id) {
-        return User::find($id);
+        try {
+            $result = User::find($id);
+            Log::info('getCandidate()', ['request_data' => $id, 'response_data' => $result]);
+            return $result;
+
+        } catch(\Exception $exception) {
+            Log::error('getCandidate()', ['error_message' => $exception->getMessage()]);
+            return $exception->getMessage();
+        }
     }
 }

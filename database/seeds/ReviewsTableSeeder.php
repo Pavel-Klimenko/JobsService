@@ -6,7 +6,7 @@ use App\Constants;
 use App\Models\Reviews;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-use App\Models\JobCategories;
+use App\Domains\Candidates\Models\JobCategories;
 
 
 class ReviewsTableSeeder extends Seeder

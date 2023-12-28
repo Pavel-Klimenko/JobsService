@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
 use App\Domains\Candidates\Http\Controllers\CandidateController;
+use App\Domains\Home\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,6 @@ Route::group(['prefix' => 'candidates'], function () {
         [CandidateController::class, 'createInterviewInvitation']);
 });
 
+Route::group(['prefix' => 'homepage'], function () {
+    Route::post('/', [HomeController::class, 'getHomePageData']);
+});

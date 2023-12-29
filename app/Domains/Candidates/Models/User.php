@@ -10,6 +10,8 @@ use App\Helper;
 //use App\Ship\Helpers\Helper;
 //use App\Containers\Vacancies\Models\InterviewInvitations;
 
+use App\Domains\Vacancies\Models\Vacancies;
+
 class User extends Model
 {
     use Notifiable;
@@ -65,76 +67,76 @@ class User extends Model
     }*/
 
 
-/*    //only companies
+    //only companies
     public function vacancies()
     {
         return $this->hasMany(Vacancies::class, 'COMPANY_ID');
     }
 
     //INTERVIEW REQUESTS
-    public function allAdvices()
-    {
-        $foreingKey = $this->foreignKey();
-        return $this->hasMany(InterviewInvitations::class, $foreingKey);
-    }
-
-    //подтвержденные
-    public function acceptedAdvices()
-    {
-        $foreingKey = $this->foreignKey();
-        return $this->hasMany(InterviewInvitations::class, $foreingKey)
-            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['ACCEPTED']);
-    }
-
-    public function rejectedAdvices()
-    {
-        $foreingKey = $this->foreignKey();
-        return $this->hasMany(InterviewInvitations::class, $foreingKey)
-            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['REJECTED']);
-    }
-
-
-    protected function foreignKey()
-    {
-        if (Helper::isCompany()) {
-            return 'COMPANY_ID';
-        } elseif (Helper::isCandidate()) {
-            return 'CANDIDATE_ID';
-        }
-    }
-
-    public function scopeCandidates($query)
-    {
-        $roleName = Constants::USER_ROLE_NAMES['candidate'];
-        $roleId = Helper::getRoleIdByName($roleName);
-        return $query->where('role_id', $roleId);
-    }
-
-    public function scopeCompanies($query)
-    {
-        $roleName = Constants::USER_ROLE_NAMES['company'];
-        $roleId = Helper::getRoleIdByName($roleName);
-        return $query->where('role_id', $roleId);
-    }
-
-    public static function getCandidateFields() {
-        return [
-            'NAME', 'IMAGE' , 'COUNTRY',
-            'CITY', 'PHONE', 'CATEGORY_ID',
-            'LEVEL', 'YEARS_EXPERIENCE',
-            'SALARY', 'EXPERIENCE',
-            'EDUCATION', 'SKILLS',
-            'LANGUAGES', 'ABOUT_ME', 'ACTIVE'
-        ];
-    }
-
-    public static function getCompanyFields() {
-        return [
-            'NAME', 'IMAGE' , 'COUNTRY',
-            'CITY', 'PHONE', 'EMPLOYEE_CNT',
-            'WEB_SITE', 'DESCRIPTION', 'ACTIVE'
-        ];
-    }*/
+//    public function allAdvices()
+//    {
+//        $foreingKey = $this->foreignKey();
+//        return $this->hasMany(InterviewInvitations::class, $foreingKey);
+//    }
+//
+//    //подтвержденные
+//    public function acceptedAdvices()
+//    {
+//        $foreingKey = $this->foreignKey();
+//        return $this->hasMany(InterviewInvitations::class, $foreingKey)
+//            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['ACCEPTED']);
+//    }
+//
+//    public function rejectedAdvices()
+//    {
+//        $foreingKey = $this->foreignKey();
+//        return $this->hasMany(InterviewInvitations::class, $foreingKey)
+//            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['REJECTED']);
+//    }
+//
+//
+//    protected function foreignKey()
+//    {
+//        if (Helper::isCompany()) {
+//            return 'COMPANY_ID';
+//        } elseif (Helper::isCandidate()) {
+//            return 'CANDIDATE_ID';
+//        }
+//    }
+//
+//    public function scopeCandidates($query)
+//    {
+//        $roleName = Constants::USER_ROLE_NAMES['candidate'];
+//        $roleId = Helper::getRoleIdByName($roleName);
+//        return $query->where('role_id', $roleId);
+//    }
+//
+//    public function scopeCompanies($query)
+//    {
+//        $roleName = Constants::USER_ROLE_NAMES['company'];
+//        $roleId = Helper::getRoleIdByName($roleName);
+//        return $query->where('role_id', $roleId);
+//    }
+//
+//    public static function getCandidateFields() {
+//        return [
+//            'NAME', 'IMAGE' , 'COUNTRY',
+//            'CITY', 'PHONE', 'CATEGORY_ID',
+//            'LEVEL', 'YEARS_EXPERIENCE',
+//            'SALARY', 'EXPERIENCE',
+//            'EDUCATION', 'SKILLS',
+//            'LANGUAGES', 'ABOUT_ME', 'ACTIVE'
+//        ];
+//    }
+//
+//    public static function getCompanyFields() {
+//        return [
+//            'NAME', 'IMAGE' , 'COUNTRY',
+//            'CITY', 'PHONE', 'EMPLOYEE_CNT',
+//            'WEB_SITE', 'DESCRIPTION', 'ACTIVE'
+//        ];
+//    }
 
 
 

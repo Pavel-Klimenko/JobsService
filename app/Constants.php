@@ -21,11 +21,11 @@ class Constants
     ];
 
 
-    const INTERVIEW_ADVICES_STATUSES = [
-        'ACCEPTED' => 'accepted',
-        'REJECTED' => 'rejected',
-        'NO_STATUS' => 'no_status',
-    ];
+//    const INTERVIEW_INVITATIONS_STATUSES = [
+//        'ACCEPTED' => 'accepted',
+//        'REJECTED' => 'rejected',
+//        'NO_STATUS' => 'no_status',
+//    ];
 
 
     const USER_IMAGE_FOLDERS = [

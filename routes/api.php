@@ -45,6 +45,9 @@ Route::group(['prefix' => 'personal'], function () {
     Route::post('/get-personal-info', [PersonalController::class, 'getPersonalInfo']);
     Route::post('/get-company-vacancies', [PersonalController::class, 'getCompanyVacancies']);
     Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
+    Route::post('/change-invitation-status', [PersonalController::class, 'changeInvitationStatus']);
+    Route::post('/get-interview-invitations', [PersonalController::class, 'getIterviewInvitations']);
+    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
 });
 
 

@@ -48,5 +48,7 @@ Route::group(['prefix' => 'personal'], function () {
 });
 
 
-
-
+//Route::post('/tokens/create', function (Request $request) {
+//    $token = $request->user()->createToken($request->token_name);
+//    return ['token' => $token->plainTextToken];
+//});

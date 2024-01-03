@@ -1,42 +1,40 @@
 <?php
-///**
-// * Created by PhpStorm.
-// * User: pavel
-// * Date: 14/05/23
-// * Time: 23:58
-// */
-//
-//namespace App\Containers\Personal\Actions;
-//
-//use App\Contracts\CacheContract;
-//use App\Ship\Helpers\Helper;
-//use App\Models\User;
-//
-//class updateUserInfo
-//{
-//
-//    public function run($request) {
-//        $user = User::find(Auth::user()->id);
-//
-//        if (Helper::isCompany()) {
-//            $arrUserFields = User::getCompanyFields();
-//        } elseif (Helper::isCandidate()) {
-//            $arrUserFields = User::getCandidateFields();
-//        }
-//
-//        foreach ($arrUserFields as $field) {
-//            $user->$field = $request->$field;
-//        }
-//        $user->ACTIVE = 0;
-//        $user->save();
-//
+
+namespace App\Domains\Personal\Actions;
+
+
+use App\Helper;
+use App\Domains\Candidates\Models\User;
+
+use App\Constants;
+
+class updateUserInfo
+{
+    public function run($request) {
+        $user = User::find($request->user_id);
+
+        if ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {
+            $arrUserFields = User::getCompanyFields();
+        } elseif ($user->role_id == Constants::USER_ROLES_IDS['company']) {
+            $arrUserFields = User::getCandidateFields();
+        }
+
+        foreach ($arrUserFields as $field) {
+            if ($field == 'user_id') continue;
+            $user->$field = $request->$field;
+        }
+
+
+        $user->ACTIVE = 1;
+        $user->save();
+
 //        //sending notification to admin
-//        $date = (object) [
-//            'entity' => 'user',
-//            'message' =>  'User updated personal info',
-//            'entity_id' => $user->id,
-//        ];
-//
-//        return $date;
-//    }
-//}
+/*        $date = (object) [
+            'entity' => 'user',
+            'message' =>  'User updated personal info',
+            'entity_id' => $user->id,
+        ];*/
+
+        //return $date;
+    }
+}

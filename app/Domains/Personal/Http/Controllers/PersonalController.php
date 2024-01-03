@@ -18,23 +18,23 @@ class PersonalController extends BaseController
         return app(Actions\getCompanyVacancies::class)->run($request);
     }
 
-//    public function createInterviewInviteFromCandidate(Request $request)
-//    {
-//        return app(Actions\createInterviewInviteFromCandidate::class)->run($request);
-//    }
-
     public function createInterviewInvitation(Request $request)
     {
         return app(Actions\createInterviewInvitation::class)->run($request);
     }
 
+    public function changeInvitationStatus(Request $request)
+    {
+        return app(Actions\changeInvitationStatus::class)->run($request);
+    }
 
+    public function getIterviewInvitations(Request $request)
+    {
+        return app(Actions\getIterviewInvitations::class)->run($request);
+    }
 
-
-
-
-
-
-
-
+    public function updateUserInfo(Request $request)
+    {
+        return app(Actions\updateUserInfo::class)->run($request);
+    }
 }

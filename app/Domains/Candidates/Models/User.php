@@ -74,37 +74,38 @@ class User extends Model
         return $this->hasMany(Vacancies::class, 'COMPANY_ID');
     }
 
-    //INTERVIEW REQUESTS
-//    public function allAdvices()
-//    {
-//        $foreingKey = $this->foreignKey();
-//        return $this->hasMany(InterviewInvitations::class, $foreingKey);
-//    }
-//
-//    //подтвержденные
-//    public function acceptedAdvices()
-//    {
-//        $foreingKey = $this->foreignKey();
-//        return $this->hasMany(InterviewInvitations::class, $foreingKey)
-//            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['ACCEPTED']);
-//    }
-//
-//    public function rejectedAdvices()
-//    {
-//        $foreingKey = $this->foreignKey();
-//        return $this->hasMany(InterviewInvitations::class, $foreingKey)
-//            ->where('invitations_to_interview.STATUS', Constants::INTERVIEW_ADVICES_STATUSES['REJECTED']);
-//    }
-//
-//
-//    protected function foreignKey()
-//    {
-//        if (Helper::isCompany()) {
-//            return 'COMPANY_ID';
-//        } elseif (Helper::isCandidate()) {
-//            return 'CANDIDATE_ID';
-//        }
-//    }
+
+    public function allInvitations($userId)
+    {
+        return $this->hasMany(InterviewInvitations::class, $this->foreignKey($userId));
+    }
+
+
+    public function acceptedInvitations($userId)
+    {
+        return $this->hasMany(InterviewInvitations::class, $this->foreignKey($userId))
+            ->where('invitations_to_interview.STATUS', 'accepted');
+    }
+
+    public function rejectedInvitations($userId)
+    {
+        return $this->hasMany(InterviewInvitations::class, $this->foreignKey($userId))
+            ->where('invitations_to_interview.STATUS', 'rejected');
+    }
+
+
+    protected function foreignKey($userId)
+    {
+        $user = User::find($userId);
+        if ($user->role_id == Constants::USER_ROLES_IDS['company']) {
+            return 'COMPANY_ID';
+        } elseif ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {
+            return 'CANDIDATE_ID';
+        }
+    }
+
+
+
 //
 //    public function scopeCandidates($query)
 //    {
@@ -120,24 +121,25 @@ class User extends Model
 //        return $query->where('role_id', $roleId);
 //    }
 //
-//    public static function getCandidateFields() {
-//        return [
-//            'NAME', 'IMAGE' , 'COUNTRY',
-//            'CITY', 'PHONE', 'CATEGORY_ID',
-//            'LEVEL', 'YEARS_EXPERIENCE',
-//            'SALARY', 'EXPERIENCE',
-//            'EDUCATION', 'SKILLS',
-//            'LANGUAGES', 'ABOUT_ME', 'ACTIVE'
-//        ];
-//    }
-//
-//    public static function getCompanyFields() {
-//        return [
-//            'NAME', 'IMAGE' , 'COUNTRY',
-//            'CITY', 'PHONE', 'EMPLOYEE_CNT',
-//            'WEB_SITE', 'DESCRIPTION', 'ACTIVE'
-//        ];
-//    }
+
+    public static function getCandidateFields() {
+        return [
+            'NAME', 'IMAGE' , 'COUNTRY',
+            'CITY', 'PHONE', 'CATEGORY_ID',
+            'LEVEL', 'YEARS_EXPERIENCE',
+            'SALARY', 'EXPERIENCE',
+            'EDUCATION', 'SKILLS',
+            'LANGUAGES', 'ABOUT_ME', 'ACTIVE'
+        ];
+    }
+
+    public static function getCompanyFields() {
+        return [
+            'NAME', 'IMAGE' , 'COUNTRY',
+            'CITY', 'PHONE', 'EMPLOYEE_CNT',
+            'WEB_SITE', 'DESCRIPTION', 'ACTIVE'
+       ];
+    }
 
 
 

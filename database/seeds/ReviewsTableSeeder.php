@@ -3,7 +3,7 @@
 //namespace Database\Seeders;
 
 use App\Constants;
-use App\Models\Reviews;
+use App\Domains\Home\Models\Reviews;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Domains\Candidates\Models\JobCategories;

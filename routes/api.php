@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 
+
+
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
 use App\Domains\Candidates\Http\Controllers\CandidateController;
 use App\Domains\Home\Http\Controllers\HomeController;
@@ -26,7 +28,7 @@ Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/list', [VacancyController::class, 'getVacancies']);
     Route::post('/read', [VacancyController::class, 'getVacancy']);
     Route::post('/create', [VacancyController::class, 'createVacancy']);
-    Route::post('/delete', [VacancyController::class, 'deleteVacancy']);
+    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
     Route::post('/update', [VacancyController::class, 'updateVacancy']);
 });
 

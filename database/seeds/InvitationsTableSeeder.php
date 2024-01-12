@@ -33,7 +33,7 @@ class InvitationsTableSeeder extends Seeder
                 'CANDIDATE_NAME' => $candidate->NAME,
                 'VACANCY_ID' => $vacancy->ID,
                 'VACANCY_NAME' => $vacancy->NAME,
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['ACCEPTED'],
+                'STATUS' => 'accepted',
             ]);
 
 
@@ -49,7 +49,7 @@ class InvitationsTableSeeder extends Seeder
                 'CANDIDATE_NAME' => $candidate->NAME,
                 'VACANCY_ID' => $vacancy->ID,
                 'VACANCY_NAME' => $vacancy->NAME,
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['REJECTED'],
+                'STATUS' => 'rejected',
             ]);
 
 /*        $candidate = User::where('NAME', 'Victor')->firstOrFail();
@@ -70,7 +70,7 @@ class InvitationsTableSeeder extends Seeder
                      It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
                      and more recently
                      with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['NO_STATUS'],
+                'STATUS' => 'no_status',
             ]);
 
         $candidate = DB::table('users')->where('NAME', 'iTechArt')->first();
@@ -83,7 +83,7 @@ class InvitationsTableSeeder extends Seeder
                 'CANDIDATE_NAME' => $candidate->NAME,
                 'VACANCY_ID' => $vacancy->ID,
                 'VACANCY_NAME' => $vacancy->NAME,
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['ACCEPTED'],
+                'STATUS' => 'accepted',
             ]);
 
 
@@ -97,7 +97,7 @@ class InvitationsTableSeeder extends Seeder
                 'CANDIDATE_NAME' => $candidate->NAME,
                 'VACANCY_ID' => $vacancy->ID,
                 'VACANCY_NAME' => $vacancy->NAME,
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['REJECTED'],
+                'STATUS' => 'rejected',
             ]);
 
         $candidate = DB::table('users')->where('NAME', 'Techin')->first();
@@ -115,7 +115,7 @@ class InvitationsTableSeeder extends Seeder
                      It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
                      and more recently
                      with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-                'STATUS' => Constants::INTERVIEW_ADVICES_STATUSES['NO_STATUS'],
+                'STATUS' => 'no_status',
             ]);
     }
 }

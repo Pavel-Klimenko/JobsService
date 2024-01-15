@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class createVacancy
 {
-    public function run($request) {
+    public function run($arRequest) {
             try {
                 /*        $arrVacancyFields = [
                 'NAME' => $request->NAME,
@@ -31,25 +31,9 @@ class createVacancy
                 'BENEFITS' => $request->BENEFITS
             ];*/
 
+            $result = Vacancies::create($arRequest);
 
-            $arrVacancyFields = [
-                'NAME' => 'Test',
-                //'ICON' => Auth::user()->ICON,
-                //'IMAGE' => Auth::user()->IMAGE,
-                'COUNTRY' => 'Test',
-                'CITY' => 'Test',
-                'CATEGORY_ID' => 1,
-                //'COMPANY_ID' => Auth::user()->id, TODO передать с другого сервиса
-                'SALARY_FROM' => 1000,
-                'DESCRIPTION' => 2000,
-                //'RESPONSIBILITY' => Helper::convertTextPointsToJson($request->RESPONSIBILITY),
-                //'QUALIFICATIONS' => Helper::convertTextPointsToJson($request->QUALIFICATIONS),
-                'BENEFITS' => 'Test'
-            ];
-
-            $result = Vacancies::create($arrVacancyFields);
-
-            Log::info('createVacancy()', ['request_data' => $request->all(), 'response_data' => $result]);
+            Log::info('createVacancy()', ['request_data' => $arRequest, 'response_data' => $result]);
             return $result;
         } catch(\Exception $exception) {
             Log::error('createVacancy()', ['error_message' => $exception->getMessage()]);

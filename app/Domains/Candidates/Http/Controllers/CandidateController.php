@@ -9,9 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 
 class CandidateController extends BaseController
 {
-    public function getCandidate(Request $request)
+    public function getCandidate($id)
     {
-        return app(Actions\getCandidate::class)->run($request->id);
+        return app(Actions\getCandidate::class)->run($id);
     }
 
     public function getCandidates(Request $request)

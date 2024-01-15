@@ -29,14 +29,14 @@ Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/read', [VacancyController::class, 'getVacancy']);
     Route::post('/create', [VacancyController::class, 'createVacancy']);
     Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
-    Route::post('/update', [VacancyController::class, 'updateVacancy']);
+    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
 });
 
 Route::group(['prefix' => 'candidates'], function () {
-    Route::post('/list', [CandidateController::class, 'getCandidates']);
-    Route::post('/read', [CandidateController::class, 'getCandidate']);
-    Route::post('/create-interview-invitation',
-        [CandidateController::class, 'createInterviewInvitation']);
+    Route::post('/create-interview-invitation', [CandidateController::class, 'createInterviewInvitation']);
+    Route::post('/', [CandidateController::class, 'getCandidates']);
+    Route::post('/{id}', [CandidateController::class, 'getCandidate']);
+
 });
 
 Route::group(['prefix' => 'homepage'], function () {
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'homepage'], function () {
 });
 
 Route::group(['prefix' => 'personal'], function () {
-    Route::post('/get-personal-info', [PersonalController::class, 'getPersonalInfo']);
+    Route::post('/get-info', [PersonalController::class, 'getPersonalInfo']);
     Route::post('/get-company-vacancies', [PersonalController::class, 'getCompanyVacancies']);
     Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
     Route::post('/change-invitation-status', [PersonalController::class, 'changeInvitationStatus']);

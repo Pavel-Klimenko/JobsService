@@ -30,7 +30,7 @@ class VacancyController extends BaseController
         return app(Actions\getVacancy::class)->run($request->id);
     }
 
-    public function createVacancy(Request $request):Vacancies
+    public function createVacancy(Request $request)
     {
         //sleep(1);
 
@@ -46,7 +46,7 @@ class VacancyController extends BaseController
             'BENEFITS' => 'required|max:2500',
         ]);*/
 
-        return app(Actions\createVacancy::class)->run($request);
+        return app(Actions\createVacancy::class)->run($request->all());
 
         //sending notification to admin
 /*        $date = (object) [
@@ -63,11 +63,9 @@ class VacancyController extends BaseController
         return app(Actions\deleteVacancy::class)->run($request->id);
     }
 
-    public function updateVacancy(Request $request)
+    public function updateVacancy($id, Request $request)
     {
-        //sleep(1);
-
-        return app(Actions\updateVacancy::class)->run($request);
+        return app(Actions\updateVacancy::class)->run($id, $request);
 
         //$this->cacheService->deleteKeyFromCache('vacancy_'.$request->VACANCY_ID);
         //sending notification to admin

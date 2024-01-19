@@ -15,12 +15,12 @@ use App\Domains\Candidates\Models\User;
 
 class getPersonalInfo
 {
-    public function run($request) {
-        $user = User::find($request->user_id);
+    public function run($id) {
+        $user = User::find($id);
 
         $result = [];
         $result['title'] = 'Personal info';
-        $result['user_id'] = $request->user_id;
+        $result['user_id'] = $id;
         $result['user_role_id'] = $user->role_id;
 
         if ($user->role_id == Constants::USER_ROLES_IDS['admin']) {
@@ -28,7 +28,7 @@ class getPersonalInfo
         } elseif ($user->role_id == Constants::USER_ROLES_IDS['company']) {
             $result['user_role'] = 'company';
         } elseif ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {
-            $result['category'] = Helper::getTableRow(JobCategories::class, 'ID', $request->user_id);
+            $result['category'] = Helper::getTableRow(JobCategories::class, 'ID', $id);
             $result['jobCategories'] = JobCategories::all();
         }
 

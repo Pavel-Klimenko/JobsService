@@ -8,14 +8,14 @@ use App\Domains\Personal\Actions;
 
 class PersonalController extends BaseController
 {
-    public function getPersonalInfo(Request $request)
+    public function getPersonalInfo($id)
     {
-        return app(Actions\getPersonalInfo::class)->run($request);
+        return app(Actions\getPersonalInfo::class)->run($id);
     }
 
-    public function getCompanyVacancies(Request $request)
+    public function getCompanyVacancies($id)
     {
-        return app(Actions\getCompanyVacancies::class)->run($request);
+        return app(Actions\getCompanyVacancies::class)->run($id);
     }
 
     public function createInterviewInvitation(Request $request)
@@ -23,14 +23,14 @@ class PersonalController extends BaseController
         return app(Actions\createInterviewInvitation::class)->run($request);
     }
 
-    public function changeInvitationStatus(Request $request)
+    public function changeInvitationStatus($id, $status)
     {
-        return app(Actions\changeInvitationStatus::class)->run($request);
+        return app(Actions\changeInvitationStatus::class)->run($id, $status);
     }
 
-    public function getIterviewInvitations(Request $request)
+    public function getInterviewInvitations($id, $status)
     {
-        return app(Actions\getIterviewInvitations::class)->run($request);
+        return app(Actions\getInterviewInvitations::class)->run($id, $status);
     }
 
     public function updateUserInfo(Request $request)

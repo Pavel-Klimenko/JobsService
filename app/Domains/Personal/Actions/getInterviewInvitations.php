@@ -6,9 +6,9 @@ use App\Helper;
 use App\Domains\Candidates\Models\User;
 
 
-class getIterviewInvitations
+class getInterviewInvitations
 {
-    public function run($request) {
+    public function run($id, $status) {
 /*       if (Helper::isAdmin()) {
             return redirect()->route('admin-main');
         }*/
@@ -19,35 +19,30 @@ class getIterviewInvitations
 
 
         $itemsOnPage = 2;
-        switch ($request->status) {
+        switch ($status) {
             case 'accepted':
                 //$title = 'Accepted interview requests';
-                $candidatesRequests = User::find($request->user_id)
-                    ->acceptedInvitations($request->user_id)
+                $candidatesRequests = User::find($id)
+                    ->acceptedInvitations($id)
                     ->paginate($itemsOnPage)
                    ->withQueryString();
                 break;
             case 'rejected':
                 //$title = 'Rejected interview requests';
-               $candidatesRequests = User::find($request->user_id)
-                    ->rejectedInvitations($request->user_id)
+               $candidatesRequests = User::find($id)
+                    ->rejectedInvitations($id)
                     ->paginate($itemsOnPage)
                    ->withQueryString();
                 break;
-
-            default:
+            case 'all':
                 //$title = 'All interview requests';
-                $candidatesRequests = User::find($request->user_id)
-                    ->allInvitations($request->user_id)
+                $candidatesRequests = User::find($id)
+                    ->allInvitations($id)
                     ->paginate($itemsOnPage)
                     ->withQueryString();
                 break;
         }
 
         return $candidatesRequests;
-
-
-/*       return view('personal.InterviewRequests',
-            compact('candidatesRequests', 'title', 'isCompanyFlag', 'isCandidateFlag'));*/
     }
 }

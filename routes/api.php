@@ -40,15 +40,15 @@ Route::group(['prefix' => 'candidates'], function () {
 });
 
 Route::group(['prefix' => 'homepage'], function () {
-    Route::post('/', [HomeController::class, 'getHomePageData']);
+    Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 
 Route::group(['prefix' => 'personal'], function () {
-    Route::post('/get-info', [PersonalController::class, 'getPersonalInfo']);
-    Route::post('/get-company-vacancies', [PersonalController::class, 'getCompanyVacancies']);
+    Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
+    Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);
     Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
-    Route::post('/change-invitation-status', [PersonalController::class, 'changeInvitationStatus']);
-    Route::post('/get-interview-invitations', [PersonalController::class, 'getIterviewInvitations']);
+    Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
+    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
     Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
 });
 

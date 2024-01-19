@@ -4,20 +4,23 @@ namespace App\Domains\Personal\Actions;
 
 use App\Constants;
 use App\Domains\Candidates\Models\InterviewInvitations;
+use RuntimeException;
 //use App\Models\User;
 
 class changeInvitationStatus
 {
-    public function run($request)
+    public function run($id, $status)
     {
-        $invitation = InterviewInvitations::find($request->id);
-        $invitation->STATUS = $request->status;
+        $invitation = InterviewInvitations::find($id);
+        $invitation->STATUS = $status;
         $invitation->save();
 
+        if (!in_array($status, ['accepted', 'rejected'])) throw new RuntimeException('Wrong invitation status');
+
         //sending notification to candidate email
-        if ($request->status == 'rejected') {
+        if ($status == 'rejected') {
             $message = 'Unfortunately company can\'t invite you to the interview';
-        } elseif ($request->status == 'accepted') {
+        } elseif ($status == 'accepted') {
             $message = 'You have been invited for an interview';
         }
 

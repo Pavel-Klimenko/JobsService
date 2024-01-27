@@ -59,13 +59,10 @@ class getCandidates
                     $candidates = $candidates->orderBy($sortFiled, 'desc');
                 }
             }
-
-            Log::info('getCandidates()', ['request_data' => $arrRequest, 'response_data' => $candidates]);
             return $candidates;
 
         } catch(\Exception $exception) {
             Log::error('getCandidates()', ['error_message' => $exception->getMessage()]);
-
             return $exception->getMessage();
         }
 

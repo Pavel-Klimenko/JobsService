@@ -24,9 +24,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//TODO общий контроллер в middleware!
+
 Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/list', [VacancyController::class, 'getVacancies']);
-    Route::post('/read', [VacancyController::class, 'getVacancy']);
+    Route::get('/{id}', [VacancyController::class, 'getVacancy']);
     Route::post('/create', [VacancyController::class, 'createVacancy']);
     Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
     Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
@@ -36,7 +38,6 @@ Route::group(['prefix' => 'candidates'], function () {
     Route::post('/create-interview-invitation', [CandidateController::class, 'createInterviewInvitation']);
     Route::post('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-
 });
 
 Route::group(['prefix' => 'homepage'], function () {

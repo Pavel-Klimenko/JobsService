@@ -25,11 +25,12 @@ class getCandidates
                 ['ACTIVE', '=', '1'],
             ])->get();
 
-            if ($request->has('CATEGORY_NAME')) {
-                $model = JobCategories::class;
-                $category = Helper::getTableRow($model, 'NAME', $arrRequest['CATEGORY_NAME']);
-                $arrRequest['CATEGORY_ID'] = $category->ID;
-            }
+//            if ($request->has('CATEGORY_NAME')) {
+//                $model = JobCategories::class;
+//                $category = Helper::getTableRow($model, 'NAME', $arrRequest['CATEGORY_NAME']);
+//                $arrRequest['CATEGORY_ID'] = $category->ID;
+//            }
+
 
             if (!empty($arrRequest)) {
                 $filterParams = ['LEVEL', 'CATEGORY_ID', 'CITY'];
@@ -49,16 +50,25 @@ class getCandidates
                     }
                 }
 
+
+
                 //sorting results
                 if ($request->has('SORT')) {
-                    if ($arrRequest['SORT'] == 'maxExperience') {
-                        $sortFiled = 'YEARS_EXPERIENCE';
-                    } elseif ($arrRequest['SORT'] == 'newest') {
-                        $sortFiled = 'created_at';
-                    }
-                    $candidates = $candidates->orderBy($sortFiled, 'desc');
+//                    if ($arrRequest['SORT'] == 'maxExperience') {
+//                        $sortFiled = 'YEARS_EXPERIENCE';
+//                    } elseif ($arrRequest['SORT'] == 'newest') {
+//                        $sortFiled = 'created_at';
+//                    }
+
+                    $candidates = $candidates->orderBy($arrRequest['SORT'], 'desc');
                 }
             }
+
+            foreach ($candidates as $user) {
+                $category = Helper::getTableRow(JobCategories::class, 'ID', $user->CATEGORY_ID);
+                $user->CATEGORY_NAME = $category->NAME;
+            }
+
             return $candidates;
 
         } catch(\Exception $exception) {

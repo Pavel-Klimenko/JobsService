@@ -33,24 +33,25 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 Route::group(['prefix' => 'candidates'], function () {
-    Route::post('/create-interview-invitation', [CandidateController::class, 'createInterviewInvitation']);
     Route::post('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-
+    Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
 });
 
 Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 
-Route::group(['prefix' => 'personal'], function () {
+
+//TODO этот раздел после очередей и авторизации
+/*Route::group(['prefix' => 'personal'], function () {
     Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
     Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);
     Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
     Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
     Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
     Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
-});
+});*/
 
 
 //Route::post('/tokens/create', function (Request $request) {

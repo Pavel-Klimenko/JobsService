@@ -14,7 +14,7 @@ class CreateReviewsTable extends Migration
     public function up()
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->id('ID')->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('NAME')->nullable();
             $table->string('PHOTO')->nullable();
             $table->mediumText('REVIEW')->nullable();

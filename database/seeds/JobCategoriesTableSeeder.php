@@ -15,22 +15,14 @@ class JobCategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        JobCategories::create(['NAME' => 'java']);
-        JobCategories::create(['NAME' => 'c']);
-        JobCategories::create(['NAME' => 'c++']);
-        JobCategories::create(['NAME' => 'c#']);
-        JobCategories::create(['NAME' => 'python']);
-        JobCategories::create(['NAME' => 'php']);
-        JobCategories::create(['NAME' => 'javascript']);
-        JobCategories::create(['NAME' => 'perl']);
-        JobCategories::create(['NAME' => 'ruby']);
-        JobCategories::create(['NAME' => 'assembler']);
-        JobCategories::create(['NAME' => 'delphi']);
-        JobCategories::create(['NAME' => 'swift']);
-        JobCategories::create(['NAME' => 'groovy']);
-        JobCategories::create(['NAME' => 'objective-C']);
-        JobCategories::create(['NAME' => 'go']);
-        JobCategories::create(['NAME' => 'scala']);
-        JobCategories::create(['NAME' => 'haskell']);
+        $arLangs = [
+            'java', 'c', 'c++', 'c#', 'python',
+            'php', 'javascript', 'perl', 'ruby', 'assembler',
+            'delphi', 'swift', 'go', 'scala', 'haskell'
+        ];
+
+        foreach ($arLangs as $lang) {
+            JobCategories::create(['NAME' => $lang]);
+        }
     }
 }

@@ -2,11 +2,8 @@
 //namespace Database\Seeders;
 
 use App\Domains\Candidates\Models\InterviewInvitations;
-use App\Domains\Candidates\Models\User;
-use App\Domains\Vacancies\Models\Vacancies;
-use App\Constants;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 
 class InvitationsTableSeeder extends Seeder
@@ -19,52 +16,32 @@ class InvitationsTableSeeder extends Seeder
     public function run()
     {
 
-        //TODO оптимизировать код! убрать дубли! Сделать фабрики!!!!
 
-        $candidate = DB::table('users')->where('NAME', 'Pavel')->first();
         $company = DB::table('users')->where('NAME', 'EPAM')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
-
 
         InterviewInvitations::create(
             [
-                'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'COMPANY_ID' => DB::table('users')->where('NAME', 'EPAM')->first()->id,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'Pavel')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'STATUS' => 'accepted',
             ]);
 
 
-        $candidate = DB::table('users')->where('NAME', 'Olga')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
-
-
-
         InterviewInvitations::create(
             [
                 'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'Olga')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'STATUS' => 'rejected',
             ]);
 
-/*        $candidate = User::where('NAME', 'Victor')->firstOrFail();
-        $vacancy = Vacancies::where('COMPANY_ID', $company->id)->firstOrFail();*/
-
-        $candidate = DB::table('users')->where('NAME', 'Victor')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
 
         InterviewInvitations::create(
             [
                 'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'Victor')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'CANDIDATE_COVERING_LETTER' => 'It has survived not only five centuries,
                      but also the leap into electronic typesetting, remaining essentially unchanged.
                      It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
@@ -73,43 +50,26 @@ class InvitationsTableSeeder extends Seeder
                 'STATUS' => 'no_status',
             ]);
 
-        $candidate = DB::table('users')->where('NAME', 'iTechArt')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
-
         InterviewInvitations::create(
             [
                 'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'iTechArt')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'STATUS' => 'accepted',
             ]);
 
-
-        $candidate = DB::table('users')->where('NAME', 'Giperlink')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
-
         InterviewInvitations::create(
             [
                 'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'Giperlink')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'STATUS' => 'rejected',
             ]);
 
-        $candidate = DB::table('users')->where('NAME', 'Techin')->first();
-        $vacancy = DB::table('vacancies')->where('COMPANY_ID', $company->id)->first();
-
-        InterviewInvitations::create(
-            [
+        InterviewInvitations::create([
                 'COMPANY_ID' => $company->id,
-                'CANDIDATE_ID' => $candidate->id,
-                'CANDIDATE_NAME' => $candidate->NAME,
-                'VACANCY_ID' => $vacancy->ID,
-                'VACANCY_NAME' => $vacancy->NAME,
+                'CANDIDATE_ID' => DB::table('users')->where('NAME', 'Techin')->first()->id,
+                'VACANCY_ID' => DB::table('vacancies')->where('COMPANY_ID', $company->id)->first()->id,
                 'CANDIDATE_COVERING_LETTER' => 'It has survived not only five centuries,
                      but also the leap into electronic typesetting, remaining essentially unchanged.
                      It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,

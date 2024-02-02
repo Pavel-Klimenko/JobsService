@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class InterviewInvitations extends Model
 {
+
+    protected $fillable = ['COMPANY_ID', 'CANDIDATE_ID', 'VACANCY_ID', 'CANDIDATE_COVERING_LETTER'];
+
     protected $table = 'invitations_to_interview';
     protected $primaryKey = 'ID';
 

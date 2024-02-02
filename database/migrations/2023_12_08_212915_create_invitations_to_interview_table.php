@@ -17,9 +17,7 @@ class CreateInvitationsToInterviewTable extends Migration
             $table->id('ID')->autoIncrement();
             $table->bigInteger('COMPANY_ID')->nullable();
             $table->bigInteger('CANDIDATE_ID')->nullable();
-            $table->string('CANDIDATE_NAME')->nullable();
             $table->bigInteger('VACANCY_ID')->nullable();
-            $table->string('VACANCY_NAME')->nullable();
             $table->mediumText('CANDIDATE_COVERING_LETTER')->nullable();
             $table->string('STATUS')->nullable();
             $table->timestamps();

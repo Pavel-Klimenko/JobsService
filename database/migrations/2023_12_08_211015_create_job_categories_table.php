@@ -14,7 +14,7 @@ class CreateJobCategoriesTable extends Migration
     public function up()
     {
         Schema::create('job_categories', function (Blueprint $table) {
-            $table->id('ID')->autoIncrement();
+            $table->id()->autoIncrement();
             $table->string('NAME')->nullable();
             $table->timestamps();
         });

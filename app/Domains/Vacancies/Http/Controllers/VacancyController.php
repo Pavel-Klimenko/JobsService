@@ -32,20 +32,6 @@ class VacancyController extends BaseController
 
     public function createVacancy(Request $request)
     {
-        //sleep(1);
-
-/*        $request->validate([
-            'NAME' => 'required|max:255',
-            'COUNTRY' => 'required|max:255',
-            'CITY' => 'required|max:255',
-            'CATEGORY_ID' => 'required|not_in:0',
-            'SALARY_FROM' => 'required|max:255',
-            'DESCRIPTION' => 'required|max:2500',
-            'RESPONSIBILITY' => 'required|max:2500',
-            'QUALIFICATIONS' => 'required|max:2500',
-            'BENEFITS' => 'required|max:2500',
-        ]);*/
-
         return app(Actions\createVacancy::class)->run($request->all());
 
         //sending notification to admin

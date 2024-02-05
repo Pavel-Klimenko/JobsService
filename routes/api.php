@@ -42,7 +42,6 @@ Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 
-
 //TODO этот раздел после очередей и авторизации
 /*Route::group(['prefix' => 'personal'], function () {
     Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
@@ -58,3 +57,10 @@ Route::group(['prefix' => 'homepage'], function () {
 //    $token = $request->user()->createToken($request->token_name);
 //    return ['token' => $token->plainTextToken];
 //});
+
+Route::post("/message", function (Request $request) {
+    $message = $_POST['message'];
+    $mqService = new \App\Services\RabbitMQService();
+    $mqService->publish($message);
+    return view('welcome');
+});

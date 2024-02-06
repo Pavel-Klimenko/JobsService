@@ -62,5 +62,5 @@ Route::post("/message", function (Request $request) {
     $message = $_POST['message'];
     $mqService = new \App\Services\RabbitMQService();
     $mqService->publish($message);
-    return view('welcome');
+    //return view('welcome');
 });

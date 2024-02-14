@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers;
 
-Route::get('/', function() {
-    return view('welcome');
-});
+//Route::get('/', function() {
+//    return view('welcome');
+//});
 
 
-//Route::get('/', [Controllers\TestController::class, 'test']);
+Route::get('/', [Controllers\TestController::class, 'test']);
+
 
 //Route::get('/', function () {
 /*  $visited = DB::select('select * from places where visited = ?', [1]);

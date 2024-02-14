@@ -55,6 +55,15 @@ services:
     networks:
       - jobservice
 
+  mailhog:
+    #platform: linux/x86_64
+    image: mailhog/mailhog
+    container_name: mailhog-smtp
+    ports:
+      - "8005:1025" # smtp server
+      - "8200:8025" # web ui
+    networks:
+      - jobservice
 
 networks:
   jobservice:

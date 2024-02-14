@@ -13,10 +13,18 @@ use App\Models\JobCategories;
 
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\UserNotification;
+use Mailgun\Mailgun;
+
 class TestController extends Controller
 {
     public function test()
     {
-       echo 'JobService запущен';
+        //TODO используем бесплатный SMTP
+        Mail::to('pavel.klimenko.1989@gmail.com')->send(new UserNotification());
+
     }
 }
+
+

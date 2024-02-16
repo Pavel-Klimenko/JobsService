@@ -23,7 +23,6 @@ class TestController extends Controller
     {
         //TODO используем бесплатный SMTP
         Mail::to('pavel.klimenko.1989@gmail.com')->send(new UserNotification());
-
     }
 }
 

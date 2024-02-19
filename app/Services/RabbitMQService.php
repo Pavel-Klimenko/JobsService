@@ -5,6 +5,7 @@ namespace App\Services;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use Illuminate\Support\Facades\Log;
 
 class RabbitMQService
 {
@@ -17,7 +18,7 @@ class RabbitMQService
         $channel->queue_bind('test_queue', 'test_exchange', 'test_key');
         $msg = new AMQPMessage($message);
         $channel->basic_publish($msg, 'test_exchange', 'test_key');
-        //echo " [x] Sent $message to test_exchange / test_queue.\n";
+        echo " [x] Sent $message to test_exchange / test_queue.\n";
         $channel->close();
         $connection->close();
     }

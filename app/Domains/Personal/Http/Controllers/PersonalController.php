@@ -1,10 +1,12 @@
 <?php
 namespace App\Domains\Personal\Http\Controllers;
 
+use App\Mail\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 use App\Domains\Personal\Actions;
+use Illuminate\Support\Facades\Mail;
 
 class PersonalController extends BaseController
 {
@@ -18,14 +20,19 @@ class PersonalController extends BaseController
         return app(Actions\getCompanyVacancies::class)->run($id);
     }
 
-    public function createInterviewInvitation(Request $request)
-    {
-        return app(Actions\createInterviewInvitation::class)->run($request);
-    }
-
     public function changeInvitationStatus($id, $status)
     {
-        return app(Actions\changeInvitationStatus::class)->run($id, $status);
+        $response = app(Actions\changeInvitationStatus::class)->run($id, $status);
+
+        Mail::send(new UserNotification([
+            'TYPE' => 'answer_to_invitation',
+            'INVITATION' => $response['invitation'],
+            'CANDIDATE' => $response['candidate'],
+            'COMPANY' => $response['company'],
+            'VACANCY' => $response['vacancy'],
+        ]));
+
+        return $response;
     }
 
     public function getInterviewInvitations($id, $status)

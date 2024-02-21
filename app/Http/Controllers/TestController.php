@@ -23,8 +23,20 @@ class TestController extends Controller
     {
         //TODO используем бесплатный SMTP
 
-//        $emailTo = 'pavel.klimenko.1989@gmail.com';
+        $emailTo = 'pavel.klimenko.1989@gmail.com';
 //
-//        Mail::to($emailTo)->send(new UserNotification());
+        Mail::to($emailTo)->send(new UserNotification());
+
+//        dump('1231231');
+//
+//        $arMessage = [
+//            'TYPE' => 'interview_invitation',
+//            'COMPANY_ID' => 'interview_invitation',
+//            'VACANCY_ID' => 'interview_invitation',
+//            'CANDIDATE_COVERING_LETTER' => 'interview_invitation',
+//        ];
+//
+//        Mail::send(new UserNotification($arMessage));
+
     }
 }

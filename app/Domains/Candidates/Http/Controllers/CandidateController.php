@@ -22,17 +22,13 @@ class CandidateController extends BaseController
     }
 
     public function createInterviewInvitation(Request $request) {
-        //return app(Actions\createInterviewInvitation::class)->run($request);
+        app(Actions\createInterviewInvitation::class)->run($request);
 
-        $arMessage = [
+        Mail::send(new UserNotification([
             'TYPE' => 'interview_invitation',
             'COMPANY_ID' => $request->COMPANY_ID,
             'VACANCY_ID' => $request->VACANCY_ID,
             'CANDIDATE_COVERING_LETTER' => $request->CANDIDATE_COVERING_LETTER,
-        ];
-
-        Mail::send(new UserNotification($arMessage));
-
-        return $request;
+        ]));
     }
 }

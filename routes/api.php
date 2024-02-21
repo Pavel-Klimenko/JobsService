@@ -43,24 +43,17 @@ Route::group(['prefix' => 'homepage'], function () {
 });
 
 //TODO этот раздел после очередей и авторизации
-/*Route::group(['prefix' => 'personal'], function () {
+Route::group(['prefix' => 'personal'], function () {
     Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
     Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);
     Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
     Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
-    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
-    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
-});*/
+//    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
+//    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
+});
 
 
 //Route::post('/tokens/create', function (Request $request) {
 //    $token = $request->user()->createToken($request->token_name);
 //    return ['token' => $token->plainTextToken];
 //});
-
-Route::post("/message", function (Request $request) {
-    $message = $_POST['message'];
-    $mqService = new \App\Services\RabbitMQService();
-    $mqService->publish($message);
-    //return view('welcome');
-});

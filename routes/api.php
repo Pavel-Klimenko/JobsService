@@ -51,9 +51,3 @@ Route::group(['prefix' => 'personal'], function () {
 //    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
 //    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
 });
-
-
-//Route::post('/tokens/create', function (Request $request) {
-//    $token = $request->user()->createToken($request->token_name);
-//    return ['token' => $token->plainTextToken];
-//});

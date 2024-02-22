@@ -1,11 +1,11 @@
 <?php
 namespace App\Domains\Candidates\Models;
 
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use App\Constants;
 use App\Helper;
 //use App\Ship\Helpers\Helper;
@@ -13,7 +13,7 @@ use App\Helper;
 
 use App\Domains\Vacancies\Models\Vacancies;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
@@ -24,8 +24,6 @@ class User extends Model
      */
 
     protected $table = 'users';
-
-
 
     protected $fillable = [
         'NAME',

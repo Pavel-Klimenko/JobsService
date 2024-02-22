@@ -12,13 +12,13 @@
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^7.0",
+        "laravel/passport": "^9.4",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
         "mailgun/mailgun-php": "^4.0",
         "nyholm/psr7": "^1.8",
         "php-amqplib/php-amqplib": "^2.8",
-        "symfony/http-client": "^5.4",
-        "tcg/voyager": "^1.4"
+        "symfony/http-client": "^5.4"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

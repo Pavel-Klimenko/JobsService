@@ -20,7 +20,6 @@ class getCandidate
             $result = User::find($id);
             $result->CATEGORY_NAME = JobCategories::find($result->CATEGORY_ID)->NAME;
             return $result;
-
         } catch(\Exception $exception) {
             Log::error('getCandidate()', ['error_message' => $exception->getMessage()]);
             return $exception->getMessage();

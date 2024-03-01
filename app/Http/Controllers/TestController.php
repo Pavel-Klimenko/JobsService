@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domains\Candidates\Models\User;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
@@ -16,27 +17,40 @@ use App\Mail\UserNotification;
 use Mailgun\Mailgun;
 
 use App\Services\RabbitMQService;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
     public function test()
     {
-        //TODO используем бесплатный SMTP
 
-        $emailTo = 'pavel.klimenko.1989@gmail.com';
-//
-        Mail::to($emailTo)->send(new UserNotification());
+        //TODO сделать методы для создания и хранения токенов!
 
-//        dump('1231231');
-//
-//        $arMessage = [
-//            'TYPE' => 'interview_invitation',
-//            'COMPANY_ID' => 'interview_invitation',
-//            'VACANCY_ID' => 'interview_invitation',
-//            'CANDIDATE_COVERING_LETTER' => 'interview_invitation',
-//        ];
-//
-//        Mail::send(new UserNotification($arMessage));
+
+        //создание токена passport
+//        $userId = 2;
+//        $user = User::find($userId);
+//        $token = $user->createToken(sprintf("%s-%s", $user->EMAIL, now()), ['candidate'])->accessToken;
+//        dd($token);
+
+
+        //создание токена sanctum
+
+        //Candidate
+
+//        $userId = 2;
+//        $user = User::find($userId);
+//        $token = $user->createToken('token-name', ['candidate_rules'])->plainTextToken;
+//        dd($token);
+
+        //Company
+
+//        $userId = 7;
+//        $user = User::find($userId);
+//        $token = $user->createToken('token-name', ['company_rules'])->plainTextToken;
+//        dd($token);
+
+
 
     }
 }

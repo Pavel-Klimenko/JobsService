@@ -1,7 +1,8 @@
 <?php
 namespace App\Domains\Candidates\Models;
 
-use Laravel\Passport\HasApiTokens;
+//use Laravel\Passport\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +33,6 @@ class User extends Authenticatable
         'COUNTRY',
         'CITY',
         'ICON',
-
         'password',
         'role_id'
     ];

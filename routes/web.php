@@ -18,3 +18,7 @@ Route::get('/', [Controllers\TestController::class, 'test']);
 
   return view('travel_list', ['visited' => $visited, 'togo' => $togo ] );*/
 //});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

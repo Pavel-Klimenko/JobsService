@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * Сопоставления политик для приложения.
+     * Policy mappings for the application.
      *
      * @var array
      */
@@ -19,18 +19,22 @@ class AuthServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Регистрация всех сервисов аутентификации / авторизации.
+     * Registration of all authentication/authorization services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->registerPolicies();
+//        $this->registerPolicies();
+//        Passport::routes();
 
-        Passport::routes();
+//        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+//        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
 
-        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+//        Passport::tokensCan([
+//            'candidate' => 'Using JobBoard like a job applicant',
+//            'company' => 'Using Job Board like company which hiring people',
+//        ]);
 
-        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
     }
 }

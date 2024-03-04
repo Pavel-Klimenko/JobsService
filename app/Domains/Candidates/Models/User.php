@@ -14,6 +14,8 @@ use App\Helper;
 
 use App\Domains\Vacancies\Models\Vacancies;
 
+//TODO переименовать в Candidate
+
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;

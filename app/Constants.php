@@ -15,9 +15,9 @@ class Constants
     ];
 
     const USER_ROLE_NAMES = [
-        'admin' => 'admin',
-        'company' => 'company',
-        'candidate' => 'candidate',
+        1 => 'admin',
+        2 => 'company',
+        3 => 'candidate',
     ];
 
 

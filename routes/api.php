@@ -32,10 +32,9 @@ Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
 });
 
-Route::group(['prefix' => 'candidates'], function () {
-    Route::post('/', [CandidateController::class, 'getCandidates'])->middleware('auth:sanctum', 'ability:candidate_rules');
-
-    Route::get('/{id}', [CandidateController::class, 'getCandidate'])->middleware('auth:sanctum', 'ability:company_rules');
+Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
+    Route::post('/', [CandidateController::class, 'getCandidates']);
+    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
     Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
 });
 
@@ -43,7 +42,7 @@ Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 
-//TODO этот раздел после очередей и авторизации
+//TODO этот раздел после очередей и авторизации и фронта!
 Route::group(['prefix' => 'personal'], function () {
     Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
     Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);

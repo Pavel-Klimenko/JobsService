@@ -38,6 +38,7 @@ class TestController extends Controller
         $password = 'almaz';
 
 
+
 //
 //        Auth::logout();
 
@@ -51,34 +52,53 @@ class TestController extends Controller
 //
 //        exit();
 
-
-
-
-
-//        AuthService::authenticateUser($email, $password);
+        //разлогин и удаление токена
 //        if (Auth::check()) {
-//            $token = AuthService::generateUserToken(Auth::user());
+//            $user = AuthService::logOutCurrentUser();
+//            AuthService::deleteUserTokens($user);
 //        }
 
 
-        AuthService::logOutCurrentUser();
+
+        //TODO при каждом АПИ запрос генерим новый токен
+
+          //логгирование и получение токена
+//        if (Auth::check()) AuthService::logOutCurrentUser();
+//        $user = AuthService::authenticateUser($email, $password);
+//        $token = AuthService::generateUserToken($user);
+//        dump($token);
+//        list($id, $value) = explode('|', $token);
+//        dump($id);
+//        dump($value); - это ставим в Bearer token
 
 
-        dd(Auth::check());
 
 
 
-        if (AuthService::authenticateUser($email, $password)) {
-            if (Auth::check()) {
-                // The user is logged in...
-
-                $token = AuthService::generateUserToken(Auth::user());
-                //dd($token);
 
 
-                //TODO метод удаления токена и логаут сделать!
-            }
-        }
+        //AuthService::logOutCurrentUser();
+
+
+
+
+
+//
+//        dd(Auth::check());
+
+
+
+//        if (AuthService::authenticateUser($email, $password)) {
+//            if (Auth::check()) {
+//                // The user is logged in...
+//
+//                $token = AuthService::generateUserToken(Auth::user());
+//                //dd($token);
+//
+//
+//                //TODO метод удаления токена и логаут сделать!
+//            }
+//        }
 
         exit();
 
@@ -122,8 +142,6 @@ class TestController extends Controller
 //        $user = User::find($userId);
 //        $token = $user->createToken('token-name', ['company_rules'])->plainTextToken;
 //        dd($token);
-
-
 
     }
 }

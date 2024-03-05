@@ -11,12 +11,12 @@ namespace App\Domains\Personal\Actions;
 use App\Helper;
 use App\Constants;
 use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 
 class getPersonalInfo
 {
     public function run($id) {
-        $user = User::find($id);
+        $user = Candidates::find($id);
 
         $result = [];
         $result['title'] = 'Personal info';

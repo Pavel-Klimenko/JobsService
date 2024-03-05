@@ -10,7 +10,7 @@ namespace App\Domains\Personal\Actions;
 
 use App\Constants;
 use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use RuntimeException;
 
 class getCompanyVacancies
@@ -19,7 +19,7 @@ class getCompanyVacancies
 //        if (Helper::isAdmin()) {
 //            return redirect()->route('admin-main');
 //        }
-        $company = User::find($id);
+        $company = Candidates::find($id);
         if ($company->role_id != Constants::USER_ROLES_IDS['company']) {
             throw new RuntimeException('Error: user is not a company');
         }

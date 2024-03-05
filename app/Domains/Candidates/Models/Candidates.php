@@ -1,22 +1,16 @@
 <?php
 namespace App\Domains\Candidates\Models;
 
-//use Laravel\Passport\HasApiTokens;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Constants;
-use App\Helper;
-//use App\Ship\Helpers\Helper;
-//use App\Containers\Vacancies\Models\InterviewInvitations;
 
 use App\Domains\Vacancies\Models\Vacancies;
 
 //TODO переименовать в Candidate
 
-class User extends Authenticatable
+class Candidates extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
@@ -96,7 +90,7 @@ class User extends Authenticatable
 
     protected function foreignKey($userId)
     {
-        $user = User::find($userId);
+        $user = Candidates::find($userId);
         if ($user->role_id == Constants::USER_ROLES_IDS['company']) {
             return 'COMPANY_ID';
         } elseif ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {

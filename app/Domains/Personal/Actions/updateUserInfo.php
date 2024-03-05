@@ -4,7 +4,7 @@ namespace App\Domains\Personal\Actions;
 
 
 use App\Helper;
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use RuntimeException;
 use App\Constants;
 
@@ -13,12 +13,12 @@ class updateUserInfo
     public function run($request) {
         try {
             if (!$request->user_id) throw new RuntimeException('User`id not sent');
-            $user = User::find($request->user_id);
+            $user = Candidates::find($request->user_id);
 
             if ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {
-                $arrUserFields = User::getCompanyFields();
+                $arrUserFields = Candidates::getCompanyFields();
             } elseif ($user->role_id == Constants::USER_ROLES_IDS['company']) {
-                $arrUserFields = User::getCandidateFields();
+                $arrUserFields = Candidates::getCandidateFields();
             }
 
             foreach ($arrUserFields as $field) {

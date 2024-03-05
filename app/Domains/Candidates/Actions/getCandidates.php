@@ -11,7 +11,7 @@ namespace App\Domains\Candidates\Actions;
 use App\Helper;
 use App\Constants;
 use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use Illuminate\Support\Facades\Log;
 
 class getCandidates
@@ -20,7 +20,7 @@ class getCandidates
         try {
             $arrRequest = $request->all();
 
-            $candidates = User::where([
+            $candidates = Candidates::where([
                 ['role_id', Constants::USER_ROLES_IDS['candidate']],
                 ['ACTIVE', '=', '1'],
             ])->get();

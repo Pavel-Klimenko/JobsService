@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 
@@ -31,117 +31,5 @@ class TestController extends Controller
 
     public function test()
     {
-
-        //TODO сделать методы для создания и хранения токенов!
-
-        $email = 'Pavel@test.com';
-        $password = 'almaz';
-
-
-
-//
-//        Auth::logout();
-
-//        Auth::login($user);
-//
-//        dd(Auth::check());
-
-
-//        AuthService::deleteUserTokens($user);
-//
-//
-//        exit();
-
-        //разлогин и удаление токена
-//        if (Auth::check()) {
-//            $user = AuthService::logOutCurrentUser();
-//            AuthService::deleteUserTokens($user);
-//        }
-
-
-
-        //TODO при каждом АПИ запрос генерим новый токен
-
-          //логгирование и получение токена
-//        if (Auth::check()) AuthService::logOutCurrentUser();
-//        $user = AuthService::authenticateUser($email, $password);
-//        $token = AuthService::generateUserToken($user);
-//        dump($token);
-//        list($id, $value) = explode('|', $token);
-//        dump($id);
-//        dump($value); - это ставим в Bearer token
-
-
-
-
-
-
-
-        //AuthService::logOutCurrentUser();
-
-
-
-
-
-//
-//        dd(Auth::check());
-
-
-
-//        if (AuthService::authenticateUser($email, $password)) {
-//            if (Auth::check()) {
-//                // The user is logged in...
-//
-//                $token = AuthService::generateUserToken(Auth::user());
-//                //dd($token);
-//
-//
-//                //TODO метод удаления токена и логаут сделать!
-//            }
-//        }
-
-        exit();
-
-        if (Auth::attempt([
-            'email' => $email,
-            'password' => $password,
-        ])) {
-            dump('Authentication was successful');
-            // Authentication was successful...
-
-
-
-
-
-
-
-        } else {
-            dd('Authentication was failed');
-        }
-
-
-        //создание токена passport
-//        $userId = 2;
-//        $user = User::find($userId);
-//        $token = $user->createToken(sprintf("%s-%s", $user->EMAIL, now()), ['candidate'])->accessToken;
-//        dd($token);
-
-
-        //создание токена sanctum
-
-        //Candidate
-
-//        $userId = 2;
-//        $user = User::find($userId);
-//        $token = $user->createToken('token-name', ['candidate_rules'])->plainTextToken;
-//        dd($token);
-
-        //Company
-
-//        $userId = 7;
-//        $user = User::find($userId);
-//        $token = $user->createToken('token-name', ['company_rules'])->plainTextToken;
-//        dd($token);
-
     }
 }

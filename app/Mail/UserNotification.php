@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use App\Domains\Vacancies\Models\Vacancies;
 
 class UserNotification extends Mailable
@@ -29,7 +29,7 @@ class UserNotification extends Mailable
     {
         if ($arParams['TYPE'] == 'interview_invitation') {
             //TODO передать ссылку на CV откликнувшегося пользователя
-            $this->company = User::find($arParams['COMPANY_ID']);
+            $this->company = Candidates::find($arParams['COMPANY_ID']);
             $this->vacancy = Vacancies::find($arParams['VACANCY_ID']);
 
             $this->template = 'mail.interview_invitation';

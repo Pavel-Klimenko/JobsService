@@ -21,13 +21,6 @@ class Constants
     ];
 
 
-//    const INTERVIEW_INVITATIONS_STATUSES = [
-//        'ACCEPTED' => 'accepted',
-//        'REJECTED' => 'rejected',
-//        'NO_STATUS' => 'no_status',
-//    ];
-
-
     const USER_IMAGE_FOLDERS = [
         'companies' => '/img/usersData/companies/',
         'candidates' => '/img/usersData/candidates/',

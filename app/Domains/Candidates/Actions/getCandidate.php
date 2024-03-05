@@ -8,7 +8,7 @@
 
 namespace App\Domains\Candidates\Actions;
 
-use App\Domains\Candidates\Models\User;
+use App\Domains\Candidates\Models\Candidates;
 use App\Domains\Candidates\Models\JobCategories;
 use Illuminate\Support\Facades\Log;
 use App\Helper;
@@ -17,7 +17,7 @@ class getCandidate
 {
     public function run($id) {
         try {
-            $result = User::find($id);
+            $result = Candidates::find($id);
             $result->CATEGORY_NAME = JobCategories::find($result->CATEGORY_ID)->NAME;
             return $result;
         } catch(\Exception $exception) {

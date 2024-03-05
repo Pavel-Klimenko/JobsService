@@ -2,12 +2,11 @@
 
 use Illuminate\Http\Request;
 
-
-
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
 use App\Domains\Candidates\Http\Controllers\CandidateController;
 use App\Domains\Home\Http\Controllers\HomeController;
 use App\Domains\Personal\Http\Controllers\PersonalController;
+use App\Http\Controllers\Auth\AuthAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +19,9 @@ use App\Domains\Personal\Http\Controllers\PersonalController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
 Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/list', [VacancyController::class, 'getVacancies']);
@@ -50,4 +49,9 @@ Route::group(['prefix' => 'personal'], function () {
     Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
 //    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
 //    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
+});
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/login', [AuthAPIController::class, 'login']);
+    Route::post('/logout', [AuthAPIController::class, 'logout']);
 });

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Domains\Candidates\Models\JobCategories;
 
 class CreateVacanciesTable extends Migration
 {
@@ -20,7 +21,12 @@ class CreateVacanciesTable extends Migration
             $table->string('IMAGE')->nullable();
             $table->string('COUNTRY')->nullable();
             $table->string('CITY')->nullable();
-            $table->bigInteger('CATEGORY_ID')->nullable();
+
+            $table->foreignId('job_category_id')
+                ->constrained(JobCategories::TABLE_NAME)
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+
             $table->bigInteger('COMPANY_ID')->nullable();
             $table->float('SALARY_FROM')->nullable();
             $table->mediumText('DESCRIPTION')->nullable();

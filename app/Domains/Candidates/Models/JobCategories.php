@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class JobCategories extends Model
 {
     protected $table = 'job_categories';
-    protected $primaryKey = 'ID';
+    const TABLE_NAME = 'job_categories';
 }

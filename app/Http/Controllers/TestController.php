@@ -24,6 +24,11 @@ use Illuminate\Support\Facades\Hash;
 use App\Constants;
 use App\Services\AuthService;
 
+use App\Domains\Personal\Models\Role;
+
+use App\Domains\Vacancies\Models\Vacancies;
+use App\Helper;
+
 
 class TestController extends Controller
 {
@@ -32,5 +37,14 @@ class TestController extends Controller
     public function test()
     {
         echo 222222222;
+
+
+        $jobCategories = DB::table('job_categories')->get();
+        foreach ($jobCategories as $category) {
+            $category->QUANTITY_OF_VACANCIES = Helper::countTableRow(Vacancies::class, 'job_category_id', $category->id);
+        }
+
+        dump($jobCategories);
+
     }
 }

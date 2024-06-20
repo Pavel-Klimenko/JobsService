@@ -17,6 +17,8 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
+    const TABLE_NAME = 'users';
+
     /**
      * The attributes that should be hidden for serialization.
      *

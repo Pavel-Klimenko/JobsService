@@ -3,6 +3,7 @@
 //namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Domains\Personal\Models\Role;
 
 class RolesTableSeeder extends Seeder
 {
@@ -11,26 +12,9 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $role = Role::firstOrNew(['name' => 'admin']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('voyager::seeders.roles.admin'),
-            ])->save();
-        }
-
-        $role = Role::firstOrNew(['name' => 'company']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('Company'),
-            ])->save();
-        }
-
-        $role = Role::firstOrNew(['name' => 'candidate']);
-        if (!$role->exists) {
-            $role->fill([
-                'display_name' => __('Candidate'),
-            ])->save();
-        }
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'company']);
+        Role::create(['name' => 'candidate']);
     }
 }
 

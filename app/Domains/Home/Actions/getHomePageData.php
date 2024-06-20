@@ -22,14 +22,16 @@ class getHomePageData
 
             //TODO сделать через получение связанных данных with или через joins
 
+            //TODO проверку авторизации. Ларавел пасспорт или санктум
+
             $cities = DB::table('vacancies')->select('CITY')->distinct()->where('CITY', '<>', '')->where('ACTIVE', 1)->get();
 
             $jobCategories = DB::table('job_categories')->get();
             foreach ($jobCategories as $category) {
-                $category->QUANTITY_OF_VACANCIES = Helper::countTableRow(Vacancies::class, 'CATEGORY_ID', $category->ID);
+                $category->QUANTITY_OF_VACANCIES = Helper::countTableRow(Vacancies::class, 'job_category_id', $category->id);
             }
 
-            $vacancyCategories = DB::table('vacancies')->select('CATEGORY_ID')->distinct()->where('ACTIVE', 1)->limit(8)->get();
+            $vacancyCategories = DB::table('vacancies')->select('job_category_id')->distinct()->where('ACTIVE', 1)->limit(8)->get();
             $vacancies = DB::table('vacancies')->where('ACTIVE', 1)->limit(6)->get();
 
 

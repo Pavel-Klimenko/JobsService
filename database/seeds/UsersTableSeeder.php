@@ -5,7 +5,9 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Domains\Candidates\Models\JobCategories;
+use App\Domains\Personal\Models\Role;
 use App\Constants;
+use App\User;
 
 class UsersTableSeeder extends Seeder
 {

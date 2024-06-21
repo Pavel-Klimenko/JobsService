@@ -13,15 +13,17 @@ class CreateInvitationsToInterviewTable extends Migration
      */
     public function up()
     {
-        Schema::create('invitations_to_interview', function (Blueprint $table) {
-            $table->id('ID')->autoIncrement();
-            $table->bigInteger('COMPANY_ID')->nullable();
-            $table->bigInteger('CANDIDATE_ID')->nullable();
-            $table->bigInteger('VACANCY_ID')->nullable();
-            $table->mediumText('CANDIDATE_COVERING_LETTER')->nullable();
-            $table->string('STATUS')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('invitations_to_interview')) {
+            Schema::create('invitations_to_interview', function (Blueprint $table) {
+                $table->id('ID')->autoIncrement();
+                $table->bigInteger('COMPANY_ID')->nullable();
+                $table->bigInteger('CANDIDATE_ID')->nullable();
+                $table->bigInteger('VACANCY_ID')->nullable();
+                $table->mediumText('CANDIDATE_COVERING_LETTER')->nullable();
+                $table->string('STATUS')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

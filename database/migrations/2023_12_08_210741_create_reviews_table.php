@@ -13,14 +13,16 @@ class CreateReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('NAME')->nullable();
-            $table->string('PHOTO')->nullable();
-            $table->mediumText('REVIEW')->nullable();
-            $table->boolean('ACTIVE')->default(false);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('reviews')) {
+            Schema::create('reviews', function (Blueprint $table) {
+                $table->id()->autoIncrement();
+                $table->string('NAME')->nullable();
+                $table->string('PHOTO')->nullable();
+                $table->mediumText('REVIEW')->nullable();
+                $table->boolean('ACTIVE')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

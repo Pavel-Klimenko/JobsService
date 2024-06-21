@@ -13,11 +13,16 @@ class CreateJobCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('NAME')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('job_categories')) {
+            Schema::create('job_categories', function (Blueprint $table) {
+                $table->id();
+                $table->string('NAME')->nullable();
+                $table->timestamps();
+            });
+        }
+
+
+
     }
 
     /**

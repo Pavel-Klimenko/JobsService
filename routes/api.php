@@ -37,7 +37,7 @@ Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability
     Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
 });
 
-Route::group(['prefix' => 'homepage'], function () {
+Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 

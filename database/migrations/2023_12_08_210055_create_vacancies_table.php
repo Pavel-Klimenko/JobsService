@@ -14,28 +14,30 @@ class CreateVacanciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('vacancies', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('NAME')->nullable();
-            $table->string('ICON')->nullable();
-            $table->string('IMAGE')->nullable();
-            $table->string('COUNTRY')->nullable();
-            $table->string('CITY')->nullable();
+        if (!Schema::hasTable('vacancies')) {
+            Schema::create('vacancies', function (Blueprint $table) {
+                $table->id()->autoIncrement();
+                $table->string('NAME')->nullable();
+                $table->string('ICON')->nullable();
+                $table->string('IMAGE')->nullable();
+                $table->string('COUNTRY')->nullable();
+                $table->string('CITY')->nullable();
 
-            $table->foreignId('job_category_id')
-                ->constrained(JobCategories::TABLE_NAME)
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+                $table->foreignId('job_category_id')
+                    ->constrained(JobCategories::TABLE_NAME)
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
 
-            $table->bigInteger('COMPANY_ID')->nullable();
-            $table->float('SALARY_FROM')->nullable();
-            $table->mediumText('DESCRIPTION')->nullable();
-            $table->json('RESPONSIBILITY')->nullable();
-            $table->json('QUALIFICATIONS')->nullable();
-            $table->mediumText('BENEFITS')->nullable();
-            $table->boolean('ACTIVE')->default(false);
-            $table->timestamps();
-        });
+                $table->bigInteger('COMPANY_ID')->nullable();
+                $table->float('SALARY_FROM')->nullable();
+                $table->mediumText('DESCRIPTION')->nullable();
+                $table->json('RESPONSIBILITY')->nullable();
+                $table->json('QUALIFICATIONS')->nullable();
+                $table->mediumText('BENEFITS')->nullable();
+                $table->boolean('ACTIVE')->default(false);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
 
@@ -23,33 +24,35 @@ use Illuminate\Support\Facades\Validator;
 class AuthAPIController extends Controller
 {
     public function login(Request $request) {
-        $validator = Validator::make($request->all(), ['email' => 'required|email', 'password' => 'required']);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        $result = [];
-        if ($validator->fails()) {
-            $result = ['status' => 'error', 'message' => 'Invalid email or password'];
-        } else {
-            if (Auth::check()) AuthService::logOutCurrentUser();
-            $user = AuthService::authenticateUser($request->email, $request->password);
-            $token = AuthService::generateUserToken($user);
-            list($id, $value) = explode('|', $token);
-            $result = ['status' => 'success', 'token' => $value];
-        }
-
-        return $result;
+        $user = AuthService::authenticateUser($request->email, $request->password);
+        $token = AuthService::generateUserToken($user);
+        list($id, $value) = explode('|', $token);
+        return [
+            'status' => 'success',
+            'token' => $value
+        ];
     }
 
-    public function logout() {
-        $result = [];
-        if (Auth::check()) {
-            $user = AuthService::logOutCurrentUser();
-            AuthService::deleteUserTokens($user);
-            $result = ['status' => 'success', 'message' => 'User is logged out. Persona token deleted'];
-        } else {
-            $result = ['status' => 'error', 'message' => 'User isn`t logged'];
-        }
+    public function logout(Request $request) {
+        $request->validate([
+            'user_id' => 'required|integer',
+        ]);
 
-        return $result;
+        $user = User::find($request->user_id);
+        if (!$user) throw new RuntimeException('User not found');
+        if (!AuthService::isUserAuthorised($user)) throw new RuntimeException('User isn`t authorised');
+
+        AuthService::logOutCurrentUser();
+        AuthService::deleteUserTokens($user);
+        return [
+            'status' => 'success',
+            'message' => 'User is logged out'
+        ];
     }
 
 

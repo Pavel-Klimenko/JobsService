@@ -23,35 +23,39 @@ use App\Http\Controllers\Auth\AuthAPIController;
 //    return $request->user();
 //});
 
-Route::group(['prefix' => 'vacancies'], function () {
-    Route::post('/list', [VacancyController::class, 'getVacancies']);
-    Route::post('/read', [VacancyController::class, 'getVacancy']);
-    Route::post('/create', [VacancyController::class, 'createVacancy']);
-    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
-    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
-});
+//Route::group(['prefix' => 'vacancies'], function () {
+//    Route::post('/list', [VacancyController::class, 'getVacancies']);
+//    Route::post('/read', [VacancyController::class, 'getVacancy']);
+//    Route::post('/create', [VacancyController::class, 'createVacancy']);
+//    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
+//    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
+//});
+//
+//Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
+//    Route::post('/', [CandidateController::class, 'getCandidates']);
+//    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
+//    Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
+//});
+//
+//Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
+//    Route::get('/', [HomeController::class, 'getHomePageData']);
+//});
+//
+////TODO этот раздел после очередей и авторизации и фронта!
+//Route::group(['prefix' => 'personal'], function () {
+//    Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
+//    Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);
+//    Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
+//    Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
+////    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
+////    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
+//});
 
-Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
-    Route::post('/', [CandidateController::class, 'getCandidates']);
-    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-    Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
-});
 
-Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
-    Route::get('/', [HomeController::class, 'getHomePageData']);
-});
+//TODO удалить sanctum и все не нужные пакеты, доделать формы на фронте на VUE, токен в localStorage
 
-//TODO этот раздел после очередей и авторизации и фронта!
-Route::group(['prefix' => 'personal'], function () {
-    Route::get('/{id}', [PersonalController::class, 'getPersonalInfo']);
-    Route::get('/company-vacancies/{id}', [PersonalController::class, 'getCompanyVacancies']);
-    Route::post('/create-interview-invitation', [PersonalController::class, 'createInterviewInvitation']);
-    Route::put('/change-invitation-status/{id}/{status}', [PersonalController::class, 'changeInvitationStatus']);
-//    Route::get('/get-interview-invitations/{id}/{status}', [PersonalController::class, 'getInterviewInvitations']);
-//    Route::post('/update-user-info', [PersonalController::class, 'updateUserInfo']);
-});
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', [AuthAPIController::class, 'login']);
+    Route::post('login', [AuthAPIController::class, 'login']);
     Route::post('/logout', [AuthAPIController::class, 'logout']);
 });

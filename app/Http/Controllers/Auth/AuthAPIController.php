@@ -20,22 +20,37 @@ use App\Constants;
 use App\Services\AuthService;
 use RuntimeException;
 use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class AuthAPIController extends Controller
 {
+
+    //TODO перенести код таски - Тонкий контроллер
+
     public function login(Request $request) {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        $user = AuthService::authenticateUser($request->email, $request->password);
-        $token = AuthService::generateUserToken($user);
-        list($id, $value) = explode('|', $token);
-        return [
-            'status' => 'success',
-            'token' => $value
-        ];
+        try {
+            if (!User::where('EMAIL', $request->email)->exists()) {
+                return ['status' => 'error', 'message' => 'User with such email not found'];
+            }
+
+            $user = AuthService::authenticateUser($request->email, $request->password);
+            $token = AuthService::generateUserToken($user);
+
+            list($id, $value) = explode('|', $token);
+            return [
+                'status' => 'success',
+                'authorized_user_id' => $user->id,
+                'token' => $value,
+                'message' => 'User successfully authorized'
+            ];
+        } catch (Exception $exception) {
+            return ['status' => 'error', 'message' => $exception->getMessage()];
+        }
     }
 
     public function logout(Request $request) {

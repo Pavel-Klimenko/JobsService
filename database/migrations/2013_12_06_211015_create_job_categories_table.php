@@ -3,8 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Domains\Candidates\Models\JobCategories;
 
-class AddRolesTable extends Migration
+class CreateJobCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +14,13 @@ class AddRolesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('roles')) {
-            Schema::create('roles', function (Blueprint $table) {
+        if (!Schema::hasTable(JobCategories::TABLE_NAME)) {
+            Schema::create(JobCategories::TABLE_NAME, function (Blueprint $table) {
                 $table->id();
-                $table->string('name');
+                $table->string('name')->nullable();
                 $table->timestamps();
             });
-        };
+        }
     }
 
     /**
@@ -29,6 +30,6 @@ class AddRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locales');
+        Schema::dropIfExists(JobCategories::TABLE_NAME);
     }
 }

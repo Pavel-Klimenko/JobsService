@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Library\ApiHelpers;
 //use App\Models\Post;
-use App\Domains\Candidates\Models\Candidates;
+use App\Domains\Candidates\Models\Candidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -104,7 +104,7 @@ class ControllerExample extends Controller
             $validator = Validator::make($request->all(), $this->userValidatedRules());
             if ($validator->passes()) {
                 // Создаем нового Автора
-                Candidates::create([
+                Candidate::create([
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'role' => 2,
@@ -128,7 +128,7 @@ class ControllerExample extends Controller
             $validator = Validator::make($request->all(), $this->userValidatedRules());
             if ($validator->passes()) {
                 // Создаем нового Подписчика
-                Candidates::create([
+                Candidate::create([
                     'name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'role' => 3,
@@ -149,7 +149,7 @@ class ControllerExample extends Controller
     {
         $user = $request->user();
         if ($this->isAdmin($user)) {
-            $user = Candidates::find($id); // Найдем id пользователя
+            $user = Candidate::find($id); // Найдем id пользователя
             if ($user->role !== 1) {
                 $user->delete(); // Удалим указанного пользователя
                 if (!empty($user)) {

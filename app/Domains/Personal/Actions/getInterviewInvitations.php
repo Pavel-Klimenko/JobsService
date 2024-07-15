@@ -3,7 +3,7 @@
 namespace App\Domains\Personal\Actions;
 
 use App\Helper;
-use App\Domains\Candidates\Models\Candidates;
+use App\Domains\Candidates\Models\Candidate;
 
 
 class getInterviewInvitations
@@ -22,21 +22,21 @@ class getInterviewInvitations
         switch ($status) {
             case 'accepted':
                 //$title = 'Accepted interview requests';
-                $candidatesRequests = Candidates::find($id)
+                $candidatesRequests = Candidate::find($id)
                     ->acceptedInvitations($id)
                     ->paginate($itemsOnPage)
                    ->withQueryString();
                 break;
             case 'rejected':
                 //$title = 'Rejected interview requests';
-               $candidatesRequests = Candidates::find($id)
+               $candidatesRequests = Candidate::find($id)
                     ->rejectedInvitations($id)
                     ->paginate($itemsOnPage)
                    ->withQueryString();
                 break;
             case 'all':
                 //$title = 'All interview requests';
-                $candidatesRequests = Candidates::find($id)
+                $candidatesRequests = Candidate::find($id)
                     ->allInvitations($id)
                     ->paginate($itemsOnPage)
                     ->withQueryString();

@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Domains\Home\Models\Review;
+use App\User;
 
 class CreateReviewsTable extends Migration
 {
@@ -13,13 +15,16 @@ class CreateReviewsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('reviews')) {
-            Schema::create('reviews', function (Blueprint $table) {
-                $table->id()->autoIncrement();
-                $table->string('NAME')->nullable();
-                $table->string('PHOTO')->nullable();
-                $table->mediumText('REVIEW')->nullable();
-                $table->boolean('ACTIVE')->default(false);
+        if (!Schema::hasTable(Review::TABLE_NAME)) {
+            Schema::create(Review::TABLE_NAME, function (Blueprint $table) {
+                $table->id();
+                $table->string('title')->nullable();
+                $table->mediumText('review')->nullable();
+                $table->foreignId('user_id')
+                    ->constrained(User::TABLE_NAME)
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
+                $table->boolean('active')->default(false);
                 $table->timestamps();
             });
         }
@@ -32,6 +37,6 @@ class CreateReviewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists(Review::TABLE_NAME);
     }
 }

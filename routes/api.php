@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
-use App\Domains\Candidates\Http\Controllers\CandidateController;
+use App\Domains\Candidates\Http\Controllers\ReviewController;
 use App\Domains\Home\Http\Controllers\HomeController;
 use App\Domains\Personal\Http\Controllers\PersonalController;
 use App\Http\Controllers\Auth\AuthAPIController;
@@ -30,16 +30,22 @@ use App\Http\Controllers\Auth\AuthAPIController;
 //    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
 //    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
 //});
-//
+
+
+
 //Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
 //    Route::post('/', [CandidateController::class, 'getCandidates']);
 //    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
 //    Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
 //});
-//
-//Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
-//    Route::get('/', [HomeController::class, 'getHomePageData']);
-//});
+
+
+Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/', [HomeController::class, 'getHomePageData']);
+    Route::post('/add-review', [HomeController::class, 'addReview']);
+});
+
+
 //
 ////TODO этот раздел после очередей и авторизации и фронта!
 //Route::group(['prefix' => 'personal'], function () {
@@ -52,10 +58,9 @@ use App\Http\Controllers\Auth\AuthAPIController;
 //});
 
 
-//TODO удалить sanctum и все не нужные пакеты, доделать формы на фронте на VUE, токен в localStorage
-
-
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthAPIController::class, 'login']);
     Route::post('/logout', [AuthAPIController::class, 'logout']);
+    Route::post('/register', [AuthAPIController::class, 'register']);
+    //Route::post('/is_authorised', [AuthAPIController::class, 'isAuthorised']);
 });

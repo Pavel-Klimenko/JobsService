@@ -8,6 +8,7 @@ class Vacancies extends Model
 {
     protected $guarded = [];
     protected $table = 'vacancies';
+    const TABLE_NAME = 'vacancies';
     protected $primaryKey = 'ID';
 
     public static $arrJsonFields = ['RESPONSIBILITY', 'QUALIFICATIONS'];

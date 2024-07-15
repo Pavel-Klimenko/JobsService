@@ -10,8 +10,8 @@ namespace App\Domains\Candidates\Actions;
 
 use App\Helper;
 use App\Constants;
-use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\Candidates;
+use App\Domains\Candidates\Models\Review;
+use App\Domains\Candidates\Models\Candidate;
 use Illuminate\Support\Facades\Log;
 
 class getCandidates
@@ -20,7 +20,7 @@ class getCandidates
         try {
             $arrRequest = $request->all();
 
-            $candidates = Candidates::where([
+            $candidates = Candidate::where([
                 ['role_id', Constants::USER_ROLES_IDS['candidate']],
                 ['ACTIVE', '=', '1'],
             ])->get();
@@ -65,7 +65,7 @@ class getCandidates
             }
 
             foreach ($candidates as $user) {
-                $category = Helper::getTableRow(JobCategories::class, 'ID', $user->CATEGORY_ID);
+                $category = Helper::getTableRow(Review::class, 'ID', $user->CATEGORY_ID);
                 $user->CATEGORY_NAME = $category->NAME;
             }
 

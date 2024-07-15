@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Models\Vacancies;
-use App\Domains\Candidates\Models\JobCategories;
+use App\Domains\Candidates\Models\Review;
 use App\Helper;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +25,7 @@ class getVacancies
             $vacancies = new Vacancies();
 
             if ($request->has('CATEGORY_NAME')) {
-                $model = JobCategories::class;
+                $model = Review::class;
                 $category = Helper::getTableRow($model, 'NAME', $arrRequest['CATEGORY_NAME']);
                 $arrRequest['CATEGORY_ID'] = $category->ID;
             }

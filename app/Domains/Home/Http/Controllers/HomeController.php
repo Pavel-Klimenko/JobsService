@@ -12,4 +12,11 @@ class HomeController extends BaseController
     {
         return app(Actions\getHomePageData::class)->run($request);
     }
+
+    public function addReview(Request $request)
+    {
+        dd($request->all());
+
+        //return app(Actions\getHomePageData::class)->run($request);
+    }
 }

@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Domains\Candidates\Models\Candidates;
+use App\Domains\Candidates\Models\Candidate;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 

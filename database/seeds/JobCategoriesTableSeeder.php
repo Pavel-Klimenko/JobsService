@@ -2,7 +2,6 @@
 //namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use App\Domains\Candidates\Models\JobCategories;
 
 
@@ -22,7 +21,7 @@ class JobCategoriesTableSeeder extends Seeder
         ];
 
         foreach ($arLangs as $lang) {
-            JobCategories::create(['NAME' => $lang]);
+            JobCategories::create(['name' => $lang]);
         }
     }
 }

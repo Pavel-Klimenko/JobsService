@@ -9,7 +9,7 @@
 namespace App\Domains\Home\Actions;
 
 use App\Constants;
-use App\Domains\Candidates\Models\JobCategories;
+use App\Domains\Home\Models\Review;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Helper;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,6 @@ class getHomePageData
 {
     public function run() {
         try {
-
             //TODO сделать через получение связанных данных with или через joins
 
             //TODO проверку авторизации. Ларавел пасспорт или санктум

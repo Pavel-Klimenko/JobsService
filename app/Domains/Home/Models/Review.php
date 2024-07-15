@@ -5,11 +5,11 @@ namespace App\Domains\Home\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reviews extends Model
+class Review extends Model
 {
     protected $guarded = [];
     protected $table = 'reviews';
-    protected $primaryKey = 'ID';
+    const TABLE_NAME = 'reviews';
 
     public static function getReviewFields() {
         return ['NAME', 'PHOTO' , 'REVIEW', 'ACTIVE'];

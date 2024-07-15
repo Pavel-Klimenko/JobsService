@@ -10,13 +10,13 @@ namespace App\Domains\Personal\Actions;
 
 use App\Helper;
 use App\Constants;
-use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\Candidates;
+use App\Domains\Candidates\Models\Review;
+use App\Domains\Candidates\Models\Candidate;
 
 class getPersonalInfo
 {
     public function run($id) {
-        $user = Candidates::find($id);
+        $user = Candidate::find($id);
 
         $result = [];
         $result['title'] = 'Personal info';
@@ -28,8 +28,8 @@ class getPersonalInfo
         } elseif ($user->role_id == Constants::USER_ROLES_IDS['company']) {
             $result['user_role'] = 'company';
         } elseif ($user->role_id == Constants::USER_ROLES_IDS['candidate']) {
-            $result['category'] = Helper::getTableRow(JobCategories::class, 'ID', $id);
-            $result['jobCategories'] = JobCategories::all();
+            $result['category'] = Helper::getTableRow(Review::class, 'ID', $id);
+            $result['jobCategories'] = Review::all();
         }
 
         return $result;

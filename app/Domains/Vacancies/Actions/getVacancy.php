@@ -8,7 +8,6 @@
 
 namespace App\Domains\Vacancies\Actions;
 
-use App\Domains\Candidates\Models\Review;
 use App\Domains\Candidates\Models\Candidate;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Helper;
@@ -18,11 +17,8 @@ class getVacancy
 {
     public function run($id) {
         try {
-            $vacancy = Vacancies::find($id);
-            $vacancy->COMPANY = Helper::getTableRow(Candidate::class, 'ID', $vacancy->COMPANY_ID);
-            return $vacancy;
+            return Vacancies::with('job_category', 'company.user')->find($id);
         } catch(\Exception $exception) {
-            Log::error('getVacancy()', ['error_message' => $exception->getMessage()]);
             return $exception->getMessage();
         }
     }

@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
-use App\Domains\Candidates\Http\Controllers\ReviewController;
+use App\Domains\Candidates\Http\Controllers\CandidateController;
+
 use App\Domains\Home\Http\Controllers\HomeController;
 use App\Domains\Personal\Http\Controllers\PersonalController;
 use App\Http\Controllers\Auth\AuthAPIController;
@@ -23,25 +24,34 @@ use App\Http\Controllers\Auth\AuthAPIController;
 //    return $request->user();
 //});
 
-//Route::group(['prefix' => 'vacancies'], function () {
-//    Route::post('/list', [VacancyController::class, 'getVacancies']);
-//    Route::post('/read', [VacancyController::class, 'getVacancy']);
-//    Route::post('/create', [VacancyController::class, 'createVacancy']);
-//    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
-//    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
-//});
+Route::group(['prefix' => 'vacancies'], function () {
+    Route::post('/', [VacancyController::class, 'getVacancies']);
+    Route::get('/{id}', [VacancyController::class, 'getVacancy']);
 
 
 
-//Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
-//    Route::post('/', [CandidateController::class, 'getCandidates']);
-//    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-//    Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
-//});
+    Route::post('/create', [VacancyController::class, 'createVacancy']);
+    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
+    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
+});
 
 
-Route::group(['prefix' => 'homepage', 'middleware' => ['auth:sanctum']], function () {
+Route::group(['prefix' => 'candidates'], function () {
+    Route::post('/', [CandidateController::class, 'getCandidates']);
+    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
+
+    //Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
+});
+
+
+
+
+Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
+    Route::get('/reviews', [HomeController::class, 'getReviews']);
+
+
+
     Route::post('/add-review', [HomeController::class, 'addReview']);
 });
 

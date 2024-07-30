@@ -10,6 +10,7 @@ use App\Ship\Helpers\Helper;*/
 
 use App\Domains\Vacancies\Models\Vacancies;
 
+use App\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -22,12 +23,14 @@ class VacancyController extends BaseController
 {
     public function getVacancies(Request $request)
     {
-        return app(Actions\getVacancies::class)->run($request);
+        $paginationParams = Helper::getPaginationParams($request);
+
+        return app(Actions\getVacancies::class)->run($paginationParams['page'], $paginationParams['limit_page']);
     }
 
-    public function getVacancy(Request $request): Vacancies
+    public function getVacancy($id)
     {
-        return app(Actions\getVacancy::class)->run($request->id);
+        return app(Actions\getVacancy::class)->run($id);
     }
 
     public function createVacancy(Request $request)

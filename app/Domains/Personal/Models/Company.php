@@ -4,6 +4,8 @@ namespace App\Domains\Personal\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\User;
 
 class Company extends Model
 {
@@ -20,5 +22,10 @@ class Company extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function user(): belongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

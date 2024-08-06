@@ -6,7 +6,6 @@ use App\Domains\Personal\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 class Vacancies extends Model
 {
     protected $guarded = [];
@@ -22,18 +21,4 @@ class Vacancies extends Model
     {
         return $this->belongsTo(Company::class)->with('user');
     }
-
-
-//    protected $primaryKey = 'ID';
-//
-//    public static $arrJsonFields = ['RESPONSIBILITY', 'QUALIFICATIONS'];
-//
-//    public static function getVacancyFields() {
-//        return [
-//            'NAME', 'COUNTRY' , 'CITY', 'ACTIVE',
-//            'CATEGORY_ID', 'SALARY_FROM', 'DESCRIPTION',
-//            'RESPONSIBILITY', 'QUALIFICATIONS', 'BENEFITS'
-//        ];
-//    }
-
 }

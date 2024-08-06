@@ -18,7 +18,7 @@ class Review extends Model
 
     public function user(): belongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->with('role');
     }
 
 }

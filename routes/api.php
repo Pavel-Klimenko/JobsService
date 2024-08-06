@@ -20,15 +20,16 @@ use App\Http\Controllers\Auth\AuthAPIController;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+
+Route::group(['prefix' => 'homepage'], function () {
+    Route::get('/', [HomeController::class, 'getHomePageData']);
+    //Route::get('/reviews', [HomeController::class, 'getReviews']);
+    //Route::post('/add-review', [HomeController::class, 'addReview']);
+});
 
 Route::group(['prefix' => 'vacancies'], function () {
     Route::post('/', [VacancyController::class, 'getVacancies']);
     Route::get('/{id}', [VacancyController::class, 'getVacancy']);
-
-
 
     Route::post('/create', [VacancyController::class, 'createVacancy']);
     Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
@@ -41,18 +42,6 @@ Route::group(['prefix' => 'candidates'], function () {
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
 
     //Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
-});
-
-
-
-
-Route::group(['prefix' => 'homepage'], function () {
-    Route::get('/', [HomeController::class, 'getHomePageData']);
-    Route::get('/reviews', [HomeController::class, 'getReviews']);
-
-
-
-    Route::post('/add-review', [HomeController::class, 'addReview']);
 });
 
 

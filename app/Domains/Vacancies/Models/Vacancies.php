@@ -20,7 +20,7 @@ class Vacancies extends Model
 
     public function company(): belongsTo
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->with('user');
     }
 
 

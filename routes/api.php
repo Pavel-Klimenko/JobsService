@@ -38,7 +38,7 @@ Route::group(['prefix' => 'vacancies'], function () {
 
 
 Route::group(['prefix' => 'candidates'], function () {
-    Route::post('/', [CandidateController::class, 'getCandidates']);
+    Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
 
     //Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);

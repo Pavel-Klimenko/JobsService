@@ -36,8 +36,8 @@ class CandidateController extends BaseController
                 'level_id' => 'integer',
             ]);
 
-            Helper::checkElementExisting(JobCategories::class, $request->job_category_id);
-            Helper::checkElementExisting(CandidateLevels::class, $request->level_id);
+            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
+            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
             $paginationParams = Helper::getPaginationParams($request);
 

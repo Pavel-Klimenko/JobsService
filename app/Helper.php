@@ -27,6 +27,7 @@ class Helper
         if (!empty($request->get('page'))) {
             $page = $request->get('page');
         }
+
         if (!empty($request->get('limit_page'))) {
             $pageLimit = $request->get('limit_page');
         }
@@ -51,7 +52,7 @@ class Helper
         ]);
     }
 
-    public static function checkElementExisting($model, $elementId):void
+    public static function checkElementExistense($model, $elementId):void
     {
         if ($elementId) {
             if (!$model::find($elementId)) {

@@ -28,12 +28,12 @@ Route::group(['prefix' => 'homepage'], function () {
 });
 
 Route::group(['prefix' => 'vacancies'], function () {
-    Route::post('/', [VacancyController::class, 'getVacancies']);
+    Route::get('/', [VacancyController::class, 'getVacancies']);
     Route::get('/{id}', [VacancyController::class, 'getVacancy']);
 
-    Route::post('/create', [VacancyController::class, 'createVacancy']);
-    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
-    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
+//    Route::post('/create', [VacancyController::class, 'createVacancy']);
+//    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
+//    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
 });
 
 

@@ -1,13 +1,6 @@
 <?php
 namespace App\Domains\Vacancies\Http\Controllers;
 
-
-/*use App\Containers\Vacancies\Actions;
-use App\Contracts\CacheContract;
-use App\Events\NewEntityCreated;
-use App\Ship\Helpers\Helper;*/
-
-
 use App\Domains\Vacancies\Models\Vacancies;
 
 use App\Helper;
@@ -16,6 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 use App\Domains\Vacancies\Actions;
 use App\QueryFilters\Filter;
+use RuntimeException;
 
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Vacancies\QueryFilters\JobCategoryId as FilterByJobCategory;
@@ -48,7 +42,14 @@ class VacancyController extends BaseController
 
     public function getVacancy($id)
     {
-        return app(Actions\getVacancy::class)->run($id);
+        try {
+            if (!$vacancy = Vacancies::with('job_category', 'company.user')->find($id)) {
+                throw new RuntimeException("Vacancy with id = $id not found");
+            }
+            return Helper::successResponse(["vacancy" => $vacancy]);
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
     }
 
     public function createVacancy(Request $request)

@@ -53,10 +53,10 @@ class Constants
         'companies-itechart' => '/img/demoData/companies/itechart.png',
         'companies-techin' => '/img/demoData/companies/techin.jpg',
 
-        'review-alex' => '/img/demoData/reviews/alex.jpg',
-        'review-bob' => '/img/demoData/reviews/bob.jpg',
-        'review-igor' => '/img/demoData/reviews/igor.png',
-        'review-pavel' => '/img/demoData/reviews/pavel.jpg',
+//        'review-alex' => '/img/demoData/reviews/alex.jpg',
+//        'review-bob' => '/img/demoData/reviews/bob.jpg',
+//        'review-igor' => '/img/demoData/reviews/igor.png',
+//        'review-pavel' => '/img/demoData/reviews/pavel.jpg',
     ];
 
     const MONTHS = [1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.', 8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec.'];

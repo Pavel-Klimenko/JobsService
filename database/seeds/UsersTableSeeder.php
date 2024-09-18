@@ -78,7 +78,7 @@ class UsersTableSeeder extends Seeder
                 'country' => 'Belarus',
                 'city' => 'Minsk',
                 'role_id' => $roleCompany->id,
-                'image' => Constants::DEMO_IMAGES['candidate-olga'],
+                'image' => Constants::DEMO_IMAGES['companies-belhard'],
                 'password' => bcrypt('almaz'),
                 'active' => 1,
             ]);
@@ -89,7 +89,7 @@ class UsersTableSeeder extends Seeder
                 'country' => 'Belarus',
                 'city' => 'Minsk',
                 'role_id' => $roleCompany->id,
-                'image' => Constants::DEMO_IMAGES['candidate-olga'],
+                'image' => Constants::DEMO_IMAGES['companies-itechart'],
                 'password' => bcrypt('almaz'),
                 'active' => 1,
             ]);

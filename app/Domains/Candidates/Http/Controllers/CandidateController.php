@@ -16,9 +16,28 @@ use App\QueryFilters\Filter;
 
 class CandidateController extends BaseController
 {
+
+    public function getPersonalData($id)
+    {
+        try {
+
+            dd(43434);
+
+            //TODO сделать репозитории и DTO!
+            if (!$candidate = Candidate::with('user', 'job_category', 'level')->find($id)) {
+                throw new RuntimeException("Candidate with id = $id not found");
+            }
+            return Helper::successResponse(["candidate" => $candidate]);
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+    }
+
+
     public function getCandidate($id)
     {
         try {
+            //TODO сделать репозитории и DTO!
             if (!$candidate = Candidate::with('user', 'job_category', 'level')->find($id)) {
                 throw new RuntimeException("Candidate with id = $id not found");
             }

@@ -22,7 +22,7 @@ class AuthAPIController extends Controller
                 'password' => 'required|string',
             ]);
 
-            if (!User::where('EMAIL', $request->email)->exists()) {
+            if (!User::where('email', $request->email)->exists()) {
                 return ['status' => 'error', 'message' => 'User with such email not found'];
             }
 

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
 use App\Domains\Candidates\Http\Controllers\CandidateController;
+use App\Domains\Companies\Http\Controllers\CompanyController;
 
 use App\Domains\Home\Http\Controllers\HomeController;
 use App\Domains\Personal\Http\Controllers\PersonalController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Auth\AuthAPIController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 
 
 Route::group(['prefix' => 'homepage'], function () {
@@ -40,9 +42,22 @@ Route::group(['prefix' => 'vacancies'], function () {
 Route::group(['prefix' => 'candidates'], function () {
     Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-
     //Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
 });
+
+
+Route::group(['prefix' => 'personal'], function () {
+    Route::group(['prefix' => 'candidate', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
+        Route::get('/{id}', [CandidateController::class, 'getPersonalData']);
+    });
+
+    Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+        Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
+    });
+});
+
+
+
 
 
 //

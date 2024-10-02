@@ -21,8 +21,6 @@ use App\Http\Controllers\Auth\AuthAPIController;
 |
 */
 
-
-
 Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
     //Route::get('/reviews', [HomeController::class, 'getReviews']);
@@ -47,13 +45,19 @@ Route::group(['prefix' => 'candidates'], function () {
 
 
 Route::group(['prefix' => 'personal'], function () {
-    Route::group(['prefix' => 'candidate', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
-        Route::get('/{id}', [CandidateController::class, 'getPersonalData']);
+
+    //TODO разобраться с нерабочими запросами sanctum
+//    Route::group(['prefix' => 'candidate', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
+//    });
+
+    Route::group(['prefix' => 'candidate'], function () {
+        Route::get('/{id}', [CandidateController::class, 'getCandidate']);
+        Route::post('/update', [CandidateController::class, 'update']);
     });
 
-    Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
-        Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
-    });
+//    Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+//        Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
+//    });
 });
 
 

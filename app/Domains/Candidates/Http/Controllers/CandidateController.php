@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 namespace App\Domains\Candidates\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,38 +17,28 @@ use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
 use App\Domains\Candidates\Models\Candidate;
 use App\QueryFilters\Filter;
 
+use App\Services\CandidateService;
+
 class CandidateController extends BaseController
 {
 
-    public function getPersonalData($id)
+    private $candidateService;
+
+    public function __construct(CandidateService $candidateService)
+    {
+        $this->candidateService = $candidateService;
+    }
+
+    public function getCandidate(int $id)
     {
         try {
-
-            dd(43434);
-
-            //TODO сделать репозитории и DTO!
-            if (!$candidate = Candidate::with('user', 'job_category', 'level')->find($id)) {
-                throw new RuntimeException("Candidate with id = $id not found");
-            }
+            $candidate = $this->candidateService->getCandidate($id);
             return Helper::successResponse(["candidate" => $candidate]);
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
     }
 
-
-    public function getCandidate($id)
-    {
-        try {
-            //TODO сделать репозитории и DTO!
-            if (!$candidate = Candidate::with('user', 'job_category', 'level')->find($id)) {
-                throw new RuntimeException("Candidate with id = $id not found");
-            }
-            return Helper::successResponse(["candidate" => $candidate]);
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
-    }
 
     public function getCandidates(Request $request)
     {
@@ -70,6 +63,33 @@ class CandidateController extends BaseController
             return Helper::failedResponse($exception->getMessage());
         }
     }
+
+    public function update(Request $request) {
+        try {
+
+
+//            $request->validate([
+//                'job_category_id' => 'integer',
+//                'level_id' => 'integer',
+//            ]);
+
+//            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
+//            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
+//
+//            $paginationParams = Helper::getPaginationParams($request);
+//
+//            $candidates = Filter::getByFilter(Candidate::class, [FilterByJobCategory::class, FilterByLevel::class]);
+//            $candidates = $candidates
+//                ->with('user', 'job_category', 'level')
+//                ->paginate($paginationParams['limit_page'], ['*'], 'page', $paginationParams['page']);
+
+            return Helper::successResponse(["test" => $request->all()], 'TEST');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+    }
+
+
 
 //    public function createInterviewInvitation(Request $request) {
 //        app(Actions\createInterviewInvitation::class)->run($request);

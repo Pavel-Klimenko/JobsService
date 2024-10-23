@@ -52,7 +52,7 @@ Route::group(['prefix' => 'personal'], function () {
 
     Route::group(['prefix' => 'candidate'], function () {
         Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-        Route::post('/update', [CandidateController::class, 'update']);
+        Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
 
 //    Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {

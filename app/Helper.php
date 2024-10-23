@@ -52,13 +52,15 @@ class Helper
         ]);
     }
 
-    public static function checkElementExistense($model, $elementId):void
+    public static function checkElementExistense($model, $elementId)
     {
         if ($elementId) {
-            if (!$model::find($elementId)) {
+            if (!$element = $model::find($elementId)) {
                 throw new RuntimeException(Str::camel(class_basename($model))." with id = $elementId not found");
             }
         }
+
+        return (isset($element)) ? $element : false;
     }
 
 }

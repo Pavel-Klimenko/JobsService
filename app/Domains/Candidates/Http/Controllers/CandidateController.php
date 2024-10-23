@@ -15,9 +15,11 @@ use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
 
 use App\Domains\Candidates\Models\Candidate;
+use App\User;
 use App\QueryFilters\Filter;
 
 use App\Services\CandidateService;
+use Illuminate\Support\Facades\DB;
 
 class CandidateController extends BaseController
 {
@@ -64,27 +66,66 @@ class CandidateController extends BaseController
         }
     }
 
-    public function update(Request $request) {
+    public function updatePersonalInfo(Request $request) {
         try {
+            DB::beginTransaction();
+            //TODO делать валидацию в Respons ах
+            //TODO использовать Spatie DTO библиотеку
+
+            $request->validate([
+                'candidate_id' => 'required|integer',
+                'user_id' => 'required|integer',
+
+                'name' => 'required|string',
+                'country' => 'required|string',
+                'city' => 'required|string',
+                'phone' =>  'required|string',
+
+                'job_category_id' =>  'required|integer',
+                'level_id' =>  'required|integer',
+                'years_experience' =>  'required|integer',
+                'salary' =>  'required|numeric',
+                'experience' =>  'required|string',
+                'education' =>  'required|string',
+                'about_me' =>  'required|string',
+            ]);
 
 
-//            $request->validate([
-//                'job_category_id' => 'integer',
-//                'level_id' => 'integer',
-//            ]);
 
-//            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
-//            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
-//
-//            $paginationParams = Helper::getPaginationParams($request);
-//
-//            $candidates = Filter::getByFilter(Candidate::class, [FilterByJobCategory::class, FilterByLevel::class]);
-//            $candidates = $candidates
-//                ->with('user', 'job_category', 'level')
-//                ->paginate($paginationParams['limit_page'], ['*'], 'page', $paginationParams['page']);
+            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
+            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
-            return Helper::successResponse(["test" => $request->all()], 'TEST');
+            $candidate = Helper::checkElementExistense(Candidate::class, $request->candidate_id);
+            $user = Helper::checkElementExistense(User::class, $request->user_id);
+
+            //обновляем кандидата
+            $arCandidateParams = [
+                'job_category_id' => $request->job_category_id,
+                'level_id' => $request->level_id,
+                'years_experience' => $request->years_experience,
+                'salary' => $request->salary,
+                'experience' => $request->experience,
+                'education' => $request->education,
+                'about_me' => $request->about_me,
+            ];
+            $arUserParams = [
+                'name' => $request->name,
+                'country' => $request->country,
+                'city' => $request->city,
+                'phone' => $request->phone,
+                'education' => $request->education,
+                'about_me' => $request->about_me,
+            ];
+
+            $candidate->update($arCandidateParams);
+            $user->update($arUserParams);
+
+            //dd($updatedCandidate);
+
+            DB::commit();
+            return Helper::successResponse(['$arCandidateParams' => $arCandidateParams], 'Candidate updated');
         } catch(\Exception $exception) {
+            DB::rollBack();
             return Helper::failedResponse($exception->getMessage());
         }
     }

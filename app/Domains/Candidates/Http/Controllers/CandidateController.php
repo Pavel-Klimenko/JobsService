@@ -17,6 +17,7 @@ use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
 use App\Domains\Candidates\Models\Candidate;
 use App\User;
 use App\QueryFilters\Filter;
+use App\Services\FileService;
 
 use App\Services\CandidateService;
 use Illuminate\Support\Facades\DB;
@@ -25,10 +26,12 @@ class CandidateController extends BaseController
 {
 
     private $candidateService;
+    private $fileService;
 
-    public function __construct(CandidateService $candidateService)
+    public function __construct(CandidateService $candidateService, FileService $fileService)
     {
         $this->candidateService = $candidateService;
+        $this->fileService = $fileService;
     }
 
     public function getCandidate(int $id)
@@ -108,6 +111,7 @@ class CandidateController extends BaseController
                 'education' => $request->education,
                 'about_me' => $request->about_me,
             ];
+
             $arUserParams = [
                 'name' => $request->name,
                 'country' => $request->country,
@@ -122,8 +126,10 @@ class CandidateController extends BaseController
 
             //dd($updatedCandidate);
 
+
+
             DB::commit();
-            return Helper::successResponse(['$arCandidateParams' => $arCandidateParams], 'Candidate updated');
+            return Helper::successResponse(['$path' => $arUserParams], 'Candidate updated');
         } catch(\Exception $exception) {
             DB::rollBack();
             return Helper::failedResponse($exception->getMessage());

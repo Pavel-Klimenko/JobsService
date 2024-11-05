@@ -37,10 +37,12 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 
-Route::group(['prefix' => 'candidates'], function () {
+Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
     Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-    //Route::post('/create-invitation', [CandidateController::class, 'createInterviewInvitation']);
+    Route::get('/my/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
+
+    Route::post('/vacancy-request', [CandidateController::class, 'createVacancyRequest']);
 });
 
 

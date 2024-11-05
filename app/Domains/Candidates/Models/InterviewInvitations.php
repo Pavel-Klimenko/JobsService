@@ -2,15 +2,22 @@
 
 namespace App\Domains\Candidates\Models;
 
+use App\Domains\Vacancies\Models\Vacancies;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class InterviewInvitations extends Model
 {
 
-    //protected $fillable = ['COMPANY_ID', 'CANDIDATE_ID', 'VACANCY_ID', 'CANDIDATE_COVERING_LETTER'];
+    protected $guarded = [];
 
     protected $table = 'invitations_to_interview';
     const TABLE_NAME = 'invitations_to_interview';
+
+    public function vacancy(): belongsTo
+    {
+        return $this->belongsTo(Vacancies::class);
+    }
 
 //    public function scopeAccepted($query) {
 //        return $query->where('STATUS', 'accepted');

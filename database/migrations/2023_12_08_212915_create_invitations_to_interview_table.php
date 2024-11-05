@@ -4,7 +4,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Domains\Candidates\Models\InterviewInvitations;
-use App\Domains\Personal\Models\Company;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Domains\Candidates\Models\Candidate;
 
@@ -20,17 +19,10 @@ class CreateInvitationsToInterviewTable extends Migration
         if (!Schema::hasTable(InterviewInvitations::TABLE_NAME)) {
             Schema::create(InterviewInvitations::TABLE_NAME, function (Blueprint $table) {
                 $table->id();
-
                 $table->foreignId('vacancy_id')
                     ->constrained(Vacancies::TABLE_NAME)
                     ->cascadeOnDelete()
                     ->cascadeOnUpdate();
-
-                $table->foreignId('company_id')
-                    ->constrained(Company::TABLE_NAME)
-                    ->cascadeOnDelete()
-                    ->cascadeOnUpdate();
-
                 $table->foreignId('candidate_id')
                     ->constrained(Candidate::TABLE_NAME)
                     ->cascadeOnDelete()
@@ -50,6 +42,7 @@ class CreateInvitationsToInterviewTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists(InterviewInvitations::TABLE_NAME);
     }
 }

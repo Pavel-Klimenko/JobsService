@@ -1,9 +1,11 @@
 <?php
 namespace App;
 
+use App\Domains\Candidates\Models\Candidate;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Domains\Personal\Models\Role;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -47,5 +49,10 @@ class User extends Authenticatable
     public function role(): belongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function candidate(): HasOne
+    {
+        return $this->hasOne(Candidate::class);
     }
 }

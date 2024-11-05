@@ -3,6 +3,7 @@ namespace App\Domains\Candidates\Models;
 
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\belongsTo;
 use App\User;
@@ -36,5 +37,10 @@ class Candidate extends Authenticatable
     public function level(): belongsTo
     {
         return $this->belongsTo(CandidateLevels::class);
+    }
+
+    public function vacancyRequests(): HasMany
+    {
+        return $this->hasMany(InterviewInvitations::class)->with('vacancy');
     }
 }

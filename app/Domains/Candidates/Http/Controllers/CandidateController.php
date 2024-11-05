@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domains\Candidates\Http\Controllers;
 
+use App\Domains\Vacancies\Models\Vacancies;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
@@ -138,14 +139,41 @@ class CandidateController extends BaseController
 
 
 
-//    public function createInterviewInvitation(Request $request) {
-//        app(Actions\createInterviewInvitation::class)->run($request);
-//
+    public function createVacancyRequest(Request $request) {
+        try {
+            $request->validate([
+                'vacancy_id' => 'required|integer',
+                'candidate_covering_letter' => 'string',
+            ]);
+
+            $candidate = $request->user()->candidate;
+            $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
+
+            $newVacancyRequest = $this->candidateService->createVacancyRequest($candidate, $vacancy, $request->candidate_covering_letter);
+
+            return Helper::successResponse($newVacancyRequest, 'New vacancy request created');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+        //TODO сделать отдельный сервис
 //        Mail::send(new UserNotification([
 //            'TYPE' => 'interview_invitation',
 //            'COMPANY_ID' => $request->COMPANY_ID,
 //            'VACANCY_ID' => $request->VACANCY_ID,
 //            'CANDIDATE_COVERING_LETTER' => $request->CANDIDATE_COVERING_LETTER,
 //        ]));
-//    }
+    }
+
+    public function getMyVacancyRequests(Request $request) {
+        try {
+            $candidate = $request->user()->candidate;
+
+            return Helper::successResponse($candidate->vacancyRequests, 'My vacancy requests');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+    }
+
+
+
 }

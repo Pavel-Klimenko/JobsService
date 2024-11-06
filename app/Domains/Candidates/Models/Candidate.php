@@ -41,6 +41,7 @@ class Candidate extends Authenticatable
 
     public function vacancyRequests(): HasMany
     {
-        return $this->hasMany(InterviewInvitations::class)->with('vacancy');
+        return $this->hasMany(InterviewInvitations::class)
+            ->with('vacancy', 'status');
     }
 }

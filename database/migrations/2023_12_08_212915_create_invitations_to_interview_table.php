@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Domains\Candidates\Models\Candidate;
+use App\Domains\Candidates\Models\InvitationsStatus;
+use App\Services\CandidateService;
 
 class CreateInvitationsToInterviewTable extends Migration
 {
@@ -16,8 +18,12 @@ class CreateInvitationsToInterviewTable extends Migration
      */
     public function up()
     {
+
+
+
         if (!Schema::hasTable(InterviewInvitations::TABLE_NAME)) {
-            Schema::create(InterviewInvitations::TABLE_NAME, function (Blueprint $table) {
+            $defaultStatus = app(CandidateService::class)->getInvitationStatusByCode('no_status');
+            Schema::create(InterviewInvitations::TABLE_NAME, function (Blueprint $table) use ($defaultStatus) {
                 $table->id();
                 $table->foreignId('vacancy_id')
                     ->constrained(Vacancies::TABLE_NAME)
@@ -27,9 +33,12 @@ class CreateInvitationsToInterviewTable extends Migration
                     ->constrained(Candidate::TABLE_NAME)
                     ->cascadeOnDelete()
                     ->cascadeOnUpdate();
-
                 $table->mediumText('candidate_covering_letter')->nullable();
-                $table->string('status')->default('no_status');
+                $table->foreignId('status_id')
+                    ->default($defaultStatus->id)
+                    ->constrained(InvitationsStatus::TABLE_NAME)
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
                 $table->timestamps();
             });
         }

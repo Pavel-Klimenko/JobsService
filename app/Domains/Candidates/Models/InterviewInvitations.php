@@ -19,6 +19,11 @@ class InterviewInvitations extends Model
         return $this->belongsTo(Vacancies::class);
     }
 
+    public function status(): belongsTo
+    {
+        return $this->belongsTo(InvitationsStatus::class);
+    }
+
 //    public function scopeAccepted($query) {
 //        return $query->where('STATUS', 'accepted');
 //    }

@@ -1,10 +1,12 @@
 <?php
 namespace App\Domains\Vacancies\Models;
 
+use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Personal\Models\Company;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Vacancies extends Model
 {
@@ -20,5 +22,11 @@ class Vacancies extends Model
     public function company(): belongsTo
     {
         return $this->belongsTo(Company::class)->with('user');
+    }
+
+    public function requestsOfCandidates(): HasMany
+    {
+        return $this->hasMany(InterviewInvitations::class, 'vacancy_id')
+            ->with('status');
     }
 }

@@ -27,7 +27,7 @@ Route::group(['prefix' => 'homepage'], function () {
     //Route::post('/add-review', [HomeController::class, 'addReview']);
 });
 
-Route::group(['prefix' => 'vacancies'], function () {
+Route::group(['prefix' => 'vacancies', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
     Route::get('/', [VacancyController::class, 'getVacancies']);
     Route::get('/{id}', [VacancyController::class, 'getVacancy']);
 
@@ -37,7 +37,7 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 
-Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
+Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
     Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/{id}', [CandidateController::class, 'getCandidate']);
     Route::get('/my/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
@@ -47,7 +47,6 @@ Route::group(['prefix' => 'candidates', 'middleware' => ['auth:sanctum','ability
 
 
 Route::group(['prefix' => 'personal'], function () {
-
     //TODO разобраться с нерабочими запросами sanctum
 //    Route::group(['prefix' => 'candidate', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
 //    });
@@ -56,10 +55,12 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('/{id}', [CandidateController::class, 'getCandidate']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
+});
 
-//    Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
-//        Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
-//    });
+Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+    Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
+    Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
+    Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
 });
 
 

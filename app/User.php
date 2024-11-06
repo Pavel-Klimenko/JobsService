@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Domains\Candidates\Models\Candidate;
+use App\Domains\Personal\Models\Company;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -22,9 +23,7 @@ class User extends Authenticatable
     protected $table = 'users';
     protected $fillable = ['name','email','phone','image','country','city','role_id','password'];
 
-
     const TABLE_NAME = 'users';
-
 
 
     /**
@@ -54,5 +53,10 @@ class User extends Authenticatable
     public function candidate(): HasOne
     {
         return $this->hasOne(Candidate::class);
+    }
+
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class);
     }
 }

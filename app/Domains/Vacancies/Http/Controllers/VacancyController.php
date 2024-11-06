@@ -4,6 +4,7 @@ namespace App\Domains\Vacancies\Http\Controllers;
 use App\Domains\Vacancies\Models\Vacancies;
 
 use App\Helper;
+use App\Services\VacancyService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -18,6 +19,16 @@ use App\Domains\Vacancies\QueryFilters\SalaryFrom as FilterBySalaryFrom;
 
 class VacancyController extends BaseController
 {
+
+    protected $vacancyService;
+
+    public function __construct(VacancyService $vacancyService)
+    {
+        $this->vacancyService = $vacancyService;
+    }
+
+
+
     public function getVacancies(Request $request)
     {
         try {
@@ -54,16 +65,34 @@ class VacancyController extends BaseController
 
     public function createVacancy(Request $request)
     {
-        return app(Actions\createVacancy::class)->run($request->all());
+        try {
+            //TODO DTO SPATIE + REQUEST VALIDATION!
+            $request->validate([
+                'title' => 'required|string',
+                'job_category_id' => 'required|integer',
+                'salary_from' => 'required|numeric',
+                'description' => 'required|string',
+            ]);
 
-        //sending notification to admin
-/*        $date = (object) [
-            'entity' => 'vacancy',
-            'message' =>  'Added new vacancy',
-            'entity_id' => $newVacancy->ID,
-        ];
+            //dd($request->all());
 
-        event(new NewEntityCreated($date));*/
+            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
+            $company = $request->user()->company;
+
+
+            $arParams = [
+                'title' => $request->title,
+                'job_category_id' => $request->job_category_id,
+                'company_id' => $company->id,
+                'salary_from' => $request->salary_from,
+                'description' => $request->description,
+            ];
+            $newVacancy = $this->vacancyService->createVacancy($arParams);
+
+            return Helper::successResponse(["new_vacancy" => $newVacancy], 'New vacancy created');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
     }
 
     public function deleteVacancy(Request $request)
@@ -71,19 +100,44 @@ class VacancyController extends BaseController
         return app(Actions\deleteVacancy::class)->run($request->id);
     }
 
-    public function updateVacancy($id, Request $request)
+    public function updateVacancy(Request $request)
     {
-        return app(Actions\updateVacancy::class)->run($id, $request);
+        try {
+            //TODO DTO SPATIE + REQUEST VALIDATION!
+            $request->validate([
+                'vacancy_id' => 'required|integer',
+                'title' => 'string',
+                'job_category_id' => 'integer',
+                'salary_from' => 'numeric',
+                'description' => 'string',
+            ]);
 
-        //$this->cacheService->deleteKeyFromCache('vacancy_'.$request->VACANCY_ID);
-        //sending notification to admin
-/*        $date = (object) [
-            'entity' => 'vacancy',
-            'message' =>  'Updated new vacancy',
-            'entity_id' => $request->VACANCY_ID,
-        ];
-        event(new NewEntityCreated($date));*/
-        //return back();
+            $currentCompany = $request->user()->company->id;
+
+            $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
+            if ($currentCompany->id != $vacancy->company_id) {
+                throw new RuntimeException("Vacancy doesn`t relate to this company");
+            }
+
+            $arParams = [
+                'title' => $request->title,
+                'job_category_id' => $request->job_category_id,
+                'company_id' => $currentCompany->id,
+                'salary_from' => $request->salary_from,
+                'description' => $request->description,
+            ];
+
+            $arParams = Helper::onlyExistedValues($arParams);
+
+            dd($arParams);
+
+            $newVacancy = $this->vacancyService->updateVacancy($vacancy, $arParams);
+
+            return Helper::successResponse(["new_vacancy" => $newVacancy], 'New vacancy created');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+
     }
 
 

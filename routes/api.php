@@ -27,14 +27,27 @@ Route::group(['prefix' => 'homepage'], function () {
     //Route::post('/add-review', [HomeController::class, 'addReview']);
 });
 
-Route::group(['prefix' => 'vacancies', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+Route::group(['prefix' => 'vacancies'], function () {
     Route::get('/', [VacancyController::class, 'getVacancies']);
     Route::get('/{id}', [VacancyController::class, 'getVacancy']);
 
-//    Route::post('/create', [VacancyController::class, 'createVacancy']);
+
 //    Route::delete('/delete/{id}', [VacancyController::class, 'deleteVacancy']);
-//    Route::post('/update/{id}', [VacancyController::class, 'updateVacancy']);
+
 });
+
+
+Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+    Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
+    Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
+    Route::post('/create-vacancy', [VacancyController::class, 'createVacancy']);
+    Route::post('/update-vacancy', [VacancyController::class, 'updateVacancy']);
+
+    Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
+
+
+});
+
 
 
 Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
@@ -57,11 +70,6 @@ Route::group(['prefix' => 'personal'], function () {
     });
 });
 
-Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
-    Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
-    Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
-    Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
-});
 
 
 

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\InvitationsStatus;
+use App\Domains\Vacancies\Models\Vacancies;
 use RuntimeException;
 
 class VacancyService
@@ -14,5 +15,14 @@ class VacancyService
     {
         $vacancyRequest->status_id = $answerStatus->id;
         $vacancyRequest->save();
+    }
+
+    public function createVacancy(array $arParams): Vacancies
+    {
+        return Vacancies::create($arParams);
+    }
+
+    public function updateVacancy(Vacancies $vacancy, array $arParams) {
+        return $vacancy->update($arParams);
     }
 }

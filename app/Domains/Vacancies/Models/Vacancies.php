@@ -27,6 +27,6 @@ class Vacancies extends Model
     public function requestsOfCandidates(): HasMany
     {
         return $this->hasMany(InterviewInvitations::class, 'vacancy_id')
-            ->with('status');
+            ->with('status', 'candidate');
     }
 }

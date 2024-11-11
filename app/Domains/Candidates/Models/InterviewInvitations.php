@@ -24,6 +24,12 @@ class InterviewInvitations extends Model
         return $this->belongsTo(InvitationsStatus::class);
     }
 
+    public function candidate(): belongsTo
+    {
+        return $this->belongsTo(Candidate::class)
+            ->with('user', 'level');
+    }
+
 //    public function scopeAccepted($query) {
 //        return $query->where('STATUS', 'accepted');
 //    }

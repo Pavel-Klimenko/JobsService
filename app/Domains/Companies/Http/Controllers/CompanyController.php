@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
 use RuntimeException;
+use App\User;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
 
@@ -69,8 +70,10 @@ class CompanyController extends BaseController
 
     public function getMyVacancies(Request $request) {
         try {
-            $myVacancies = $request->user()->company->vacancies;
-            return Helper::successResponse($myVacancies);
+            //$myVacancies = $request->user()->company->vacancies;
+            $myVacancies = User::find(6)->company->vacancies;
+
+            return Helper::successResponse($myVacancies, 'My vacancies');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }

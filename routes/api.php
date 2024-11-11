@@ -37,7 +37,7 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 
-Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+Route::group(['prefix' => 'company', /*'middleware' => ['auth:sanctum','ability:company_rules']*/], function () {
     Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
     Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
     Route::post('/create-vacancy', [VacancyController::class, 'createVacancy']);

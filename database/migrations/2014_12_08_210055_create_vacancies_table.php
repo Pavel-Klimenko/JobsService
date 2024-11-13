@@ -16,8 +16,8 @@ class CreateVacanciesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('vacancies')) {
-            Schema::create('vacancies', function (Blueprint $table) {
+        if (!Schema::hasTable(Vacancies::TABLE_NAME)) {
+            Schema::create(Vacancies::TABLE_NAME, function (Blueprint $table) {
                 $table->id();
                 $table->string('title')->nullable();
                 $table->foreignId('job_category_id')
@@ -32,7 +32,7 @@ class CreateVacanciesTable extends Migration
 
                 $table->float('salary_from')->nullable();
                 $table->mediumText('description')->nullable();
-                $table->boolean('active')->default(false);
+                $table->boolean('active')->default(true);
                 $table->timestamps();
             });
         }
@@ -45,6 +45,6 @@ class CreateVacanciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vacancies');
+        Schema::dropIfExists(Vacancies::TABLE_NAME);
     }
 }

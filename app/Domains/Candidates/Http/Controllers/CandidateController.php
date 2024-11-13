@@ -45,7 +45,6 @@ class CandidateController extends BaseController
         }
     }
 
-
     public function getCandidates(Request $request)
     {
         try {
@@ -136,8 +135,6 @@ class CandidateController extends BaseController
             return Helper::failedResponse($exception->getMessage());
         }
     }
-
-
 
     public function createVacancyRequest(Request $request) {
         try {

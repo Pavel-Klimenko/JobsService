@@ -38,14 +38,15 @@ Route::group(['prefix' => 'vacancies'], function () {
 
 
 Route::group(['prefix' => 'company', /*'middleware' => ['auth:sanctum','ability:company_rules']*/], function () {
-    Route::get('/{id}', [CompanyController::class, 'getPersonalData']);
+    Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
+    Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
+
     Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
-    Route::post('/create-vacancy', [VacancyController::class, 'createVacancy']);
-    Route::post('/update-vacancy', [VacancyController::class, 'updateVacancy']);
 
+    Route::get('/my/vacancy/{id}', [CompanyController::class, 'getMyVacancy']);
     Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
-
-
+    Route::post('/my/vacancies/create', [CompanyController::class, 'createVacancy']);
+    Route::post('/my/vacancies/update', [CompanyController::class, 'updateVacancy']);
 });
 
 
@@ -61,16 +62,12 @@ Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','abili
 
 Route::group(['prefix' => 'personal'], function () {
     //TODO разобраться с нерабочими запросами sanctum
-//    Route::group(['prefix' => 'candidate', 'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
-//    });
 
-    Route::group(['prefix' => 'candidate'], function () {
+    Route::group(['prefix' => 'candidate',  /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
         Route::get('/{id}', [CandidateController::class, 'getCandidate']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
 });
-
-
 
 
 

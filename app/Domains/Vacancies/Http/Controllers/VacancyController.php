@@ -54,42 +54,10 @@ class VacancyController extends BaseController
     public function getVacancy($id)
     {
         try {
-            if (!$vacancy = Vacancies::with('job_category', 'company.user')->find($id)) {
+            if (!$vacancy = $this->vacancyService->getVacancyById($id)) {
                 throw new RuntimeException("Vacancy with id = $id not found");
             }
             return Helper::successResponse(["vacancy" => $vacancy]);
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
-    }
-
-    public function createVacancy(Request $request)
-    {
-        try {
-            //TODO DTO SPATIE + REQUEST VALIDATION!
-            $request->validate([
-                'title' => 'required|string',
-                'job_category_id' => 'required|integer',
-                'salary_from' => 'required|numeric',
-                'description' => 'required|string',
-            ]);
-
-            //dd($request->all());
-
-            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
-            $company = $request->user()->company;
-
-
-            $arParams = [
-                'title' => $request->title,
-                'job_category_id' => $request->job_category_id,
-                'company_id' => $company->id,
-                'salary_from' => $request->salary_from,
-                'description' => $request->description,
-            ];
-            $newVacancy = $this->vacancyService->createVacancy($arParams);
-
-            return Helper::successResponse(["new_vacancy" => $newVacancy], 'New vacancy created');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
@@ -99,46 +67,4 @@ class VacancyController extends BaseController
     {
         return app(Actions\deleteVacancy::class)->run($request->id);
     }
-
-    public function updateVacancy(Request $request)
-    {
-        try {
-            //TODO DTO SPATIE + REQUEST VALIDATION!
-            $request->validate([
-                'vacancy_id' => 'required|integer',
-                'title' => 'string',
-                'job_category_id' => 'integer',
-                'salary_from' => 'numeric',
-                'description' => 'string',
-            ]);
-
-            $currentCompany = $request->user()->company->id;
-
-            $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
-            if ($currentCompany->id != $vacancy->company_id) {
-                throw new RuntimeException("Vacancy doesn`t relate to this company");
-            }
-
-            $arParams = [
-                'title' => $request->title,
-                'job_category_id' => $request->job_category_id,
-                'company_id' => $currentCompany->id,
-                'salary_from' => $request->salary_from,
-                'description' => $request->description,
-            ];
-
-            $arParams = Helper::onlyExistedValues($arParams);
-
-            dd($arParams);
-
-            $newVacancy = $this->vacancyService->updateVacancy($vacancy, $arParams);
-
-            return Helper::successResponse(["new_vacancy" => $newVacancy], 'New vacancy created');
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
-
-    }
-
-
 }

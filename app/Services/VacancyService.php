@@ -25,4 +25,8 @@ class VacancyService
     public function updateVacancy(Vacancies $vacancy, array $arParams) {
         return $vacancy->update($arParams);
     }
+
+    public function getVacancyById(int $id) {
+        return Vacancies::with('job_category', 'company.user')->findOrFail($id);
+    }
 }

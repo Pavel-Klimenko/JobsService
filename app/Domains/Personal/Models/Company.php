@@ -11,19 +11,11 @@ use App\User;
 
 class Company extends Model
 {
-    protected $guarded = [];
+
     protected $table = 'companies';
     const TABLE_NAME = 'companies';
 
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name'
-    ];
+    protected $guarded = [];
 
     public function user(): belongsTo
     {

@@ -35,4 +35,13 @@ class CandidateService
         return InvitationsStatus::where('code', $code)->first();
     }
 
+    public function isThereVacancyRequest(Candidate $candidate, int $vacancyId):bool
+    {
+        $arVacanciesImadeRequest = $candidate->vacancyRequests->toArray();
+        $arVacanciesImadeRequestIds = array_column($arVacanciesImadeRequest, 'vacancy_id');
+
+        return in_array($vacancyId, $arVacanciesImadeRequestIds);
+
+    }
+
 }

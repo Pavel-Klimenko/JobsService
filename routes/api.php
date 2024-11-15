@@ -51,12 +51,20 @@ Route::group(['prefix' => 'company', /*'middleware' => ['auth:sanctum','ability:
 
 
 
-Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
-    Route::get('/', [CandidateController::class, 'getCandidates']);
-    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
-    Route::get('/my/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
 
-    Route::post('/vacancy-request', [CandidateController::class, 'createVacancyRequest']);
+
+
+
+
+Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
+    Route::get('/is-there-vacancy-request', [CandidateController::class, 'isThereVacancyRequest']);
+
+    Route::get('/', [CandidateController::class, 'getCandidates']);
+    Route::get('/candidate/{id}', [CandidateController::class, 'getCandidate']);
+    Route::get('/my/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
+    Route::get('/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
+
+    Route::post('/create-vacancy-request', [CandidateController::class, 'createVacancyRequest']);
 });
 
 

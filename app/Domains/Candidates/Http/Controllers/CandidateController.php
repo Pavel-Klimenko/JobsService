@@ -143,15 +143,18 @@ class CandidateController extends BaseController
                 'candidate_covering_letter' => 'string',
             ]);
 
-            $candidate = $request->user()->candidate;
+            //$currentCandidate = $request->user()->candidate;
+            $currentCandidate = User::find(2)->candidate;
+
             $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
 
-            $newVacancyRequest = $this->candidateService->createVacancyRequest($candidate, $vacancy, $request->candidate_covering_letter);
+            $newVacancyRequest = $this->candidateService->createVacancyRequest($currentCandidate, $vacancy, $request->candidate_covering_letter);
 
             return Helper::successResponse($newVacancyRequest, 'New vacancy request created');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
+
         //TODO сделать отдельный сервис
 //        Mail::send(new UserNotification([
 //            'TYPE' => 'interview_invitation',
@@ -172,6 +175,27 @@ class CandidateController extends BaseController
             return Helper::failedResponse($exception->getMessage());
         }
     }
+
+    public function isThereVacancyRequest(Request $request) {
+        try {
+            $request->validate(['vacancy_id' => 'required|integer']);
+
+            //dd($request->vacancy_id);
+
+            $currentCandidate = User::find(2)->candidate;
+            $vacancyId = (int)$request->vacancy_id;
+            $isThereVacancyRequest = $this->candidateService->isThereVacancyRequest($currentCandidate, $vacancyId);
+
+            return Helper::successResponse([
+                'vacancy_id' => $vacancyId,
+                'is_there_vacancy_request' => $isThereVacancyRequest,
+            ]);
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+    }
+
+
 
 
 

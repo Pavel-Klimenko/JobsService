@@ -102,7 +102,14 @@ class CompanyController extends BaseController
             ]);
 
             $vacancyRequest = Helper::checkElementExistense(InterviewInvitations::class, $request->vacancy_request_id);
-            if ($request->user()->company->id != $vacancyRequest->vacancy->company_id) {
+
+
+            //$currentUser = $request->user();
+            $currentUser = User::find(6);
+
+
+
+            if ($currentUser->company->id != $vacancyRequest->vacancy->company_id) {
                 throw new RuntimeException("Vacancy doesn`t relate to this company");
             }
 
@@ -112,7 +119,7 @@ class CompanyController extends BaseController
             return Helper::successResponse([
                 'vacancy' => $vacancyRequest->vacancy,
                 'answer_status' => $answerStatus->code
-            ]);
+            ], 'Vacancy request status changed');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }

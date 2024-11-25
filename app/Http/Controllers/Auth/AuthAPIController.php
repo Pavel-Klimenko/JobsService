@@ -42,22 +42,21 @@ class AuthAPIController extends Controller
 
     public function logout(Request $request) {
         try {
-        $request->validate([
-            'user_id' => 'required|integer',
-        ]);
 
-        $user = User::find($request->user_id);
-        if (!$user) throw new RuntimeException('User not found');
-        if (!AuthService::isUserAuthorised($user)) throw new RuntimeException('User isn`t authorised');
+            //TODO доделать!!!!
 
-        AuthService::logOutCurrentUser();
-        AuthService::deleteUserTokens($user);
+            $user = $request->user();
 
-        return [
-            'status' => 'success',
-            'user_id' => $request->user_id,
-            'message' => 'User is logged out'
-        ];
+            if (!AuthService::isUserAuthorised($user)) throw new RuntimeException('User isn`t authorised');
+
+            AuthService::logOutCurrentUser();
+            AuthService::deleteUserTokens($user);
+
+            return [
+                'status' => 'success',
+                'user_id' => $user->id,
+                'message' => 'User is logged out'
+            ];
 
         } catch (Exception $exception) {
             return ['status' => 'error', 'message' => $exception->getMessage()];

@@ -165,8 +165,8 @@ class CompanyController extends BaseController
 
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
 
-            //$currentCompany = $request->user()->company;
-            $currentCompany = User::find(6)->company;
+            $currentCompany = $request->user()->company;
+            //$currentCompany = User::find(6)->company;
 
             $arParams = [
                 'title' => $request->title,

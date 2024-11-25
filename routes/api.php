@@ -37,7 +37,7 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 
-Route::group(['prefix' => 'company', /*'middleware' => ['auth:sanctum','ability:company_rules']*/], function () {
+Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
     Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
     Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
 
@@ -93,8 +93,8 @@ Route::group(['prefix' => 'personal'], function () {
 
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', [AuthAPIController::class, 'login']);
-    Route::post('/logout', [AuthAPIController::class, 'logout']);
+    Route::post('/login', [AuthAPIController::class, 'login']);
+    Route::post('/logout', [AuthAPIController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('/register', [AuthAPIController::class, 'register']);
     //Route::post('/is_authorised', [AuthAPIController::class, 'isAuthorised']);
 });

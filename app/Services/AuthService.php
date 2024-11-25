@@ -59,8 +59,8 @@ class AuthService
         }
     }
 
-//    public static function isUserAuthorised(\App\User $user) {
-//        return $user->tokens()->where('tokenable_id', $user->id)->exists();
-//    }
+    public static function isUserAuthorised(\App\User $user) {
+        return $user->tokens()->where('tokenable_id', $user->id)->exists();
+    }
 
 }

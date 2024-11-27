@@ -40,18 +40,7 @@ class AuthService
         }
     }
 
-
-    public static function logOutCurrentUser() {
-        try {
-            $user = Auth::user();
-            Auth::logout();
-            return $user;
-        } catch (Exception $exception) {
-            throw new RuntimeException($exception->getMessage());
-        }
-    }
-
-    public static function deleteUserTokens(\App\User $user) {
+    public static function deleteUserTokens(User $user) {
         try {
             return $user->tokens()->where('tokenable_id', $user->id)->delete();
         } catch (Exception $exception) {

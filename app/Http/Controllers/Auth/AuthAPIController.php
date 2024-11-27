@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Domains\Personal\Models\Role;
@@ -27,41 +28,52 @@ class AuthAPIController extends Controller
             }
 
             $user = AuthService::authenticateUser($request->email, $request->password);
-            $token = AuthService::generateUserToken($user);
 
-            return [
+            $token = AuthService::generateUserToken($user);
+            $userRoleName = $user->role->name;
+
+            if ($userRoleName == 'company') {
+                $userRelatedEntityId = $user->company->id;
+            } else if ($userRoleName == 'candidate') {
+                $userRelatedEntityId = $user->candidate->id;
+            }
+
+            return Helper::successResponse([
                 'status' => 'success',
                 'user_id' => $user->id,
                 'token' => $token,
+                'role_name' => $userRoleName,
+                'related_entity_id' => $userRelatedEntityId,
                 'message' => 'User successfully authorized'
-            ];
+            ], 'Created new vacancy');
+
         } catch (Exception $exception) {
-            return ['status' => 'error', 'message' => $exception->getMessage()];
+            return Helper::failedResponse(
+                $exception->getMessage(),
+                $exception->getTrace()
+            );
         }
     }
 
     public function logout(Request $request) {
         try {
-
-            //TODO доделать!!!!
-
             $user = $request->user();
-
-            if (!AuthService::isUserAuthorised($user)) throw new RuntimeException('User isn`t authorised');
-
-            AuthService::logOutCurrentUser();
             AuthService::deleteUserTokens($user);
 
-            return [
+            return Helper::successResponse([
                 'status' => 'success',
                 'user_id' => $user->id,
                 'message' => 'User is logged out'
-            ];
+            ], 'Created new vacancy');
 
         } catch (Exception $exception) {
-            return ['status' => 'error', 'message' => $exception->getMessage()];
+            return Helper::failedResponse(
+                $exception->getMessage(),
+                $exception->getTrace()
+            );
         }
     }
+
     public function register(Request $request) {
         try {
             $request->validate([

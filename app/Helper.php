@@ -44,11 +44,12 @@ class Helper
         ]);
     }
 
-    public static function failedResponse(string $errorMessage = 'error'): JsonResponse
+    public static function failedResponse(string $errorMessage = 'error', $trace = ''): JsonResponse
     {
         return response()->json([
             'status' => 'error',
             'message' => $errorMessage,
+            'trace' => $trace
         ]);
     }
 

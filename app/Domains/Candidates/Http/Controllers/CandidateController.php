@@ -166,10 +166,7 @@ class CandidateController extends BaseController
 
     public function getMyVacancyRequests(Request $request) {
         try {
-            //$candidate = $request->user()->candidate;
-
-            $candidate = Candidate::find(1);
-
+            $candidate = $request->user()->candidate;
             return Helper::successResponse($candidate->vacancyRequests, 'My vacancy requests');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());

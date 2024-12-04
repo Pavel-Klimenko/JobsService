@@ -12,9 +12,11 @@ class CandidateLevelsSeeder extends Seeder
      */
     public function run()
     {
-        CandidateLevels::create(['code' => 'junior']);
-        CandidateLevels::create(['code' => 'middle']);
-        CandidateLevels::create(['code' => 'senior']);
+        if (CandidateLevels::count() == 0) {
+            CandidateLevels::create(['code' => 'junior']);
+            CandidateLevels::create(['code' => 'middle']);
+            CandidateLevels::create(['code' => 'senior']);
+        }
     }
 }
 

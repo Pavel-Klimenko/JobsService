@@ -136,11 +136,12 @@ class CompanyController extends BaseController
         }
     }
 
-    public function getMyVacancy($id) {
+    public function getMyVacancy($id, Request $request) {
         try {
-            //$currentCompany = $request->user()->company;
-            $currentCompany = User::find(6)->company;
+            $currentCompany = $request->user()->company;
+            //$currentCompany = User::find(6)->company;
 
+            //TODO проверить что это моя вакансия
             $vacancy = $this->vacancyService->getVacancyById($id);
 
 
@@ -196,8 +197,8 @@ class CompanyController extends BaseController
                 'description' => 'string',
             ]);
 
-            //$currentCompany = $request->user()->company;
-            $currentCompany = User::find(6)->company;
+            $currentCompany = $request->user()->company;
+            //$currentCompany = User::find(6)->company;
 
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);

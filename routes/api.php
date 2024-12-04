@@ -7,7 +7,6 @@ use App\Domains\Candidates\Http\Controllers\CandidateController;
 use App\Domains\Companies\Http\Controllers\CompanyController;
 
 use App\Domains\Home\Http\Controllers\HomeController;
-use App\Domains\Personal\Http\Controllers\PersonalController;
 use App\Http\Controllers\Auth\AuthAPIController;
 
 /*
@@ -23,8 +22,6 @@ use App\Http\Controllers\Auth\AuthAPIController;
 
 Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
-    //Route::get('/reviews', [HomeController::class, 'getReviews']);
-    //Route::post('/add-review', [HomeController::class, 'addReview']);
 });
 
 Route::group(['prefix' => 'vacancies'], function () {
@@ -37,28 +34,18 @@ Route::group(['prefix' => 'vacancies'], function () {
 });
 
 
-Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
-    Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
-    Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
+//Route::group(['prefix' => 'company', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+//    Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
+//    Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
 
-    Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
-
-    Route::get('/my/vacancy/{id}', [CompanyController::class, 'getMyVacancy']);
-    Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
-    Route::post('/my/vacancies/create', [CompanyController::class, 'createVacancy']);
-    Route::post('/my/vacancies/update', [CompanyController::class, 'updateVacancy']);
-});
-
-
-
-
-
-
-
+    //Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
+    //Route::get('/my/vacancy/{id}', [CompanyController::class, 'getMyVacancy']);
+    //Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
+//    Route::post('/my/vacancies/create', [CompanyController::class, 'createVacancy']);
+//    Route::post('/my/vacancies/update', [CompanyController::class, 'updateVacancy']);
+//});
 
 Route::group(['prefix' => 'candidates', /*'middleware' => ['auth:sanctum','ability:candidate_rules']*/], function () {
-
-
     Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/candidate/{id}', [CandidateController::class, 'getCandidate']);
 
@@ -76,6 +63,19 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('/{id}', [CandidateController::class, 'getCandidate']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
+
+    Route::group(['prefix' => 'company',  'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+        Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
+        Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
+        Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
+
+        Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
+        Route::get('/my/vacancies/{id}', [CompanyController::class, 'getMyVacancy']);
+
+        Route::post('/create-vacancy', [CompanyController::class, 'createVacancy']);
+        Route::post('/update-vacancy', [CompanyController::class, 'updateVacancy']);
+    });
+
 });
 
 
@@ -97,5 +97,4 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [AuthAPIController::class, 'login']);
     Route::post('/logout', [AuthAPIController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('/register', [AuthAPIController::class, 'register']);
-    //Route::post('/is_authorised', [AuthAPIController::class, 'isAuthorised']);
 });

@@ -13,10 +13,11 @@ class CompaniesTableSeeder extends Seeder
      */
     public function run()
     {
-        $testCompanyABCsoft = User::where('email', 'ABCsoft@test.com')->firstOrFail();
-        $testCompanyUdemyDev = User::where('email', 'UdemyDev@test.com')->firstOrFail();
+        if (Company::count() == 0) {
+            $testCompanyABCsoft = User::where('email', 'ABCsoft@test.com')->firstOrFail();
+            $testCompanyUdemyDev = User::where('email', 'UdemyDev@test.com')->firstOrFail();
 
-        Company::create([
+            Company::create([
                 'user_id' => $testCompanyABCsoft->id,
                 'employee_cnt' => 50,
                 'web_site' => 'https://abc-soft.com',
@@ -24,16 +25,16 @@ class CompaniesTableSeeder extends Seeder
                                 the Latvian market. The services that we offer to the customers
                                 are connected with development and implementation of information systems
                                 and complete software solutions adaptable to each customer`s requirements.',
-        ]);
-
-        Company::create([
+            ]);
+            Company::create([
                 'user_id' => $testCompanyUdemyDev->id,
                 'employee_cnt' => 143,
                 'web_site' => 'https://udemy-dev.com',
                 'description' => 'Udemy Dev Company is an Global Oriented software outsourcing
                                  company that focuses on highly qualitative,
                                  timely delivered and cost-effective offshore software development',
-        ]);
+            ]);
+        }
     }
 }
 

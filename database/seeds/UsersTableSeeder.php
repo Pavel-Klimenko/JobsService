@@ -70,7 +70,6 @@ class UsersTableSeeder extends Seeder
                 'password' => bcrypt('almaz'),
                 'active' => 1,
             ]);
-
             User::create([
                 'name' => 'ABC Soft',
                 'email' => 'ABCsoft@test.com',

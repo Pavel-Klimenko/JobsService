@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Domains\Candidates\Models\Candidate;
+use App\Domains\Personal\Models\Company;
+use App\Domains\Vacancies\Models\Vacancies;
 use App\Helper;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -82,28 +85,41 @@ class AuthAPIController extends Controller
                 'phone' => 'required',
                 'country' => 'required|string',
                 'city' => 'required|string',
-                'user_role' => 'required|string',
+                'role_id' => 'required|integer',
                 'password' => 'required',
             ]);
 
             $arRequest = $request->all();
 
-            $arRequest['role_id'] = Role::where('name', $arRequest['user_role'])->firstOrFail()->id;
-            unset($arRequest['user_role']);
+            $userRole = Helper::checkElementExistense(Role::class, $request->role_id);
+
+            $arRequest['role_id'] = $userRole->id;
             $arRequest['password'] = bcrypt($arRequest['password']);
 
             if (User::where('email', $arRequest['email'])->exists()) {
                 throw new RuntimeException('User witch such email already exists');
             }
 
-            $newUser = User::create($arRequest);
+            $relatedEntityName = $userRole->name;
+
+            //TODO внедрить DTO Spatie
+            if ($newUser = User::create($arRequest)) {
+                if ($relatedEntityName == 'candidate') {
+                    $relatedEntity = Candidate::create(['user_id' => $newUser->id]);
+                } else if ($relatedEntityName == 'company') {
+                    $relatedEntity = Company::create(['user_id' => $newUser->id]);
+                }
+            }
 
             return [
                 'status' => 'success',
                 'message' => 'User successfully registered',
-                'new_user' => $newUser
+                'created_user' => $newUser,
+                'related_entity' => [
+                    'name' => $relatedEntityName,
+                    'data' => $relatedEntity
+                ],
             ];
-
         } catch (Exception $exception) {
             return ['status' => 'error', 'message' => $exception->getMessage()];
         }

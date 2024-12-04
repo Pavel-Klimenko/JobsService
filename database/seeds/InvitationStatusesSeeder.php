@@ -12,9 +12,11 @@ class InvitationStatusesSeeder extends Seeder
      */
     public function run()
     {
-        InvitationsStatus::create(['code' => 'accepted']);
-        InvitationsStatus::create(['code' => 'rejected']);
-        InvitationsStatus::create(['code' => 'no_status']);
+        if (InvitationsStatus::count() == 0) {
+            InvitationsStatus::create(['code' => 'accepted']);
+            InvitationsStatus::create(['code' => 'rejected']);
+            InvitationsStatus::create(['code' => 'no_status']);
+        }
     }
 }
 

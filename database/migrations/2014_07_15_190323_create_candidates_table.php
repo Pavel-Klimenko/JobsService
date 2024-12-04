@@ -24,10 +24,12 @@ class CreateCandidatesTable extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignId('job_category_id')
+                ->nullable()
                 ->constrained(JobCategories::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignId('level_id')
+                ->nullable()
                 ->constrained(CandidateLevels::TABLE_NAME)
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();

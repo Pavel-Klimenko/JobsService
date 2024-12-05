@@ -93,8 +93,6 @@ class CandidateController extends BaseController
                 'about_me' =>  'required|string',
             ]);
 
-
-
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
@@ -126,8 +124,6 @@ class CandidateController extends BaseController
 
             //dd($updatedCandidate);
 
-
-
             DB::commit();
             return Helper::successResponse(['$path' => $arUserParams], 'Candidate updated');
         } catch(\Exception $exception) {
@@ -143,11 +139,8 @@ class CandidateController extends BaseController
                 'candidate_covering_letter' => 'string',
             ]);
 
-            //$currentCandidate = $request->user()->candidate;
-            $currentCandidate = User::find(2)->candidate;
-
+            $currentCandidate = $request->user()->candidate;
             $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
-
             $newVacancyRequest = $this->candidateService->createVacancyRequest($currentCandidate, $vacancy, $request->candidate_covering_letter);
 
             return Helper::successResponse($newVacancyRequest, 'New vacancy request created');
@@ -176,10 +169,7 @@ class CandidateController extends BaseController
     public function isThereVacancyRequest(Request $request) {
         try {
             $request->validate(['vacancy_id' => 'required|integer']);
-
-            //dd($request->vacancy_id);
-
-            $currentCandidate = User::find(2)->candidate;
+            $currentCandidate = $request->user()->candidate;
             $vacancyId = (int)$request->vacancy_id;
             $isThereVacancyRequest = $this->candidateService->isThereVacancyRequest($currentCandidate, $vacancyId);
 
@@ -191,9 +181,4 @@ class CandidateController extends BaseController
             return Helper::failedResponse($exception->getMessage());
         }
     }
-
-
-
-
-
 }

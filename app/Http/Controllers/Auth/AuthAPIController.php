@@ -93,9 +93,7 @@ class AuthAPIController extends Controller
 
             $userRole = Helper::checkElementExistense(Role::class, $request->role_id);
 
-            $arRequest['role_id'] = $userRole->id;
             $arRequest['password'] = bcrypt($arRequest['password']);
-
             if (User::where('email', $arRequest['email'])->exists()) {
                 throw new RuntimeException('User witch such email already exists');
             }

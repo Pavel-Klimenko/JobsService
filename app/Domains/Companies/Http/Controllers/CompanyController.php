@@ -36,8 +36,7 @@ class CompanyController extends BaseController
     public function getPersonalData(Request $request)
     {
         try {
-            //$currentCompany = $request->user()->company;
-            $currentCompany = User::find(6)->company;
+            $currentCompany = $request->user()->company;
             //TODO сделать сервисы и DTO!
             return Helper::successResponse($currentCompany, 'My company info');
         } catch(\Exception $exception) {
@@ -63,8 +62,7 @@ class CompanyController extends BaseController
             ]);
 
 
-            //$currentUser = $request->user();
-            $currentUser = User::find(6);
+            $currentUser = $request->user();
             $currentCompany = $currentUser->company;
 
 
@@ -103,11 +101,7 @@ class CompanyController extends BaseController
 
             $vacancyRequest = Helper::checkElementExistense(InterviewInvitations::class, $request->vacancy_request_id);
 
-
-            //$currentUser = $request->user();
-            $currentUser = User::find(6);
-
-
+            $currentUser = $request->user();
 
             if ($currentUser->company->id != $vacancyRequest->vacancy->company_id) {
                 throw new RuntimeException("Vacancy doesn`t relate to this company");
@@ -127,8 +121,7 @@ class CompanyController extends BaseController
 
     public function getMyVacancies(Request $request) {
         try {
-            //$myVacancies = $request->user()->company->vacancies;
-            $myVacancies = User::find(6)->company->vacancies;
+            $myVacancies = $request->user()->company->vacancies;
 
             return Helper::successResponse($myVacancies, 'My vacancies');
         } catch(\Exception $exception) {
@@ -139,11 +132,8 @@ class CompanyController extends BaseController
     public function getMyVacancy($id, Request $request) {
         try {
             $currentCompany = $request->user()->company;
-            //$currentCompany = User::find(6)->company;
-
             //TODO проверить что это моя вакансия
             $vacancy = $this->vacancyService->getVacancyById($id);
-
 
             if ($vacancy->company_id != $currentCompany->id) {
                 throw new RuntimeException("Vacancy doesn`t relate to this company");
@@ -167,7 +157,6 @@ class CompanyController extends BaseController
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
 
             $currentCompany = $request->user()->company;
-            //$currentCompany = User::find(6)->company;
 
             $arParams = [
                 'title' => $request->title,
@@ -198,7 +187,6 @@ class CompanyController extends BaseController
             ]);
 
             $currentCompany = $request->user()->company;
-            //$currentCompany = User::find(6)->company;
 
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);

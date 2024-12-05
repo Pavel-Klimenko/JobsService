@@ -24,17 +24,23 @@ Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData']);
 });
 
+
+Route::group(['prefix' => 'entity-directories'], function () {
+    Route::get('/user-roles', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getUserRoles']);
+    Route::get('/job-categories', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getJobCategories']);
+    Route::get('/candidate-levels', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getCandidateLevels']);
+    Route::get('/candidate-response-statuses', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getCandidateResponseStatuses']);
+});
+
 Route::group(['prefix' => 'vacancies'], function () {
     Route::get('/', [VacancyController::class, 'getVacancies']);
     Route::get('/{id}', [VacancyController::class, 'getVacancy']);
 });
 
-
 Route::group(['prefix' => 'candidates'], function () {
     Route::get('/', [CandidateController::class, 'getCandidates']);
     Route::get('/candidate/{id}', [CandidateController::class, 'getCandidate']);
 });
-
 
 Route::group(['prefix' => 'personal'], function () {
     Route::group(['prefix' => 'candidate',  'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {

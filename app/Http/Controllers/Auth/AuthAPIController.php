@@ -47,8 +47,7 @@ class AuthAPIController extends Controller
                 'token' => $token,
                 'role_name' => $userRoleName,
                 'related_entity_id' => $userRelatedEntityId,
-                'message' => 'User successfully authorized'
-            ], 'Created new vacancy');
+            ], 'User successfully authorized');
 
         } catch (Exception $exception) {
             return Helper::failedResponse(
@@ -66,8 +65,7 @@ class AuthAPIController extends Controller
             return Helper::successResponse([
                 'status' => 'success',
                 'user_id' => $user->id,
-                'message' => 'User is logged out'
-            ], 'Created new vacancy');
+            ], 'User is logged out');
 
         } catch (Exception $exception) {
             return Helper::failedResponse(

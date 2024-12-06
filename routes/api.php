@@ -39,7 +39,7 @@ Route::group(['prefix' => 'vacancies'], function () {
 
 Route::group(['prefix' => 'candidates'], function () {
     Route::get('/', [CandidateController::class, 'getCandidates']);
-    Route::get('/candidate/{id}', [CandidateController::class, 'getCandidate']);
+    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
 });
 
 Route::group(['prefix' => 'personal'], function () {

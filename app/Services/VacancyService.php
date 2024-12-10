@@ -6,7 +6,10 @@ namespace App\Services;
 
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\InvitationsStatus;
+use App\Domains\Vacancies\DTO\CreateVacancyDto;
+use App\Domains\Vacancies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
+use App\Domains\Personal\Models\Company;
 use RuntimeException;
 
 class VacancyService
@@ -17,13 +20,24 @@ class VacancyService
         $vacancyRequest->save();
     }
 
-    public function createVacancy(array $arParams): Vacancies
+    public function createVacancy(Company $company, CreateVacancyDto $createVacancyDto): Vacancies
     {
-        return Vacancies::create($arParams);
+        return Vacancies::create([
+            'title' => $createVacancyDto->title,
+            'job_category_id' => $createVacancyDto->job_category_id,
+            'salary_from' => $createVacancyDto->salary_from,
+            'description' => $createVacancyDto->description,
+            'company_id' => $company->id,
+        ]);
     }
 
-    public function updateVacancy(Vacancies $vacancy, array $arParams) {
-        return $vacancy->update($arParams);
+    public function updateVacancy(Vacancies $vacancy, UpdateVacancyDto $updateVacancyDto) {
+        return $vacancy->update([
+            'title' => $updateVacancyDto->title,
+            'job_category_id' => $updateVacancyDto->job_category_id,
+            'salary_from' => $updateVacancyDto->salary_from,
+            'description' => $updateVacancyDto->description,
+        ]);
     }
 
     public function getVacancyById(int $id) {

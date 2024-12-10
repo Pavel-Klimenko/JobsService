@@ -4,6 +4,7 @@ namespace App\Domains\Companies\Http\Controllers;
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\InvitationsStatus;
 use App\Domains\Personal\Models\Company;
+use App\Domains\Vacancies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Services\CandidateService;
 use App\Services\FileService;
@@ -15,6 +16,9 @@ use RuntimeException;
 use App\User;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
+use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
+use App\Domains\Companies\Http\Requests\UpdateVacancyRequest;
+use App\Domains\Vacancies\DTO\CreateVacancyDto;
 
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
@@ -26,7 +30,7 @@ use App\QueryFilters\Filter;
 class CompanyController extends BaseController
 {
 
-    protected $vacancyService;
+    private $vacancyService;
 
     public function __construct(VacancyService $vacancyService)
     {
@@ -145,28 +149,13 @@ class CompanyController extends BaseController
         }
     }
 
-    public function createVacancy(Request $request) {
+    public function createVacancy(CreateVacancyRequest $request) {
         try {
-            $request->validate([
-                'title' => 'required|string',
-                'job_category_id' => 'required|integer',
-                'salary_from' => 'required|numeric',
-                'description' => 'required|string',
-            ]);
-
-            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
-
             $currentCompany = $request->user()->company;
 
-            $arParams = [
-                'title' => $request->title,
-                'job_category_id' => $request->job_category_id,
-                'salary_from' => $request->salary_from,
-                'description' => $request->description,
-                'company_id' => $currentCompany->id,
-            ];
-
-            $newVacancy = $this->vacancyService->createVacancy($arParams);
+            $createVacancyDto = new CreateVacancyDto($request);
+            $dto = $createVacancyDto->getDTO();
+            $newVacancy = $this->vacancyService->createVacancy($currentCompany, $dto);
 
             return Helper::successResponse($newVacancy, 'Created new vacancy');
         } catch(\Exception $exception) {
@@ -174,18 +163,9 @@ class CompanyController extends BaseController
         }
     }
 
-    public function updateVacancy(Request $request)
+    public function updateVacancy(UpdateVacancyRequest $request)
     {
         try {
-            //TODO DTO SPATIE + REQUEST VALIDATION!
-            $request->validate([
-                'vacancy_id' => 'required|integer',
-                'title' => 'string',
-                'job_category_id' => 'integer',
-                'salary_from' => 'numeric',
-                'description' => 'string',
-            ]);
-
             $currentCompany = $request->user()->company;
 
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
@@ -194,15 +174,9 @@ class CompanyController extends BaseController
                 throw new RuntimeException("Vacancy doesn`t relate to this company");
             }
 
-            $arParams = [
-                'title' => $request->title,
-                'job_category_id' => $request->job_category_id,
-                'salary_from' => $request->salary_from,
-                'description' => $request->description,
-            ];
-
-            $arParams = Helper::onlyExistedValues($arParams);
-            $this->vacancyService->updateVacancy($vacancy, $arParams);
+            $createVacancyDto = new UpdateVacancyDto($request);
+            $dto = $createVacancyDto->getDTO();
+            $this->vacancyService->updateVacancy($vacancy, $dto);
 
             return Helper::successResponse(['vacancy_id' => $vacancy->id], 'Vacancy successfully updated');
         } catch(\Exception $exception) {

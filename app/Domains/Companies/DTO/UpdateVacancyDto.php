@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\Vacancies\DTO;
+namespace App\Domains\Companies\DTO;
 
 use App\Contracts\DataObjectContract;
 use App\Domains\Companies\Http\Requests\UpdateVacancyRequest;

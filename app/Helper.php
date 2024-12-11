@@ -35,7 +35,7 @@ class Helper
         return ['page' => (int)$page, 'limit_page' => (int)$pageLimit];
     }
 
-    public static function successResponse($data, string $message = 'Success server`s response'): JsonResponse
+    public static function successResponse($data = [], string $message = 'Success server`s response'): JsonResponse
     {
         return response()->json([
             'status' => 'ok',

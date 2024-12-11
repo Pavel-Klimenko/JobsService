@@ -11,6 +11,7 @@ use App\Helper;
 use RuntimeException;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
+use App\Domains\Candidates\Http\Requests\GetCandidatesRequest;
 
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
@@ -27,12 +28,12 @@ class CandidateController extends BaseController
 {
 
     private $candidateService;
-    private $fileService;
+    //private $fileService;
 
     public function __construct(CandidateService $candidateService, FileService $fileService)
     {
         $this->candidateService = $candidateService;
-        $this->fileService = $fileService;
+        //$this->fileService = $fileService;
     }
 
     public function getCandidate(int $id)
@@ -45,14 +46,9 @@ class CandidateController extends BaseController
         }
     }
 
-    public function getCandidates(Request $request)
+    public function getCandidates(GetCandidatesRequest $request)
     {
         try {
-            $request->validate([
-                'job_category_id' => 'integer',
-                'level_id' => 'integer',
-            ]);
-
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 

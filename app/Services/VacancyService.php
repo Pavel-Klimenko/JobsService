@@ -6,8 +6,8 @@ namespace App\Services;
 
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\InvitationsStatus;
-use App\Domains\Vacancies\DTO\CreateVacancyDto;
-use App\Domains\Vacancies\DTO\UpdateVacancyDto;
+use App\Domains\Companies\DTO\CreateVacancyDto;
+use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Domains\Personal\Models\Company;
 use RuntimeException;

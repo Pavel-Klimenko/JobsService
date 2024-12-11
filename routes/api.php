@@ -59,6 +59,7 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('/my/vacancies/{id}', [CompanyController::class, 'getMyVacancy']);
         Route::post('/create-vacancy', [CompanyController::class, 'createVacancy']);
         Route::post('/update-vacancy', [CompanyController::class, 'updateVacancy']);
+        Route::delete('/delete-vacancy/{id}', [CompanyController::class, 'deleteVacancy']);
     });
 });
 

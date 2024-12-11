@@ -3,10 +3,14 @@ namespace App\Domains\Companies\Http\Controllers;
 
 use App\Domains\Candidates\Models\InterviewInvitations;
 use App\Domains\Candidates\Models\InvitationsStatus;
+use App\Domains\Companies\DTO\UpdateCompanyDto;
+use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
 use App\Domains\Personal\Models\Company;
-use App\Domains\Vacancies\DTO\UpdateVacancyDto;
+use App\Domains\Companies\DTO\CreateVacancyDto;
+use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Services\CandidateService;
+use App\Services\CompanyService;
 use App\Services\FileService;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
@@ -16,9 +20,8 @@ use RuntimeException;
 use App\User;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
-use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
 use App\Domains\Companies\Http\Requests\UpdateVacancyRequest;
-use App\Domains\Vacancies\DTO\CreateVacancyDto;
+use App\Domains\Companies\Http\Requests\UpdatePersonalInfoRequest;
 
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
@@ -31,10 +34,12 @@ class CompanyController extends BaseController
 {
 
     private $vacancyService;
+    private $companyService;
 
-    public function __construct(VacancyService $vacancyService)
+    public function __construct(VacancyService $vacancyService, CompanyService $companyService)
     {
         $this->vacancyService = $vacancyService;
+        $this->companyService = $companyService;
     }
 
     public function getPersonalData(Request $request)
@@ -48,48 +53,16 @@ class CompanyController extends BaseController
         }
     }
 
-    public function updatePersonalInfo(Request $request) {
+    public function updatePersonalInfo(UpdatePersonalInfoRequest $request) {
         try {
             DB::beginTransaction();
-            //TODO делать валидацию в Respons ах
-            //TODO использовать Spatie DTO библиотеку
-
-            $request->validate([
-                'employee_cnt' => 'required|integer',
-                'web_site' => 'required|string',
-                'description' => 'required|string',
-
-                'name' => 'required|string',
-                'country' => 'required|string',
-                'city' => 'required|string',
-                'phone' =>  'required|string',
-            ]);
-
-
             $currentUser = $request->user();
-            $currentCompany = $currentUser->company;
 
-
-            //обновляем кандидата
-            $arCompanyParams = [
-                'employee_cnt' => $request->employee_cnt,
-                'web_site' => $request->web_site,
-                'description' => $request->description,
-            ];
-
-            $arUserParams = [
-                'name' => $request->name,
-                'country' => $request->country,
-                'city' => $request->city,
-                'phone' => $request->phone,
-            ];
-
-            $currentCompany->update($arCompanyParams);
-            $currentUser->update($arUserParams);
-
+            $updateCompanyDto = new UpdateCompanyDto($request);
+            $this->companyService->updateCompany($currentUser, $updateCompanyDto->getDTO());
 
             DB::commit();
-            return Helper::successResponse(['$arUserParams' => $arUserParams], 'Company updated');
+            return Helper::successResponse([], 'Company updated');
         } catch(\Exception $exception) {
             DB::rollBack();
             return Helper::failedResponse($exception->getMessage());
@@ -136,7 +109,6 @@ class CompanyController extends BaseController
     public function getMyVacancy($id, Request $request) {
         try {
             $currentCompany = $request->user()->company;
-            //TODO проверить что это моя вакансия
             $vacancy = $this->vacancyService->getVacancyById($id);
 
             if ($vacancy->company_id != $currentCompany->id) {
@@ -154,8 +126,7 @@ class CompanyController extends BaseController
             $currentCompany = $request->user()->company;
 
             $createVacancyDto = new CreateVacancyDto($request);
-            $dto = $createVacancyDto->getDTO();
-            $newVacancy = $this->vacancyService->createVacancy($currentCompany, $dto);
+            $newVacancy = $this->vacancyService->createVacancy($currentCompany, $createVacancyDto->getDTO());
 
             return Helper::successResponse($newVacancy, 'Created new vacancy');
         } catch(\Exception $exception) {
@@ -175,13 +146,28 @@ class CompanyController extends BaseController
             }
 
             $createVacancyDto = new UpdateVacancyDto($request);
-            $dto = $createVacancyDto->getDTO();
-            $this->vacancyService->updateVacancy($vacancy, $dto);
+            $this->vacancyService->updateVacancy($vacancy, $createVacancyDto->getDTO());
 
             return Helper::successResponse(['vacancy_id' => $vacancy->id], 'Vacancy successfully updated');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
+    }
 
+    public function deleteVacancy($id, Request $request)
+    {
+        try {
+            $currentCompany = $request->user()->company;
+            $vacancy = Helper::checkElementExistense(Vacancies::class, $id);
+            if ($currentCompany->id != $vacancy->company_id) {
+                throw new RuntimeException("Vacancy doesn`t relate to this company");
+            }
+
+            $vacancy->delete();
+
+            return Helper::successResponse([], 'Vacancy successfully deleted');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
     }
 }

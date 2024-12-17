@@ -11,6 +11,7 @@ use RuntimeException;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Vacancies\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Vacancies\QueryFilters\SalaryFrom as FilterBySalaryFrom;
+use Illuminate\Support\Facades\Cache;
 
 
 class VacancyController extends BaseController
@@ -44,6 +45,12 @@ class VacancyController extends BaseController
     public function getVacancy($id)
     {
         try {
+
+            //Cache::put('vacancy', 'my_vacancy');
+            //$vacancy = Cache::get('vacancy');
+            //Cache::forget('vacancy');
+
+
             if (!$vacancy = $this->vacancyService->getVacancyById($id)) {
                 throw new RuntimeException("Vacancy with id = $id not found");
             }

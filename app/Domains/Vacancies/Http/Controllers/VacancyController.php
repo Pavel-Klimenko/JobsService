@@ -27,6 +27,8 @@ class VacancyController extends BaseController
     public function getVacancies(GetVacanciesRequest $request)
     {
         try {
+            //TODO список вакансий с учетом фильтров в кэш
+
             $paginationParams = Helper::getPaginationParams($request);
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
 
@@ -45,15 +47,13 @@ class VacancyController extends BaseController
     public function getVacancy($id)
     {
         try {
+            $vacancy = Cache::rememberForever('vacancy:'.$id, function () use ($id) {
+                if (!$vacancy = $this->vacancyService->getVacancyById($id)) {
+                    throw new RuntimeException("Vacancy with id = $id not found");
+                }
+                return $vacancy;
+            });
 
-            //Cache::put('vacancy', 'my_vacancy');
-            //$vacancy = Cache::get('vacancy');
-            //Cache::forget('vacancy');
-
-
-            if (!$vacancy = $this->vacancyService->getVacancyById($id)) {
-                throw new RuntimeException("Vacancy with id = $id not found");
-            }
             return Helper::successResponse(["vacancy" => $vacancy]);
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Domains\Candidates\Http\Controllers;
 
 use App\Domains\Vacancies\Models\Vacancies;
+use App\Jobs\CreateVacancyRequestJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
@@ -12,6 +13,7 @@ use RuntimeException;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
 use App\Domains\Candidates\Http\Requests\GetCandidatesRequest;
+use App\Domains\Candidates\Http\Requests\createVacancyInvitationRequest;
 
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
@@ -21,8 +23,10 @@ use App\User;
 use App\QueryFilters\Filter;
 use App\Services\FileService;
 
+
 use App\Services\CandidateService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class CandidateController extends BaseController
 {
@@ -39,8 +43,10 @@ class CandidateController extends BaseController
     public function getCandidate(int $id)
     {
         try {
-            $candidate = $this->candidateService->getCandidate($id);
-            return Helper::successResponse(["candidate" => $candidate]);
+            $candidate = Cache::rememberForever('candidate:'.$id, function () use ($id) {
+                return $this->candidateService->getCandidate($id);
+            });
+            return Helper::successResponse(['candidate' => $candidate]);
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
@@ -49,6 +55,8 @@ class CandidateController extends BaseController
     public function getCandidates(GetCandidatesRequest $request)
     {
         try {
+            //TODO список кандидатов с учетом фильтров в кэш
+
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
@@ -128,18 +136,11 @@ class CandidateController extends BaseController
         }
     }
 
-    public function createVacancyRequest(Request $request) {
+    public function createVacancyRequest(createVacancyInvitationRequest $request) {
         try {
-            $request->validate([
-                'vacancy_id' => 'required|integer',
-                'candidate_covering_letter' => 'string',
-            ]);
+            CreateVacancyRequestJob::dispatch($request);
 
-            $currentCandidate = $request->user()->candidate;
-            $vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
-            $newVacancyRequest = $this->candidateService->createVacancyRequest($currentCandidate, $vacancy, $request->candidate_covering_letter);
-
-            return Helper::successResponse($newVacancyRequest, 'New vacancy request created');
+            return Helper::successResponse([], 'New vacancy request created');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }

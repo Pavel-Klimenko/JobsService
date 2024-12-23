@@ -1,34 +1,23 @@
 <?php
 namespace App\Domains\Companies\Http\Controllers;
 
-use App\Domains\Candidates\Models\InterviewInvitations;
-use App\Domains\Candidates\Models\InvitationsStatus;
 use App\Domains\Companies\DTO\UpdateCompanyDto;
 use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
-use App\Domains\Personal\Models\Company;
 use App\Domains\Companies\DTO\CreateVacancyDto;
 use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
-use App\Services\CandidateService;
 use App\Services\CompanyService;
-use App\Services\FileService;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
 use RuntimeException;
-use App\User;
 use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\CandidateLevels;
 use App\Domains\Companies\Http\Requests\UpdateVacancyRequest;
 use App\Domains\Companies\Http\Requests\UpdatePersonalInfoRequest;
-
-use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
-use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
+use App\Domains\Companies\Http\Requests\AnswerToVacancyInvitationRequest;
+use App\Jobs\AnswerToVacancyRequestJob;
 use Illuminate\Support\Facades\DB;
-
-use App\Domains\Candidates\Models\Candidate;
-use App\QueryFilters\Filter;
 
 class CompanyController extends BaseController
 {
@@ -69,28 +58,10 @@ class CompanyController extends BaseController
         }
     }
 
-    public function answerToVacancyRequest(Request $request) {
+    public function answerToVacancyRequest(AnswerToVacancyInvitationRequest $request) {
         try {
-            $request->validate([
-                'vacancy_request_id' => 'required|integer',
-                'answer_status_id' => 'required|integer',
-            ]);
-
-            $vacancyRequest = Helper::checkElementExistense(InterviewInvitations::class, $request->vacancy_request_id);
-
-            $currentUser = $request->user();
-
-            if ($currentUser->company->id != $vacancyRequest->vacancy->company_id) {
-                throw new RuntimeException("Vacancy doesn`t relate to this company");
-            }
-
-            $answerStatus = Helper::checkElementExistense(InvitationsStatus::class, $request->answer_status_id);
-            $this->vacancyService->answerToVacancyRequest($vacancyRequest, $answerStatus);
-
-            return Helper::successResponse([
-                'vacancy' => $vacancyRequest->vacancy,
-                'answer_status' => $answerStatus->code
-            ], 'Vacancy request status changed');
+            AnswerToVacancyRequestJob::dispatch($request);
+            return Helper::successResponse([], 'Company replied to candidate`s vacancy request');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
@@ -128,6 +99,9 @@ class CompanyController extends BaseController
             $createVacancyDto = new CreateVacancyDto($request);
             $newVacancy = $this->vacancyService->createVacancy($currentCompany, $createVacancyDto->getDTO());
 
+            //TODO в обсервер (то же самое для вакансий)
+            //Cache::put('vacancy:'.$newVacancy->id, $newVacancy);
+
             return Helper::successResponse($newVacancy, 'Created new vacancy');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
@@ -164,6 +138,9 @@ class CompanyController extends BaseController
             }
 
             $vacancy->delete();
+
+            //TODO в обсервер (то же самое для вакансий)
+            //Cache::forget('vacancy:'.$newVacancy->id, $newVacancy);
 
             return Helper::successResponse([], 'Vacancy successfully deleted');
         } catch(\Exception $exception) {

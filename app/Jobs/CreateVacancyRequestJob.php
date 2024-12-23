@@ -17,6 +17,8 @@ class CreateVacancyRequestJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $tries = 3;
+
 
     private $currentCandidate;
     private $vacancy;
@@ -42,10 +44,12 @@ class CreateVacancyRequestJob implements ShouldQueue
      */
     public function handle()
     {
-
         try {
-            app(CandidateService::class)
-                ->createVacancyRequest($this->currentCandidate, $this->vacancy, $this->candidate_covering_letter);
+            app(CandidateService::class)->createVacancyRequest(
+                $this->currentCandidate,
+                $this->vacancy,
+                $this->candidate_covering_letter
+            );
         } catch(\Exception $exception) {
             Log::error($exception->getMessage());
         }

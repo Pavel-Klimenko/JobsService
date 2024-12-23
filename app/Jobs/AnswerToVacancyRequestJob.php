@@ -23,6 +23,8 @@ class AnswerToVacancyRequestJob implements ShouldQueue
     private $currentUser;
     private $answerStatus;
 
+    public $tries = 3;
+
     /**
      * Create a new job instance.
      *

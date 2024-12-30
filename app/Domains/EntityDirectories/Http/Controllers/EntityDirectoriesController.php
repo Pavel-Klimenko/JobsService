@@ -8,6 +8,8 @@ use App\Domains\Personal\Models\Role;
 use App\Services\VacancyService;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
+use Illuminate\Support\Facades\Cache;
+
 
 class EntityDirectoriesController extends BaseController
 {
@@ -20,7 +22,10 @@ class EntityDirectoriesController extends BaseController
 
     public function getUserRoles() {
         try {
-            $userRoles = Role::select('id', 'name')->get();
+            $userRoles = Cache::rememberForever('roles:all', function () {
+                 return Role::select('id', 'name')->get();
+            });
+
             return Helper::successResponse($userRoles, 'User`s roles');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
@@ -30,7 +35,10 @@ class EntityDirectoriesController extends BaseController
     public function getJobCategories()
     {
         try {
-            $jobCategories = JobCategories::select('id', 'name')->get();
+            $jobCategories = Cache::rememberForever('job_categories:all', function () {
+                return JobCategories::select('id', 'name')->get();
+            });
+
             return Helper::successResponse($jobCategories, 'Job`s categories');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
@@ -40,7 +48,9 @@ class EntityDirectoriesController extends BaseController
     public function getCandidateLevels()
     {
         try {
-            $candidateLevels = CandidateLevels::select('id', 'code')->get();
+            $candidateLevels = Cache::rememberForever('candidate_levels:all', function () {
+                return CandidateLevels::select('id', 'code')->get();
+            });
             return Helper::successResponse($candidateLevels, 'Candidate`s levels');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
@@ -50,7 +60,9 @@ class EntityDirectoriesController extends BaseController
     public function getCandidateResponseStatuses()
     {
         try {
-            $candidateResponseStatuses = InvitationsStatus::select('id', 'code')->get();
+            $candidateResponseStatuses = Cache::rememberForever('invitation_statuses:all', function () {
+                return InvitationsStatus::select('id', 'code')->get();
+            });
             return Helper::successResponse($candidateResponseStatuses, 'Candidate`s response statuses');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());

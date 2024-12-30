@@ -1,7 +1,7 @@
 <?php
 namespace App\Domains\Personal\Http\Controllers;
 
-use App\Mail\UserNotification;
+use App\Mail\UserMailNotification;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -24,7 +24,7 @@ class PersonalController extends BaseController
     {
         $response = app(Actions\changeInvitationStatus::class)->run($id, $status);
 
-        Mail::send(new UserNotification([
+        Mail::send(new UserMailNotification([
             'TYPE' => 'answer_to_invitation',
             'INVITATION' => $response['invitation'],
             'CANDIDATE' => $response['candidate'],

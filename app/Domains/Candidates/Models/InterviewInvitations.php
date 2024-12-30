@@ -29,17 +29,4 @@ class InterviewInvitations extends Model
         return $this->belongsTo(Candidate::class)
             ->with('user', 'level');
     }
-
-//    public function scopeAccepted($query) {
-//        return $query->where('STATUS', 'accepted');
-//    }
-//
-//    public function scopeRejected($query) {
-//        return $query->where('STATUS', 'rejected');
-//    }
-//
-//    public function scopeNostatus($query) {
-//        return $query->where('STATUS', 'no_status');
-//    }
-
 }

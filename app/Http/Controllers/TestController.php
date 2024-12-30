@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\UserNotification;
+use App\Mail\UserMailNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Mailgun\Mailgun;
 

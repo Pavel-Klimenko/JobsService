@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Domains\Candidates\Http\Requests\createVacancyInvitationRequest;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Helper;
+use App\Mail\UserMailNotification;
 use App\Services\CandidateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +13,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class CreateVacancyRequestJob implements ShouldQueue
 {
@@ -31,7 +34,6 @@ class CreateVacancyRequestJob implements ShouldQueue
      */
     public function __construct(createVacancyInvitationRequest $request)
     {
-
         $this->currentCandidate = $request->user()->candidate;
         $this->vacancy = Helper::checkElementExistense(Vacancies::class, $request->vacancy_id);
         $this->candidate_covering_letter = $request->candidate_covering_letter;
@@ -45,16 +47,22 @@ class CreateVacancyRequestJob implements ShouldQueue
     public function handle()
     {
         try {
-            app(CandidateService::class)->createVacancyRequest(
+            DB::beginTransaction();
+            if ($createdVacancyRequest = app(CandidateService::class)->createVacancyRequest(
                 $this->currentCandidate,
                 $this->vacancy,
                 $this->candidate_covering_letter
-            );
+            )) {
+                Mail::send(new UserMailNotification([
+                    'TYPE' => 'interview_invitation',
+                    'VACANCY_REQUEST' => $createdVacancyRequest,
+                ]));
+            }
+
+            DB::commit();
         } catch(\Exception $exception) {
+            DB::rollBack();
             Log::error($exception->getMessage());
         }
-
-
-
     }
 }

@@ -4,12 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Domains\Candidates\Http\Controllers;
 
-use App\Domains\Vacancies\Models\Vacancies;
+use App\Domains\Candidates\Http\Requests\UpdateCandidateInfoRequest;
 use App\Jobs\CreateVacancyRequestJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
-use RuntimeException;
 use App\Domains\Candidates\Models\JobCategories;
 use App\Domains\Candidates\Models\CandidateLevels;
 use App\Domains\Candidates\Http\Requests\GetCandidatesRequest;
@@ -19,25 +18,24 @@ use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
 
 use App\Domains\Candidates\Models\Candidate;
-use App\User;
 use App\QueryFilters\Filter;
-use App\Services\FileService;
 
 
 use App\Services\CandidateService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Domains\Candidates\DTO\UpdateCandidateDto;
 
 class CandidateController extends BaseController
 {
 
     private $candidateService;
-    //private $fileService;
 
-    public function __construct(CandidateService $candidateService, FileService $fileService)
+    public function __construct(
+        CandidateService $candidateService
+    )
     {
         $this->candidateService = $candidateService;
-        //$this->fileService = $fileService;
     }
 
     public function getCandidate(int $id)
@@ -55,8 +53,6 @@ class CandidateController extends BaseController
     public function getCandidates(GetCandidatesRequest $request)
     {
         try {
-            //TODO список кандидатов с учетом фильтров в кэш
-
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
@@ -73,63 +69,25 @@ class CandidateController extends BaseController
         }
     }
 
-    public function updatePersonalInfo(Request $request) {
+    public function updatePersonalInfo(UpdateCandidateInfoRequest $request) {
         try {
             DB::beginTransaction();
-            //TODO делать валидацию в Respons ах
-            //TODO использовать Spatie DTO библиотеку
-
-            $request->validate([
-                'candidate_id' => 'required|integer',
-                'user_id' => 'required|integer',
-
-                'name' => 'required|string',
-                'country' => 'required|string',
-                'city' => 'required|string',
-                'phone' =>  'required|string',
-
-                'job_category_id' =>  'required|integer',
-                'level_id' =>  'required|integer',
-                'years_experience' =>  'required|integer',
-                'salary' =>  'required|numeric',
-                'experience' =>  'required|string',
-                'education' =>  'required|string',
-                'about_me' =>  'required|string',
-            ]);
 
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
             Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
-            $candidate = Helper::checkElementExistense(Candidate::class, $request->candidate_id);
-            $user = Helper::checkElementExistense(User::class, $request->user_id);
+            $user = $request->user();
+            $candidate = $request->user()->candidate;
 
-            //обновляем кандидата
-            $arCandidateParams = [
-                'job_category_id' => $request->job_category_id,
-                'level_id' => $request->level_id,
-                'years_experience' => $request->years_experience,
-                'salary' => $request->salary,
-                'experience' => $request->experience,
-                'education' => $request->education,
-                'about_me' => $request->about_me,
-            ];
-
-            $arUserParams = [
-                'name' => $request->name,
-                'country' => $request->country,
-                'city' => $request->city,
-                'phone' => $request->phone,
-                'education' => $request->education,
-                'about_me' => $request->about_me,
-            ];
+            $updateCandidateDto = new UpdateCandidateDto($request);
+            $arCandidateParams = $updateCandidateDto->getCandidateDTO();
+            $arUserParams = $updateCandidateDto->getCandidateUserDTO();
 
             $candidate->update($arCandidateParams);
             $user->update($arUserParams);
 
-            //dd($updatedCandidate);
-
             DB::commit();
-            return Helper::successResponse(['$path' => $arUserParams], 'Candidate updated');
+            return Helper::successResponse([], 'Candidate updated and related user updated');
         } catch(\Exception $exception) {
             DB::rollBack();
             return Helper::failedResponse($exception->getMessage());
@@ -138,20 +96,13 @@ class CandidateController extends BaseController
 
     public function createVacancyRequest(createVacancyInvitationRequest $request) {
         try {
-            CreateVacancyRequestJob::dispatch($request);
+
+           CreateVacancyRequestJob::dispatch($request);
 
             return Helper::successResponse([], 'New vacancy request created');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
-
-        //TODO сделать отдельный сервис
-//        Mail::send(new UserNotification([
-//            'TYPE' => 'interview_invitation',
-//            'COMPANY_ID' => $request->COMPANY_ID,
-//            'VACANCY_ID' => $request->VACANCY_ID,
-//            'CANDIDATE_COVERING_LETTER' => $request->CANDIDATE_COVERING_LETTER,
-//        ]));
     }
 
     public function getMyVacancyRequests(Request $request) {

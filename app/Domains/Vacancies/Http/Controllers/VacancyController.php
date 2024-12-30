@@ -27,8 +27,6 @@ class VacancyController extends BaseController
     public function getVacancies(GetVacanciesRequest $request)
     {
         try {
-            //TODO список вакансий с учетом фильтров в кэш
-
             $paginationParams = Helper::getPaginationParams($request);
             Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
 

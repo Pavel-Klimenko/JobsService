@@ -1,11 +1,15 @@
 <?php
 namespace App\Domains\Companies\Http\Controllers;
 
+use App\Domains\Candidates\Models\InterviewInvitations;
+use App\Domains\Candidates\Models\InvitationsStatus;
 use App\Domains\Companies\DTO\UpdateCompanyDto;
+use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
 use App\Domains\Companies\DTO\CreateVacancyDto;
-use App\Domains\Companies\DTO\UpdateVacancyDto;
+//use App\Domains\Companies\DTO\UpdateCandidateDto;
 use App\Domains\Vacancies\Models\Vacancies;
+use App\Mail\UserMailNotification;
 use App\Services\CompanyService;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
@@ -18,6 +22,7 @@ use App\Domains\Companies\Http\Requests\UpdatePersonalInfoRequest;
 use App\Domains\Companies\Http\Requests\AnswerToVacancyInvitationRequest;
 use App\Jobs\AnswerToVacancyRequestJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CompanyController extends BaseController
 {
@@ -35,7 +40,6 @@ class CompanyController extends BaseController
     {
         try {
             $currentCompany = $request->user()->company;
-            //TODO сделать сервисы и DTO!
             return Helper::successResponse($currentCompany, 'My company info');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());

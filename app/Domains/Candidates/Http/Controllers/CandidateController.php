@@ -86,8 +86,9 @@ class CandidateController extends BaseController
             $candidate->update($arCandidateParams);
             $user->update($arUserParams);
 
+            Cache::flush();
             DB::commit();
-            return Helper::successResponse([], 'Candidate updated and related user updated');
+            return Helper::successResponse([], 'Candidate and related user updated');
         } catch(\Exception $exception) {
             DB::rollBack();
             return Helper::failedResponse($exception->getMessage());
@@ -96,9 +97,7 @@ class CandidateController extends BaseController
 
     public function createVacancyRequest(createVacancyInvitationRequest $request) {
         try {
-
-           CreateVacancyRequestJob::dispatch($request);
-
+            CreateVacancyRequestJob::dispatch($request);
             return Helper::successResponse([], 'New vacancy request created');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());

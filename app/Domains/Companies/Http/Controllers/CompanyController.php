@@ -1,15 +1,12 @@
 <?php
 namespace App\Domains\Companies\Http\Controllers;
 
-use App\Domains\Candidates\Models\InterviewInvitations;
-use App\Domains\Candidates\Models\InvitationsStatus;
 use App\Domains\Companies\DTO\UpdateCompanyDto;
 use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
 use App\Domains\Companies\DTO\CreateVacancyDto;
-//use App\Domains\Companies\DTO\UpdateCandidateDto;
 use App\Domains\Vacancies\Models\Vacancies;
-use App\Mail\UserMailNotification;
+use Illuminate\Support\Facades\Cache;
 use App\Services\CompanyService;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
@@ -22,7 +19,6 @@ use App\Domains\Companies\Http\Requests\UpdatePersonalInfoRequest;
 use App\Domains\Companies\Http\Requests\AnswerToVacancyInvitationRequest;
 use App\Jobs\AnswerToVacancyRequestJob;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 class CompanyController extends BaseController
 {
@@ -54,6 +50,7 @@ class CompanyController extends BaseController
             $updateCompanyDto = new UpdateCompanyDto($request);
             $this->companyService->updateCompany($currentUser, $updateCompanyDto->getDTO());
 
+            Cache::flush();
             DB::commit();
             return Helper::successResponse([], 'Company updated');
         } catch(\Exception $exception) {
@@ -102,9 +99,8 @@ class CompanyController extends BaseController
 
             $createVacancyDto = new CreateVacancyDto($request);
             $newVacancy = $this->vacancyService->createVacancy($currentCompany, $createVacancyDto->getDTO());
-
-            //TODO в обсервер (то же самое для вакансий)
-            //Cache::put('vacancy:'.$newVacancy->id, $newVacancy);
+            Cache::flush();
+            Cache::put('vacancy:'.$newVacancy->id, $newVacancy);
 
             return Helper::successResponse($newVacancy, 'Created new vacancy');
         } catch(\Exception $exception) {
@@ -123,9 +119,9 @@ class CompanyController extends BaseController
                 throw new RuntimeException("Vacancy doesn`t relate to this company");
             }
 
-            $createVacancyDto = new UpdateVacancyDto($request);
-            $this->vacancyService->updateVacancy($vacancy, $createVacancyDto->getDTO());
-
+            $updateVacancyDto = new UpdateVacancyDto($request);
+            $this->vacancyService->updateVacancy($vacancy, $updateVacancyDto->getDTO());
+            Cache::flush();
             return Helper::successResponse(['vacancy_id' => $vacancy->id], 'Vacancy successfully updated');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
@@ -142,9 +138,7 @@ class CompanyController extends BaseController
             }
 
             $vacancy->delete();
-
-            //TODO в обсервер (то же самое для вакансий)
-            //Cache::forget('vacancy:'.$newVacancy->id, $newVacancy);
+            Cache::forget('vacancy:'.$id);
 
             return Helper::successResponse([], 'Vacancy successfully deleted');
         } catch(\Exception $exception) {

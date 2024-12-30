@@ -12,6 +12,7 @@ final class UpdateVacancyDto implements DataObjectContract
     public $salary_from;
     public $description;
     public $vacancy_id;
+    public $active;
 
     public function __construct(UpdateVacancyRequest $request)
     {
@@ -20,6 +21,7 @@ final class UpdateVacancyDto implements DataObjectContract
         $this->salary_from = $request->salary_from;
         $this->description = $request->description;
         $this->vacancy_id = $request->vacancy_id;
+        $this->active = $request->active;
     }
 
     public function getDTO():UpdateVacancyDto

@@ -37,6 +37,7 @@ class VacancyService
             'job_category_id' => $updateVacancyDto->job_category_id,
             'salary_from' => $updateVacancyDto->salary_from,
             'description' => $updateVacancyDto->description,
+            'active' => (bool)$updateVacancyDto->active,
         ]);
     }
 

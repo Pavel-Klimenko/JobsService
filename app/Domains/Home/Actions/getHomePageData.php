@@ -13,6 +13,7 @@ use App\Domains\Home\Models\Review;
 use App\Domains\Personal\Models\Company;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Domains\Candidates\Models\Candidate;
+use App\Helper;
 use App\User;
 
 class getHomePageData
@@ -24,9 +25,12 @@ class getHomePageData
                 ->where('active', true)
                 ->get();
 
+            if ($vacancies->count() == 0) {
+                throw new \App\Exceptions\CustomException('There are no any vacancies');
+            }
+
             $companies = Company::with('user')->get();
             $candidates = Candidate::with('user', 'job_category')->get();
-            $reviews = Review::with('user')->where('active', true)->get();
             $jobCategories = JobCategories::has('vacancies')->get();
 
             $arResponse = [
@@ -35,13 +39,12 @@ class getHomePageData
                 'vacancies' => $vacancies,
                 'candidates' => $candidates,
                 'companies' => $companies,
-                'reviews' => $reviews,
             ];
 
             return collect($arResponse);
 
-        } catch(\Exception $exception) {
-            return $exception->getMessage();
+        } catch(\App\Exceptions\CustomException $exception) {
+            return Helper::failedResponse($exception->getMessage());
         }
     }
 

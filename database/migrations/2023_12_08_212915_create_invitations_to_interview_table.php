@@ -22,8 +22,8 @@ class CreateInvitationsToInterviewTable extends Migration
 
 
         if (!Schema::hasTable(InterviewInvitations::TABLE_NAME)) {
-            $defaultStatus = app(CandidateService::class)->getInvitationStatusByCode('no_status');
-            Schema::create(InterviewInvitations::TABLE_NAME, function (Blueprint $table) use ($defaultStatus) {
+            //$defaultStatus = app(CandidateService::class)->getInvitationStatusByCode('no_status');
+            Schema::create(InterviewInvitations::TABLE_NAME, function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('vacancy_id')
                     ->constrained(Vacancies::TABLE_NAME)
@@ -35,7 +35,8 @@ class CreateInvitationsToInterviewTable extends Migration
                     ->cascadeOnUpdate();
                 $table->mediumText('candidate_covering_letter')->nullable();
                 $table->foreignId('status_id')
-                    ->default($defaultStatus->id)
+                    ->nullable()
+                    //->default($defaultStatus->id)
                     ->constrained(InvitationsStatus::TABLE_NAME)
                     ->cascadeOnDelete()
                     ->cascadeOnUpdate();

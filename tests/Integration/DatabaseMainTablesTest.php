@@ -2,43 +2,57 @@
 
 namespace Tests\Integration;
 
-use App\Domains\Vacancies\Models\Vacancies;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class DatabaseTablesTest extends TestCase
+class DatabaseMainTablesTest extends TestCase
 {
-
     use RefreshDatabase;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testDatabaseHasMainTables()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->seed();
+    }
 
-        $this->assertDatabaseHas('users', ['email' => 'admin@admin.com']);
-
+    public function testDatabaseHasUserRoles()
+    {
         $this->assertDatabaseHas('roles', ['name' => 'admin']);
         $this->assertDatabaseHas('roles', ['name' => 'company']);
         $this->assertDatabaseHas('roles', ['name' => 'candidate']);
+    }
 
+    public function testDatabaseHasUsersTableWithAdmin()
+    {
+        $this->assertDatabaseHas('users', ['email' => 'admin@admin.com']);
+    }
+
+    public function testDatabaseHasVacanciesTable()
+    {
         $this->assertDatabaseHas('vacancies', []);
+    }
+
+    public function testDatabaseHasCandidatesTable()
+    {
         $this->assertDatabaseHas('candidates', []);
+    }
 
-
+    public function testDatabaseHasInvitationStatuses()
+    {
         $this->assertDatabaseHas('invitation_statuses', ['code' => 'accepted']);
         $this->assertDatabaseHas('invitation_statuses', ['code' => 'rejected']);
         $this->assertDatabaseHas('invitation_statuses', ['code' => 'no_status']);
+    }
 
-
+    public function testDatabaseHasCandidateLevels()
+    {
         $this->assertDatabaseHas('candidate_levels', ['code' => 'junior']);
         $this->assertDatabaseHas('candidate_levels', ['code' => 'middle']);
         $this->assertDatabaseHas('candidate_levels', ['code' => 'senior']);
+    }
 
+    public function testDatabaseHasJobMainJobCategories()
+    {
         $this->assertDatabaseHas('job_categories', ['name' => 'java']);
         $this->assertDatabaseHas('job_categories', ['name' => 'php']);
         $this->assertDatabaseHas('job_categories', ['name' => 'javascript']);

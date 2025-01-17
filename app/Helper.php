@@ -2,22 +2,18 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use RuntimeException;
-
-
-//use App\Models\Roles;
-
-use App\Constants;
 
 class Helper
 {
     private const PAGE_LIMIT = 20;
     private const PAGE = 1;
+    public const REQUEST_SUCCESS_STATUS = 'ok';
+    public const REQUEST_ERROR_STATUS = 'error';
 
     public static function getPaginationParams(Request $request): array
     {
@@ -35,22 +31,24 @@ class Helper
         return ['page' => (int)$page, 'limit_page' => (int)$pageLimit];
     }
 
-    public static function successResponse($data = [], string $message = 'Success server`s response'): JsonResponse
+    public static function successResponse($data = [], string $message = 'Success server`s response', $responseCode = false): JsonResponse
     {
+        $responseCode = ($responseCode) ? $responseCode: Response::HTTP_OK;
         return response()->json([
-            'status' => 'ok',
+            'status' => self::REQUEST_SUCCESS_STATUS,
             'message' => $message,
             'info' => $data
-        ]);
+        ], $responseCode);
     }
 
-    public static function failedResponse(string $errorMessage = 'error', $trace = ''): JsonResponse
+    public static function failedResponse(string $errorMessage = 'error', $trace = '', $responseCode = false): JsonResponse
     {
+        $responseCode = ($responseCode) ? $responseCode: Response::HTTP_INTERNAL_SERVER_ERROR;
         return response()->json([
-            'status' => 'error',
+            'status' => self::REQUEST_ERROR_STATUS,
             'message' => $errorMessage,
             'trace' => $trace
-        ]);
+        ], $responseCode);
     }
 
     public static function checkElementExistense($model, $elementId)

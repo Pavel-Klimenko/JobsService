@@ -16,13 +16,11 @@ use Exception;
 
 class AuthAPIController extends Controller
 {
-
     public function login(Request $request) {
         try {
             $request->validate(['email' => 'required|email', 'password' => 'required|string']);
 
             if (!User::where('email', $request->email)->exists()) {
-                //TODO сделать кастомный Exception класс
                 return ['status' => 'error', 'message' => 'User with such email not found'];
             }
 
@@ -30,19 +28,20 @@ class AuthAPIController extends Controller
             $token = AuthService::generateUserToken($user);
             $userRoleName = $user->role->name;
 
-            if ($userRoleName == 'company') {
-                $userRelatedEntityId = $user->company->id;
-            } else if ($userRoleName == 'candidate') {
-                $userRelatedEntityId = $user->candidate->id;
-            }
-
-            return Helper::successResponse([
-                'status' => 'success',
+            $arResponse = [
                 'user_id' => $user->id,
                 'token' => $token,
                 'role_name' => $userRoleName,
-                'related_entity_id' => $userRelatedEntityId,
-            ], 'User successfully authorized');
+            ];
+
+
+            if ($userRoleName == 'company') {
+                $arResponse['related_entity_id'] = $user->company->id;
+            } else if ($userRoleName == 'candidate') {
+                $arResponse['related_entity_id'] = $user->candidate->id;
+            }
+
+            return Helper::successResponse($arResponse, 'User successfully authorized');
 
         } catch (Exception $exception) {
             return Helper::failedResponse(
@@ -89,19 +88,16 @@ class AuthAPIController extends Controller
                     $relatedEntity = Company::create(['user_id' => $newUser->id]);
                 }
             }
-
-            return [
-                'status' => 'success',
-                'message' => 'User successfully registered',
+            return Helper::successResponse([
                 'created_user' => $newUser,
                 'related_entity' => [
                     'name' => $relatedEntityName,
                     'data' => $relatedEntity
                 ],
-            ];
+            ], 'User successfully registered');
+
         } catch (Exception $exception) {
             return ['status' => 'error', 'message' => $exception->getMessage()];
         }
     }
-
 }

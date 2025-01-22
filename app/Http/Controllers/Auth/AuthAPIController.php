@@ -34,11 +34,10 @@ class AuthAPIController extends Controller
                 'role_name' => $userRoleName,
             ];
 
-
             if ($userRoleName == 'company') {
-                $arResponse['related_entity_id'] = $user->company->id;
+                $arResponse['related_entity_id'] = (isset($user->company->id)) ? $user->company->id : '';
             } else if ($userRoleName == 'candidate') {
-                $arResponse['related_entity_id'] = $user->candidate->id;
+                $arResponse['related_entity_id'] = (isset($user->candidate->id)) ? $user->candidate->id : '';
             }
 
             return Helper::successResponse($arResponse, 'User successfully authorized');

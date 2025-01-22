@@ -21,7 +21,7 @@ use App\Http\Controllers\Auth\AuthAPIController;
 */
 
 Route::group(['prefix' => 'homepage'], function () {
-    Route::get('/', [HomeController::class, 'getHomePageData']);
+    Route::get('/', [HomeController::class, 'getHomePageData'])->name('home');
 });
 
 
@@ -46,10 +46,12 @@ Route::group(['prefix' => 'personal'], function () {
     Route::group(['prefix' => 'candidate',  'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
         Route::get('/is-there-vacancy-request', [CandidateController::class, 'isThereVacancyRequest']);
         Route::post('/create-vacancy-request', [CandidateController::class, 'createVacancyRequest']);
+
         Route::get('/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
-        Route::get('/{id}', [CandidateController::class, 'getCandidate']);
+        Route::get('/get-personal-data', [CandidateController::class, 'getCandidateData']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
+
 
     Route::group(['prefix' => 'company',  'middleware' => ['auth:sanctum','ability:company_rules']], function () {
         Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);

@@ -13,7 +13,6 @@ class UpdateCandidateInfoRequest extends BaseRequest
             'country' => 'required|string',
             'city' => 'required|string',
             'phone' =>  'required|string',
-
             'job_category_id' =>  'required|integer',
             'level_id' =>  'required|integer',
             'years_experience' =>  'required|integer',

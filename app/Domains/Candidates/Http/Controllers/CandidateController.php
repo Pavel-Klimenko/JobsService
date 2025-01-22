@@ -50,6 +50,16 @@ class CandidateController extends BaseController
         }
     }
 
+    public function getCandidateData(Request $request)
+    {
+        $candidateId = $request->user()->candidate->id;
+        $candidate = Cache::rememberForever('candidate:'.$candidateId, function () use ($candidateId) {
+            return $this->candidateService->getCandidate($candidateId);
+        });
+
+        return Helper::successResponse(['candidate' => $candidate], 'Candidate`s personal data');
+    }
+
     public function getCandidates(GetCandidatesRequest $request)
     {
         try {
@@ -117,6 +127,7 @@ class CandidateController extends BaseController
         try {
             $request->validate(['vacancy_id' => 'required|integer']);
             $currentCandidate = $request->user()->candidate;
+
             $vacancyId = (int)$request->vacancy_id;
             $isThereVacancyRequest = $this->candidateService->isThereVacancyRequest($currentCandidate, $vacancyId);
 

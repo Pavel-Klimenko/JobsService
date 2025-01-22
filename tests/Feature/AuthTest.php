@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Domains\Personal\Models\Role;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +11,8 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    private CONST TEST_USER_NAME = 'TestUser';
-    private CONST TEST_USER_EMAIL = 'TestUser@testEmail.com';
-    private CONST TEST_USER_PASSWORD = 'password123';
-    private CONST TEST_USER_PHONE = '+7933311111121';
-    private CONST TEST_USER_COUNTRY = 'Germany';
-    private CONST TEST_USER_CITY = 'Berlin';
+    private $randomUser;
+    private $faker;
 
     protected function setUp(): void
     {
@@ -25,27 +20,36 @@ class AuthTest extends TestCase
         $this->seed();
     }
 
-
     public function testCanUserLogin()
     {
-        $testEmail = self::TEST_USER_EMAIL;
-        $testPassword = self::TEST_USER_PASSWORD;
+        $createdTestUser = $this->createRandomUser();
 
-        $testUser = User::first();
-
-        $response = $this->actingAs($testUser)->post('/api/auth/login', [
-            'email' => $testEmail,
-            'password' => $testPassword,
+        $response = $this->post('/api/auth/login', [
+            'email' => $createdTestUser->email,
+            'password' => self::TEST_USER_PASSWORD,
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testCanUserLogout()
+    {
+        $testUser = User::first();
+        $response = $this->actingAs($testUser)->post('/api/auth/logout/');
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testUnauthenticatedUserCannotAccessToPrivatePath()
+    {
+        $response = $this->get('/api/personal/candidate/get-personal-data');
+        $response->assertStatus(Response::HTTP_FOUND);
     }
 
     public function testCanNewUserRegister()
     {
         $response = $this->post('/api/auth/register', [
             'name' => self::TEST_USER_NAME,
-            'email' => self::TEST_USER_EMAIL,
+            'email' => time().'mail@test.com',
             'phone' => self::TEST_USER_PHONE,
             'country' => self::TEST_USER_COUNTRY,
             'city' => self::TEST_USER_CITY,
@@ -55,10 +59,4 @@ class AuthTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
     }
-
-    private function getRandomRoleId():int
-    {
-        return Role::inRandomOrder()->first()->id;
-    }
-
 }

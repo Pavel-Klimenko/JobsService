@@ -26,6 +26,37 @@ class CompanyActionsTest extends TestCase
         $this->randomCompanyUser = $this->getRandomCompanyUser();
     }
 
+    public function testCanCompanyAccessToProfileData()
+    {
+        Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
+        $response = $this->get('/api/personal/company/my-personal-info');
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testCanCompanyAccessToCreatedVacancy()
+    {
+        Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
+        $createdTestVacancy = $this->createCompanyVacancy($this->randomCompanyUser->company->id);
+        $response = $this->get('/api/personal/company/my/vacancies/'.$createdTestVacancy->id);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function testCanCompanyAccessToCreatedVacancyList()
+    {
+        Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
+
+        $createdTestVacancyOne = $this->createCompanyVacancy($this->randomCompanyUser->company->id);
+        $createdTestVacancyTwo = $this->createCompanyVacancy($this->randomCompanyUser->company->id);
+
+        $response = $this->get('/api/personal/company/my/vacancies');
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('vacancies', ['title' => $createdTestVacancyOne->title]);
+        $this->assertDatabaseHas('vacancies', ['title' => $createdTestVacancyTwo->title]);
+
+
+    }
+
     public function testCanCompanyCreateVacancy()
     {
         Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
@@ -69,6 +100,20 @@ class CompanyActionsTest extends TestCase
         ]);
     }
 
+    public function testCanCompanyDeleteVacancy()
+    {
+        Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
+        $createdTestVacancy = $this->createCompanyVacancy($this->randomCompanyUser->company->id);
+
+        $createdTestVacancyTitle = $createdTestVacancy->title;
+
+        $response = $this->delete('/api/personal/company/delete-vacancy/'.$createdTestVacancy->id);
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertDeleted('vacancies', [
+            'title' => $createdTestVacancyTitle,
+        ]);
+    }
+
     private function createCompanyVacancy(int $companyId):Vacancies
     {
         return Vacancies::create([
@@ -79,6 +124,4 @@ class CompanyActionsTest extends TestCase
             'company_id' => $companyId,
         ]);
     }
-
-
 }

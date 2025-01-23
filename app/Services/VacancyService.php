@@ -10,7 +10,6 @@ use App\Domains\Companies\DTO\CreateVacancyDto;
 use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Domains\Personal\Models\Company;
-use RuntimeException;
 
 class VacancyService
 {

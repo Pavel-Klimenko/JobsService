@@ -15,6 +15,7 @@
         "laravel/framework": "^7.0",
         "laravel/horizon": "^4.3",
         "laravel/sanctum": "^2.15",
+        "laravel/telescope": "^3.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.5",
         "mailgun/mailgun-php": "^4.0",
@@ -41,7 +42,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "autoload": {

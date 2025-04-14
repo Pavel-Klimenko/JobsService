@@ -1,13 +1,12 @@
 <?php
 namespace App\Domains\Companies\Http\Controllers;
 
-use App\Domains\Companies\DTO\UpdateCompanyDto;
 use App\Domains\Companies\DTO\UpdateVacancyDto;
 use App\Domains\Companies\Http\Requests\CreateVacancyRequest;
 use App\Domains\Companies\DTO\CreateVacancyDto;
 use App\Domains\Vacancies\Models\Vacancies;
+use App\Services\CompanyPersonalService;
 use Illuminate\Support\Facades\Cache;
-use App\Services\CompanyService;
 use App\Services\VacancyService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
@@ -24,16 +23,19 @@ class CompanyController extends BaseController
 {
 
     private $vacancyService;
-    private $companyService;
+    private $companyPersonalService;
 
-    public function __construct(VacancyService $vacancyService, CompanyService $companyService)
+
+    public function __construct(
+        VacancyService $vacancyService,
+        CompanyPersonalService $companyPersonalService
+    )
     {
         $this->vacancyService = $vacancyService;
-        $this->companyService = $companyService;
+        $this->companyPersonalService = $companyPersonalService;
     }
 
 
-    //TODO вынести в интерфейс и применить паттерн стратегия
     public function getPersonalData(Request $request)
     {
         try {
@@ -46,23 +48,13 @@ class CompanyController extends BaseController
 
     public function updatePersonalInfo(UpdatePersonalInfoRequest $request) {
         try {
-            DB::beginTransaction();
-            $currentUser = $request->user();
-
-            $updateCompanyDto = new UpdateCompanyDto($request);
-            $this->companyService->updateCompany($currentUser, $updateCompanyDto->getDTO());
-
-            Cache::flush();
-            DB::commit();
+            $this->companyPersonalService->updatePersonalInfo($request);
             return Helper::successResponse([], 'Company updated');
         } catch(\Exception $exception) {
             DB::rollBack();
             return Helper::failedResponse($exception->getMessage());
         }
     }
-
-
-
 
 
     public function answerToVacancyRequest(AnswerToVacancyInvitationRequest $request) {

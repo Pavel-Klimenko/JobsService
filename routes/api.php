@@ -53,8 +53,6 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('/get-personal-data', [CandidateController::class, 'getCandidateData']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
-
-
     Route::group(['prefix' => 'company',  'middleware' => ['auth:sanctum','ability:company_rules']], function () {
         Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
         Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);

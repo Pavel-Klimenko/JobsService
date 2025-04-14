@@ -14,6 +14,8 @@ class CompaniesTableSeeder extends Seeder
     public function run()
     {
         if (Company::count() == 0) {
+            //TODO Фабрикой!!!
+
             $testCompanyABCsoft = User::where('email', 'ABCsoft@test.com')->firstOrFail();
             $testCompanyUdemyDev = User::where('email', 'UdemyDev@test.com')->firstOrFail();
 

@@ -15,6 +15,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        //TODO Фабрикой!!!
+
         if (User::count() == 0) {
             $roleAdmin = Role::where('name', 'admin')->firstOrFail();
             $roleCandidate = Role::where('name', 'candidate')->firstOrFail();

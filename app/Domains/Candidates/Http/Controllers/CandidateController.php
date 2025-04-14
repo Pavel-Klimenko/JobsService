@@ -1,36 +1,34 @@
-<?php
-
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
 
 namespace App\Domains\Candidates\Http\Controllers;
 
 use App\Domains\Candidates\Http\Requests\UpdateCandidateInfoRequest;
+
+use App\Services\CandidatePersonalService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
 use App\Domains\Candidates\Http\Requests\GetCandidatesRequest;
-
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
-
 use App\Domains\Candidates\Models\Candidate;
 use App\QueryFilters\Filter;
-
 use App\Services\CandidateService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-use App\Domains\Candidates\DTO\UpdateCandidateDto;
 
 class CandidateController extends BaseController
 {
 
     private $candidateService;
+    private $candidatePersonalService;
 
     public function __construct(
-        CandidateService $candidateService
+        CandidateService $candidateService,
+        CandidatePersonalService $candidatePersonalService
     )
     {
         $this->candidateService = $candidateService;
+        $this->candidatePersonalService = $candidatePersonalService;
     }
 
     public function getCandidate(int $id)
@@ -52,20 +50,7 @@ class CandidateController extends BaseController
 
     public function updatePersonalInfo(UpdateCandidateInfoRequest $request) {
         try {
-            DB::beginTransaction();
-
-            $user = $request->user();
-            $candidate = $request->user()->candidate;
-
-            $updateCandidateDto = new UpdateCandidateDto($request);
-            $arCandidateParams = $updateCandidateDto->getCandidateDTO();
-            $arUserParams = $updateCandidateDto->getCandidateUserDTO();
-
-            $candidate->update($arCandidateParams);
-            $user->update($arUserParams);
-
-            Cache::flush();
-            DB::commit();
+            $this->candidatePersonalService->updatePersonalInfo($request);
             return Helper::successResponse([], 'Candidate and related user updated');
         } catch(\Exception $exception) {
             DB::rollBack();

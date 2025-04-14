@@ -17,6 +17,8 @@ class CandidatesTableSeeder extends Seeder
     public function run()
     {
         if (Candidate::count() == 0) {
+            //TODO Фабрикой!!!
+
             $testCandidatePavel = User::where('email', 'Pavel@test.com')->firstOrFail();
             $testCandidateOlga = User::where('email', 'Olga@test.com')->firstOrFail();
             $testCandidateAlexander = User::where('email', 'Alexander@test.com')->firstOrFail();

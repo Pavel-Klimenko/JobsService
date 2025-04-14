@@ -10,7 +10,6 @@ namespace App\Domains\Personal\Actions;
 
 use App\Helper;
 use App\Constants;
-use App\Domains\Candidates\Models\Review;
 use App\Domains\Candidates\Models\Candidate;
 
 class getPersonalInfo

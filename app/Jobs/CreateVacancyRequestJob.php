@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Domains\Candidates\Http\Requests\createVacancyInvitationRequest;
+use App\Domains\VacancyInvitations\Http\Requests\createVacancyInvitationRequest;
 use App\Domains\Vacancies\Models\Vacancies;
 use App\Helper;
 use App\Mail\UserMailNotification;

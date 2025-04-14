@@ -5,21 +5,16 @@ declare(strict_types = 1);
 namespace App\Domains\Candidates\Http\Controllers;
 
 use App\Domains\Candidates\Http\Requests\UpdateCandidateInfoRequest;
-use App\Jobs\CreateVacancyRequestJob;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Helper;
-use App\Domains\Candidates\Models\JobCategories;
-use App\Domains\Candidates\Models\CandidateLevels;
 use App\Domains\Candidates\Http\Requests\GetCandidatesRequest;
-use App\Domains\Candidates\Http\Requests\createVacancyInvitationRequest;
 
 use App\Domains\Candidates\QueryFilters\JobCategoryId as FilterByJobCategory;
 use App\Domains\Candidates\QueryFilters\LevelId as FilterByLevel;
 
 use App\Domains\Candidates\Models\Candidate;
 use App\QueryFilters\Filter;
-
 
 use App\Services\CandidateService;
 use Illuminate\Support\Facades\DB;
@@ -41,50 +36,23 @@ class CandidateController extends BaseController
     public function getCandidate(int $id)
     {
         try {
-            $candidate = Cache::rememberForever('candidate:'.$id, function () use ($id) {
-                return $this->candidateService->getCandidate($id);
-            });
+            $candidate = $this->candidateService->getCandidate($id);
             return Helper::successResponse(['candidate' => $candidate]);
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
     }
 
+    //TODO вынести в интерфейс и применить паттерн стратегия
     public function getCandidateData(Request $request)
     {
-        $candidateId = $request->user()->candidate->id;
-        $candidate = Cache::rememberForever('candidate:'.$candidateId, function () use ($candidateId) {
-            return $this->candidateService->getCandidate($candidateId);
-        });
-
+        $candidate = $this->candidateService->getCandidate($request->user()->candidate->id);
         return Helper::successResponse(['candidate' => $candidate], 'Candidate`s personal data');
-    }
-
-    public function getCandidates(GetCandidatesRequest $request)
-    {
-        try {
-            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
-            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
-
-            $paginationParams = Helper::getPaginationParams($request);
-
-            $candidates = Filter::getByFilter(Candidate::class, [FilterByJobCategory::class, FilterByLevel::class]);
-            $candidates = $candidates
-                ->with('user', 'job_category', 'level')
-                ->paginate($paginationParams['limit_page'], ['*'], 'page', $paginationParams['page']);
-
-            return Helper::successResponse(["candidates" => $candidates], 'Candidates list');
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
     }
 
     public function updatePersonalInfo(UpdateCandidateInfoRequest $request) {
         try {
             DB::beginTransaction();
-
-            Helper::checkElementExistense(JobCategories::class, $request->job_category_id);
-            Helper::checkElementExistense(CandidateLevels::class, $request->level_id);
 
             $user = $request->user();
             $candidate = $request->user()->candidate;
@@ -105,36 +73,17 @@ class CandidateController extends BaseController
         }
     }
 
-    public function createVacancyRequest(createVacancyInvitationRequest $request) {
+    public function getCandidates(GetCandidatesRequest $request)
+    {
         try {
-            CreateVacancyRequestJob::dispatch($request);
-            return Helper::successResponse([], 'New vacancy request created');
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
-    }
+            $paginationParams = Helper::getPaginationParams($request);
 
-    public function getMyVacancyRequests(Request $request) {
-        try {
-            $candidate = $request->user()->candidate;
-            return Helper::successResponse($candidate->vacancyRequests, 'My vacancy requests');
-        } catch(\Exception $exception) {
-            return Helper::failedResponse($exception->getMessage());
-        }
-    }
+            $candidates = Filter::getByFilter(Candidate::class, [FilterByJobCategory::class, FilterByLevel::class]);
+            $candidates = $candidates
+                ->with('user', 'job_category', 'level')
+                ->paginate($paginationParams['limit_page'], ['*'], 'page', $paginationParams['page']);
 
-    public function isThereVacancyRequest(Request $request) {
-        try {
-            $request->validate(['vacancy_id' => 'required|integer']);
-            $currentCandidate = $request->user()->candidate;
-
-            $vacancyId = (int)$request->vacancy_id;
-            $isThereVacancyRequest = $this->candidateService->isThereVacancyRequest($currentCandidate, $vacancyId);
-
-            return Helper::successResponse([
-                'vacancy_id' => $vacancyId,
-                'is_there_vacancy_request' => $isThereVacancyRequest,
-            ]);
+            return Helper::successResponse(["candidates" => $candidates], 'Candidates list');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }

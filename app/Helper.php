@@ -62,7 +62,6 @@ class Helper
         return (isset($element)) ? $element : false;
     }
 
-
     public static function onlyExistedValues(array $arParams): array
     {
         $arResult = [];

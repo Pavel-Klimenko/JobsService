@@ -45,9 +45,11 @@ Route::group(['prefix' => 'candidates'], function () {
 Route::group(['prefix' => 'personal'], function () {
     Route::group(['prefix' => 'candidate',  'middleware' => ['auth:sanctum','ability:candidate_rules']], function () {
         Route::get('/is-there-vacancy-request', [CandidateController::class, 'isThereVacancyRequest']);
-        Route::post('/create-vacancy-request', [CandidateController::class, 'createVacancyRequest']);
+        Route::post('/create-vacancy-request',
+            [\App\Domains\VacancyInvitations\Http\Controllers\VacancyInvitationController::class, 'createVacancyRequest']);
 
-        Route::get('/vacancy-requests', [CandidateController::class, 'getMyVacancyRequests']);
+        Route::get('/vacancy-requests',
+            [\App\Domains\VacancyInvitations\Http\Controllers\VacancyInvitationController::class, 'getMyVacancyRequests']);
         Route::get('/get-personal-data', [CandidateController::class, 'getCandidateData']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });

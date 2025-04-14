@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\Candidates\Http\Requests;
+namespace App\Domains\VacancyInvitations\Http\Requests;
 
 use App\Http\Requests\BaseRequest;
 

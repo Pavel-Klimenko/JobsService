@@ -13,14 +13,17 @@ class DatabaseSeeder extends Seeder {
      */
     public function run()
     {
+
+        //TODO применить фабрики для Seeders
+
         $this->call([
-            RolesTableSeeder::class,
-            InvitationStatusesSeeder::class,
-            CandidateLevelsSeeder::class,
-            JobCategoriesTableSeeder::class,
-            UsersTableSeeder::class,
-            CompaniesTableSeeder::class,
-            CandidatesTableSeeder::class,
+//            RolesTableSeeder::class,
+//            InvitationStatusesSeeder::class,
+//            CandidateLevelsSeeder::class,
+//            JobCategoriesTableSeeder::class,
+//            UsersTableSeeder::class,
+//            CompaniesTableSeeder::class,
+//            CandidatesTableSeeder::class,
             VacanciesTableSeeder::class,
         ]);
     }

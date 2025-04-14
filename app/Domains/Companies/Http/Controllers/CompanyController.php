@@ -32,6 +32,8 @@ class CompanyController extends BaseController
         $this->companyService = $companyService;
     }
 
+
+    //TODO вынести в интерфейс и применить паттерн стратегия
     public function getPersonalData(Request $request)
     {
         try {
@@ -58,6 +60,10 @@ class CompanyController extends BaseController
             return Helper::failedResponse($exception->getMessage());
         }
     }
+
+
+
+
 
     public function answerToVacancyRequest(AnswerToVacancyInvitationRequest $request) {
         try {

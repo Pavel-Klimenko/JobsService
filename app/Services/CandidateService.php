@@ -12,7 +12,12 @@ class CandidateService
     public function getCandidate(int $id):Candidate
     {
         return Cache::rememberForever('candidate:'.$id, function () use ($id) {
-            return $this->getCandidate($id);
+            return $this->getCandidateData($id);
         });
+    }
+
+    private function getCandidateData(int $id):Candidate
+    {
+        return Candidate::with('user', 'job_category', 'level')->findOrFail($id);
     }
 }

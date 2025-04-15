@@ -8,6 +8,7 @@ use App\Domains\Companies\Http\Controllers\CompanyController;
 
 use App\Domains\Home\Http\Controllers\HomeController;
 use App\Http\Controllers\Auth\AuthAPIController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <?php
 
-//namespace Database\Seeders;
+namespace Database\Seeders;
 
 use App\Domains\Vacancies\Models\Vacancies;
 use Illuminate\Database\Seeder;
@@ -14,8 +14,8 @@ class VacanciesTableSeeder extends Seeder
      */
     public function run()
     {
-        if (Vacancies::count() == 0) {
-            factory(Vacancies::class, 3)->create();
-        }
+//        if (Vacancies::count() == 0) {
+//            factory(Vacancies::class, 3)->create();
+//        }
     }
 }

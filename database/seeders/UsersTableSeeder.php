@@ -1,7 +1,8 @@
 <?php
 
-//namespace Database\Seeders;
+namespace Database\Seeders;
 
+use App\Constants;
 use Illuminate\Database\Seeder;
 use App\Domains\Personal\Models\Role;
 use App\User;

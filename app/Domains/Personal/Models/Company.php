@@ -2,8 +2,8 @@
 
 namespace App\Domains\Personal\Models;
 
-
 use App\Domains\Vacancies\Models\Vacancies;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,6 +11,7 @@ use App\User;
 
 class Company extends Model
 {
+    use HasFactory;
 
     protected $table = 'companies';
     const TABLE_NAME = 'companies';

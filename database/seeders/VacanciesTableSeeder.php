@@ -14,8 +14,8 @@ class VacanciesTableSeeder extends Seeder
      */
     public function run()
     {
-//        if (Vacancies::count() == 0) {
-//            factory(Vacancies::class, 3)->create();
-//        }
+        if (Vacancies::count() == 0) {
+            Vacancies::factory()->count(3)->create();
+        }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Domains\Chat\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Domains\Chat\Http\Requests\MessageFormRequest;
 use Illuminate\Contracts\Foundation\Application;
@@ -32,12 +33,22 @@ class ChatController extends Controller
 
     public function send(MessageFormRequest $request)
     {
-        $message = $request->user()
-            ->messages()
-            ->create($request->validated());
+        try {
+            $message = $request->user()
+                ->messages()
+                ->create($request->validated());
 
-        broadcast(new MessageSent($request->user(), $message));
+            broadcast(new MessageSent($request->user(), $message));
 
-        return $message;
+            return Helper::successResponse([
+                'user_id' => $request->user()->id,
+                'message' => $message
+            ]);
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+
+
+
     }
 }

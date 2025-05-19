@@ -11,6 +11,8 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
+//TODO сюда перенести класс с каналом!
+\Illuminate\Support\Facades\Broadcast::channel('chat', function ($user, $id) {
+    //TODO проверка на авторизованного пользователя
     return (int) $user->id === (int) $id;
 });

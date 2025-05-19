@@ -2,9 +2,11 @@
 namespace App;
 
 use App\Domains\Candidates\Models\Candidate;
+use App\Domains\Chat\Models\Message;
 use App\Domains\Personal\Models\Company;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -60,5 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class)
             ->with('user');
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
     }
 }

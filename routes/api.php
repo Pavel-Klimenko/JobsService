@@ -7,7 +7,6 @@ use App\Domains\Candidates\Http\Controllers\CandidateController;
 use App\Domains\Companies\Http\Controllers\CompanyController;
 
 use App\Domains\Home\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\AuthAPIController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,22 +24,29 @@ Route::group(['prefix' => 'homepage'], function () {
     Route::get('/', [HomeController::class, 'getHomePageData'])->name('home');
 });
 
-
-Route::group(['prefix' => 'entity-directories'], function () {
-    Route::get('/user-roles', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getUserRoles']);
-    Route::get('/job-categories', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getJobCategories']);
-    Route::get('/candidate-levels', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getCandidateLevels']);
-    Route::get('/candidate-response-statuses', [\App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class, 'getCandidateResponseStatuses']);
+Route::group(['prefix' => 'chat',
+    'controller' => \App\Domains\Chat\Http\Controllers\ChatController::class,
+    'middleware' => ['auth:sanctum']], function () {
+        Route::get('/', 'index');
+        Route::get('/messages', 'messages');
+        Route::post('/send', 'send');
 });
 
-Route::group(['prefix' => 'vacancies'], function () {
-    Route::get('/', [VacancyController::class, 'getVacancies']);
-    Route::get('/{id}', [VacancyController::class, 'getVacancy']);
+Route::group(['prefix' => 'entity-directories', 'controller' => \App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class], function () {
+    Route::get('/user-roles', 'getUserRoles');
+    Route::get('/job-categories', 'getJobCategories');
+    Route::get('/candidate-levels', 'getCandidateLevels');
+    Route::get('/candidate-response-statuses', 'getCandidateResponseStatuses');
 });
 
-Route::group(['prefix' => 'candidates'], function () {
-    Route::get('/', [CandidateController::class, 'getCandidates']);
-    Route::get('/{id}', [CandidateController::class, 'getCandidate']);
+Route::group(['prefix' => 'vacancies', 'controller' => VacancyController::class], function () {
+    Route::get('/', 'getVacancies');
+    Route::get('/{id}', 'getVacancy');
+});
+
+Route::group(['prefix' => 'candidates', 'controller' => CandidateController::class], function () {
+    Route::get('/', 'getCandidates');
+    Route::get('/{id}', 'getCandidate');
 });
 
 Route::group(['prefix' => 'personal'], function () {
@@ -54,20 +60,20 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('/get-personal-data', [CandidateController::class, 'getCandidateData']);
         Route::post('/update', [CandidateController::class, 'updatePersonalInfo']);
     });
-    Route::group(['prefix' => 'company',  'middleware' => ['auth:sanctum','ability:company_rules']], function () {
-        Route::get('/my-personal-info', [CompanyController::class, 'getPersonalData']);
-        Route::post('/update-personal-info', [CompanyController::class, 'updatePersonalInfo']);
-        Route::post('/answer-to-vacancy-request', [CompanyController::class, 'answerToVacancyRequest']);
-        Route::get('/my/vacancies', [CompanyController::class, 'getMyVacancies']);
-        Route::get('/my/vacancies/{id}', [CompanyController::class, 'getMyVacancy']);
-        Route::post('/create-vacancy', [CompanyController::class, 'createVacancy']);
-        Route::post('/update-vacancy', [CompanyController::class, 'updateVacancy']);
-        Route::delete('/delete-vacancy/{id}', [CompanyController::class, 'deleteVacancy']);
+    Route::group(['prefix' => 'company', 'controller' => CompanyController::class,  'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+        Route::get('/my-personal-info', 'getPersonalData');
+        Route::post('/update-personal-info', 'updatePersonalInfo');
+        Route::post('/answer-to-vacancy-request', 'answerToVacancyRequest');
+        Route::get('/my/vacancies', 'getMyVacancies');
+        Route::get('/my/vacancies/{id}', 'getMyVacancy');
+        Route::post('/create-vacancy', 'createVacancy');
+        Route::post('/update-vacancy', 'updateVacancy');
+        Route::delete('/delete-vacancy/{id}', 'deleteVacancy');
     });
 });
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', [AuthAPIController::class, 'login']);
-    Route::post('/logout', [AuthAPIController::class, 'logout'])->middleware('auth:sanctum');
-    Route::post('/register', [AuthAPIController::class, 'register']);
+Route::group(['prefix' => 'auth', 'controller' => \App\Http\Controllers\Auth\AuthAPIController::class], function () {
+    Route::post('/login', 'login');
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+    Route::post('/register', 'register');
 });

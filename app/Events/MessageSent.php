@@ -37,4 +37,9 @@ class MessageSent implements ShouldBroadcast
             new PrivateChannel('chat'),
         ];
     }
+
+    public function broadcastAs()
+    {
+        return 'chat-message-sent-event';
+    }
 }

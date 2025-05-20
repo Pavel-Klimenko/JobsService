@@ -12,7 +12,7 @@
 */
 
 //TODO сюда перенести класс с каналом!
-\Illuminate\Support\Facades\Broadcast::channel('chat', function ($user, $id) {
+\Illuminate\Support\Facades\Broadcast::channel('chat', function ($user) {
     //TODO проверка на авторизованного пользователя
-    return (int) $user->id === (int) $id;
+    return true;
 });

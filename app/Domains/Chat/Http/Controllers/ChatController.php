@@ -28,7 +28,12 @@ class ChatController extends Controller
 
     public function messages()
     {
-        return \App\Domains\Chat\Models\Message::all();
+        try {
+            $chatMessages = \App\Domains\Chat\Models\Message::all();
+            return Helper::successResponse(['messages' => $chatMessages], 'Chat messages');
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
     }
 
     public function send(MessageFormRequest $request)
@@ -38,17 +43,18 @@ class ChatController extends Controller
                 ->messages()
                 ->create($request->validated());
 
+            //dd($message);
+
             broadcast(new MessageSent($request->user(), $message));
 
             return Helper::successResponse([
                 'user_id' => $request->user()->id,
                 'message' => $message
-            ]);
+            ], 'Message has already sent');
+
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
-
-
-
     }
+
 }

@@ -6,6 +6,11 @@ use App\Http\Requests\BaseRequest;
 
 class MessageFormRequest extends BaseRequest
 {
+    public function authorize()
+    {
+        return auth()->check();
+    }
+
     public function rules()
     {
         return [

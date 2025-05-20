@@ -227,7 +227,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Constants' => App\Constants::class,
-        'cors' => \Fruitcake\Cors\HandleCors::class,
+        'cors' => \Illuminate\Http\Middleware\HandleCors::class
     ],
 
 ];

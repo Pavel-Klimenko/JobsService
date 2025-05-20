@@ -77,3 +77,10 @@ Route::group(['prefix' => 'auth', 'controller' => \App\Http\Controllers\Auth\Aut
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
     Route::post('/register', 'register');
 });
+
+//Route::post('/broadcasting/auth', [\App\Http\Controllers\BroadcastController::class, 'auth'])
+//    ->middleware('auth:sanctum');
+
+Route::post('/broadcasting/auth', function () {
+    return Illuminate\Support\Facades\Broadcast::auth(request());
+})->middleware(['auth:sanctum']);

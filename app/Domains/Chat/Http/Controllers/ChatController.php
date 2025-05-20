@@ -43,8 +43,6 @@ class ChatController extends Controller
                 ->messages()
                 ->create($request->validated());
 
-            //dd($message);
-
             broadcast(new MessageSent($request->user(), $message));
 
             return Helper::successResponse([

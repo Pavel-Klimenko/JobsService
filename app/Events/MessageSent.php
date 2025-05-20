@@ -9,7 +9,6 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Laravel\Reverb\Protocols\Pusher\Channels\Channel;
 
 class MessageSent implements ShouldBroadcast
 {
@@ -35,12 +34,7 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat'),
+            new PrivateChannel('chat'),
         ];
-    }
-
-    public function broadcastAs()
-    {
-        return 'chat-message-sent-event';
     }
 }

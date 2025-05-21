@@ -9,10 +9,6 @@ use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Domains\Chat\Http\Requests\CreateChatRequest;
 use App\Domains\Chat\Http\Requests\MessageFormRequest;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -20,13 +16,10 @@ class ChatController extends Controller
     public function index(Request $request)
     {
 
-        dd($request->user()->id);
+        //dd(111111);
         //TODO авторизация пользователя! через Request
-
         //auth()->loginUsingId(1);
-        //return view('chat');
-
-        dd('chat');
+        return view('chat');
     }
 
     public function messages()
@@ -38,6 +31,8 @@ class ChatController extends Controller
             return Helper::failedResponse($exception->getMessage());
         }
     }
+
+    //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
 
     public function createChat(CreateChatRequest $request)
     {
@@ -75,7 +70,7 @@ class ChatController extends Controller
               ]);
 
 //            event(new MessageSent($request->user(), $message));
-//            broadcast(new MessageSent($request->user(), $message));
+            broadcast(new MessageSent($request->user(), $request->message));
 
             return Helper::successResponse([
                 'user_id' => $request->user()->id,

@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Domains\Chat\Models\Message;
 use App\User;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -26,16 +27,14 @@ class MessageSent implements ShouldBroadcast
         $this->message = $message;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
+
+    public function broadcastOn()
     {
-        return [
-            new PrivateChannel('chat'),
-        ];
+//        return [
+//            new PrivateChannel('chat'),
+//        ];
+
+        return new Channel('chat');
     }
 
     public function broadcastAs()

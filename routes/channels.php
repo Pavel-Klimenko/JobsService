@@ -14,4 +14,10 @@
 use Illuminate\Support\Facades\Broadcast;
 use App\Broadcasting\ChatChannel;
 
-Broadcast::channel('chat', ChatChannel::class);
+//Broadcast::channel('chat', ChatChannel::class);
+
+Broadcast::routes();
+
+Broadcast::channel('chat', function ($user) {
+    return ['id' => $user->id, 'name' => $user->name];
+});

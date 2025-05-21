@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\User;
 use App\Domains\Chat\Models\Message;
+use App\Domains\Chat\Models\Chat;
 
 class CreateMessageTable extends Migration
 {
@@ -18,6 +19,10 @@ class CreateMessageTable extends Migration
         if (!Schema::hasTable(Message::TABLE_NAME)) {
             Schema::create(Message::TABLE_NAME, function (Blueprint $table) {
                 $table->id();
+                $table->foreignId('chat_id')
+                    ->constrained(Chat::TABLE_NAME)
+                    ->cascadeOnDelete()
+                    ->cascadeOnUpdate();
                 $table->foreignId('user_id')
                     ->constrained(User::TABLE_NAME)
                     ->cascadeOnDelete()

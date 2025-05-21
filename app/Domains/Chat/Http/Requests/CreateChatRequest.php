@@ -4,7 +4,7 @@ namespace App\Domains\Chat\Http\Requests;
 
 use App\Http\Requests\BaseRequest;
 
-class MessageFormRequest extends BaseRequest
+class CreateChatRequest extends BaseRequest
 {
     public function authorize()
     {
@@ -14,8 +14,7 @@ class MessageFormRequest extends BaseRequest
     public function rules()
     {
         return [
-            'message' => 'required|string',
-            'chat_id' => 'required|integer|exists:chats,id',
+            'candidate_id' => 'required|exists:candidates,id',
         ];
     }
 }

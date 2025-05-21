@@ -2,9 +2,12 @@
 
 namespace App\Domains\Chat\Http\Controllers;
 
+use App\Domains\Chat\Models\Chat;
+use App\Domains\Chat\Models\Message;
 use App\Events\MessageSent;
 use App\Helper;
 use App\Http\Controllers\Controller;
+use App\Domains\Chat\Http\Requests\CreateChatRequest;
 use App\Domains\Chat\Http\Requests\MessageFormRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -36,18 +39,47 @@ class ChatController extends Controller
         }
     }
 
-    public function send(MessageFormRequest $request)
+    public function createChat(CreateChatRequest $request)
     {
         try {
-            $message = $request->user()
-                ->messages()
-                ->create($request->validated());
+            $currentCompany = $request->user()->company;
+            $newChat = Chat::create([
+                'candidate_id' => $request->candidate_id,
+                'company_id' => $currentCompany->id,
+            ]);
 
-            broadcast(new MessageSent($request->user(), $message));
+            return Helper::successResponse([
+                'created_chat' => $newChat,
+            ], 'New chat created');
+
+        } catch(\Exception $exception) {
+            return Helper::failedResponse($exception->getMessage());
+        }
+    }
+
+    public function sendMessage(MessageFormRequest $request)
+    {
+        try {
+              $chat = Chat::findOrFail($request->chat_id);
+              $currentUserId = $request->user()->id;
+
+              $arChatMembers = [$chat->company->user->id, $chat->candidate->user->id];
+              if (!in_array($currentUserId, $arChatMembers)) {
+                  throw new \RuntimeException('Current user is not a chat member');
+              }
+
+              $newMessage = Message::create([
+                  'chat_id' => $chat->id,
+                  'user_id' => $currentUserId,
+                  'message' => $request->message,
+              ]);
+
+//            event(new MessageSent($request->user(), $message));
+//            broadcast(new MessageSent($request->user(), $message));
 
             return Helper::successResponse([
                 'user_id' => $request->user()->id,
-                'message' => $message
+                'new_message' => $newMessage
             ], 'Message has already sent');
 
         } catch(\Exception $exception) {

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Domains\Vacancies\Http\Controllers\VacancyController;
 use App\Domains\Candidates\Http\Controllers\CandidateController;
 use App\Domains\Companies\Http\Controllers\CompanyController;
+use App\Domains\Chat\Http\Controllers\ChatController;
 
 use App\Domains\Home\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -25,11 +26,15 @@ Route::group(['prefix' => 'homepage'], function () {
 });
 
 Route::group(['prefix' => 'chat',
-    'controller' => \App\Domains\Chat\Http\Controllers\ChatController::class,
-    'middleware' => ['auth:sanctum']], function () {
+    'controller' => ChatController::class,
+    'middleware' => ['auth:sanctum','ability:company_rules,candidate_rules']], function () {
         Route::get('/', 'index');
         Route::get('/messages', 'messages');
-        Route::post('/send', 'send');
+        Route::post('/send-message', 'sendMessage');
+});
+
+Route::group(['prefix' => 'chat', 'middleware' => ['auth:sanctum','ability:company_rules']], function () {
+    Route::post('/create', [ChatController::class, 'createChat']);
 });
 
 Route::group(['prefix' => 'entity-directories', 'controller' => \App\Domains\EntityDirectories\Http\Controllers\EntityDirectoriesController::class], function () {

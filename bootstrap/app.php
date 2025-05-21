@@ -5,6 +5,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+use Laravel\Sanctum\Http\Middleware\CheckAbilities;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
+
+
+
 $application = Application::configure()
     ->withProviders()
     ->withRouting(
@@ -29,6 +34,12 @@ $application = Application::configure()
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // тут же регистрируем свои Exceptions, которые описаны в app/Exceptions/Handler.php
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'abilities' => CheckAbilities::class,
+            'ability' => CheckForAnyAbility::class,
+        ]);
     })
     /*
     А вот так регистрируются кастомные команды

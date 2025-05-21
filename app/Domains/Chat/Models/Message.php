@@ -21,7 +21,12 @@ class Message extends Model
     protected $table = 'message';
     const TABLE_NAME = 'message';
 
-    protected $fillable = ['user_id', 'message'];
+    protected $fillable = ['chat_id', 'user_id', 'message'];
+
+    public function chat(): belongsTo
+    {
+        return $this->belongsTo(Chat::class);
+    }
 
     public function user(): belongsTo
     {

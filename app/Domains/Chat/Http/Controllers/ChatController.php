@@ -69,7 +69,6 @@ class ChatController extends Controller
                   'message' => $request->message,
               ]);
 
-//            event(new MessageSent($request->user(), $message));
             broadcast(new MessageSent($request->user(), $request->message));
 
             return Helper::successResponse([

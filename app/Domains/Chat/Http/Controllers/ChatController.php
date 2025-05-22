@@ -13,14 +13,8 @@ use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
-    public function index(Request $request)
-    {
 
-        //dd(111111);
-        //TODO авторизация пользователя! через Request
-        //auth()->loginUsingId(1);
-        return view('chat');
-    }
+    //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
 
     public function messages()
     {
@@ -31,8 +25,6 @@ class ChatController extends Controller
             return Helper::failedResponse($exception->getMessage());
         }
     }
-
-    //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
 
     public function createChat(CreateChatRequest $request)
     {

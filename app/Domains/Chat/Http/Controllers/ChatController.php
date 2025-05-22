@@ -16,6 +16,7 @@ class ChatController extends Controller
 
     //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
 
+    //TODO сообщения по конкретноу чату!
     public function messages()
     {
         try {
@@ -61,7 +62,7 @@ class ChatController extends Controller
                   'message' => $request->message,
               ]);
 
-            broadcast(new MessageSent($request->user(), $request->message));
+            broadcast(new MessageSent($request->user(), $newMessage));
 
             return Helper::successResponse([
                 'user_id' => $request->user()->id,

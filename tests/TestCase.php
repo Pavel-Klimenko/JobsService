@@ -25,6 +25,12 @@ abstract class TestCase extends BaseTestCase
         return User::where('role_id', $candidateRoleId)->first();
     }
 
+    protected function getRandomUser():User
+    {
+        $companyRoleId = Role::whereIn('name', ['company', 'candidate'])->first()->id;
+        return User::where('role_id', $companyRoleId)->first();
+    }
+
     protected function getRandomCompanyUser():User
     {
         $companyRoleId = Role::where('name', 'company')->first()->id;

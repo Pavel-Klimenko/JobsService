@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder {
             CompaniesTableSeeder::class,
             CandidatesTableSeeder::class,
             VacanciesTableSeeder::class,
+            ChatsTableSeeder::class,
         ]);
     }
 }

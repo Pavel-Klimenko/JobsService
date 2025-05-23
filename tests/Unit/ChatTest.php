@@ -23,17 +23,6 @@ class ChatTest extends TestCase
         $this->randomUser = $this->getRandomUser();
     }
 
-
-    //TODO Unit test:
-
-
-    // messages()
-    //1) если пользователь авторизован, то АПИ метод отдает код 200 ОК
-    //2) если пользователь не авторизован, то АПИ метод отдает 403 Auathorized
-
-
-    //php artisan test --filter ChatTest
-
     public function testCreatingNewChat() {
         Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
         $response = $this->post('/api/chat/create', [
@@ -66,16 +55,6 @@ class ChatTest extends TestCase
         ]);
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
-
-//    public function testGettingMessagesNewChat() {
-//        Sanctum::actingAs($this->randomCompanyUser, ['company_rules']);
-//        $response = $this->post('/api/chat/create', [
-//            'candidate_id' => $this->randomCandidateUser->id,
-//        ]);
-//        $response->assertStatus(Response::HTTP_OK)
-//            ->assertJson(['message' => 'New chat created']);
-//    }
-
 
     public function testCreatingNewMessageWithoutChatId() {
         Sanctum::actingAs($this->randomUser, ['company_rules', 'candidate_rules']);
@@ -117,8 +96,5 @@ class ChatTest extends TestCase
         $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
             ->assertJson(['message' => 'Current user is not a chat member']);
     }
-
-
-    //TODO тесты для метода сообщений
 }
 

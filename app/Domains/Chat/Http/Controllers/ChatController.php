@@ -10,28 +10,25 @@ use App\Http\Controllers\Controller;
 use App\Domains\Chat\Http\Requests\CreateChatRequest;
 use App\Domains\Chat\Http\Requests\MessageFormRequest;
 use App\Domains\Chat\Http\Requests\ChatMessagesRequest;
-use Illuminate\Http\Request;
+use App\Services\ChatService;
 
 class ChatController extends Controller
 {
+    private $chatService;
 
-    //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
+    public function __construct(
+        ChatService $chatService,
+    ){
+        $this->chatService = $chatService;
+    }
 
-    //TODO сообщения по конкретноу чату!
     public function messages(ChatMessagesRequest $request)
     {
         try {
             $chat = Chat::findOrFail($request->chat_id);
 
-            //TODO в сервис!!!
-            if ($request->user()->role->name == 'candidate') {
-                if ($request->user()->candidate->id != $chat->candidate_id) {
-                    throw new \RuntimeException('Current user is not a chat member');
-                }
-            } else if ($request->user()->role->name == 'company') {
-                if ($request->user()->company->id != $chat->company_id) {
-                    throw new \RuntimeException('Current user is not a chat member');
-                }
+            if (!$this->chatService->isUserChatMember($chat, $request->user())) {
+                throw new \RuntimeException('Current user is not a chat member');
             }
 
             return Helper::successResponse(['messages' => $chat->messages], 'Chat messages');

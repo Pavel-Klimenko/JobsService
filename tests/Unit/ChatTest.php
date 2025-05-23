@@ -3,6 +3,7 @@
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 use App\Domains\Chat\Models\Chat;
+use App\Domains\Candidates\Models\Candidate;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -75,30 +76,6 @@ class ChatTest extends TestCase
 //            ->assertJson(['message' => 'New chat created']);
 //    }
 
-    //sendMessage()
-    //1) если валидные параметры, то АПИ метод отдает код 200 ОК и Json сообщение
-    //2) если пользователь не авторизован, то АПИ метод отдает 403 Auathorized
-    //3) если message не верного формата, то код 400 и текст ошибки валидации
-    //4) если chat_id не верного формата, то код 400 и текст ошибки валидации
-    //5) если пользователь не участник чата
-
-    public function testCreatingNewMessage() {
-        Sanctum::actingAs($this->randomUser, ['company_rules', 'candidate_rules']);
-
-        //TODO создавать чаты фабрикой!
-        $createdChat = Chat::create([
-            'candidate_id' => $this->randomCandidateUser->id,
-            'company_id' => $this->randomCompanyUser->id,
-        ]);
-
-        $response = $this->post('/api/chat/send-message', [
-            'message' => 'Test',
-            'chat_id' => $createdChat->id,
-        ]);
-
-        $response->assertStatus(Response::HTTP_OK)
-            ->assertJson(['message' => 'Message has already sent']);
-    }
 
     public function testCreatingNewMessageWithoutChatId() {
         Sanctum::actingAs($this->randomUser, ['company_rules', 'candidate_rules']);
@@ -110,4 +87,38 @@ class ChatTest extends TestCase
         $response->assertStatus(Response::HTTP_BAD_REQUEST)
             ->assertJson(['message' => 'Validation errors']);
     }
+
+    public function testCreatingNewMessageFromChatMember() {
+        $chat = Chat::first();
+
+        $candidateService = new \App\Services\CandidateService();
+        $chatCandidate = $candidateService->getCandidate($chat->candidate_id);
+        Sanctum::actingAs($chatCandidate->user, ['candidate_rules']);
+
+        $response = $this->post('/api/chat/send-message', [
+            'message' => 'Test',
+            'chat_id' => $chat->id,
+        ]);
+
+        $response->assertStatus(Response::HTTP_OK)
+            ->assertJson(['message' => 'Message has already sent']);
+    }
+
+    public function testCreatingNewMessageFromNotChatMember() {
+        $chat = Chat::first();
+        $notChatMemberCandidate = Candidate::where('id', '!=', $chat->candidate_id)->first();
+        Sanctum::actingAs($notChatMemberCandidate->user, ['candidate_rules']);
+
+        $response = $this->post('/api/chat/send-message', [
+            'message' => 'Test',
+            'chat_id' => $chat->id,
+        ]);
+
+        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
+            ->assertJson(['message' => 'Current user is not a chat member']);
+    }
+
+
+    //TODO тесты для метода сообщений
 }
+

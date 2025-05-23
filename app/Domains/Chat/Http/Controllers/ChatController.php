@@ -9,6 +9,7 @@ use App\Helper;
 use App\Http\Controllers\Controller;
 use App\Domains\Chat\Http\Requests\CreateChatRequest;
 use App\Domains\Chat\Http\Requests\MessageFormRequest;
+use App\Domains\Chat\Http\Requests\ChatMessagesRequest;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -17,11 +18,23 @@ class ChatController extends Controller
     //TODO сервисы, DTO + написать тесты!!! и сдать ДЗ!
 
     //TODO сообщения по конкретноу чату!
-    public function messages()
+    public function messages(ChatMessagesRequest $request)
     {
         try {
-            $chatMessages = \App\Domains\Chat\Models\Message::all();
-            return Helper::successResponse(['messages' => $chatMessages], 'Chat messages');
+            $chat = Chat::findOrFail($request->chat_id);
+
+            //TODO в сервис!!!
+            if ($request->user()->role->name == 'candidate') {
+                if ($request->user()->candidate->id != $chat->candidate_id) {
+                    throw new \RuntimeException('Current user is not a chat member');
+                }
+            } else if ($request->user()->role->name == 'company') {
+                if ($request->user()->company->id != $chat->company_id) {
+                    throw new \RuntimeException('Current user is not a chat member');
+                }
+            }
+
+            return Helper::successResponse(['messages' => $chat->messages], 'Chat messages');
         } catch(\Exception $exception) {
             return Helper::failedResponse($exception->getMessage());
         }
